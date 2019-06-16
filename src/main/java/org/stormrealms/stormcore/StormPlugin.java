@@ -6,7 +6,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
 
 public abstract class StormPlugin {
-	private AnnotationConfigApplicationContext context;
+	protected AnnotationConfigApplicationContext context;
 
 	public void init() {
 		ConfigurableApplicationContext context = initializeContext();
