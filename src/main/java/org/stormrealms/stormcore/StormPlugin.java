@@ -9,7 +9,7 @@ public abstract class StormPlugin {
 	protected AnnotationConfigApplicationContext context;
 
 	public void init() {
-		ConfigurableApplicationContext context = initializeContext();
+		AnnotationConfigApplicationContext context = initializeContext();
 		setContext(context);
 	}
 
@@ -23,7 +23,7 @@ public abstract class StormPlugin {
 
 	public abstract Class<?> getConfigurationClass();
 
-	public ConfigurableApplicationContext initializeContext() {
+	public AnnotationConfigApplicationContext initializeContext() {
 		SpringConfig cfg = getSpringConfig();
 		this.context = new AnnotationConfigApplicationContext();
 		// TODO: This method doesn't exist?
@@ -37,7 +37,7 @@ public abstract class StormPlugin {
 
 	public abstract SpringConfig getSpringConfig();
 
-	public abstract void setContext(ConfigurableApplicationContext context);
+	public abstract void setContext(AnnotationConfigApplicationContext context);
 
 	public abstract ConfigurableApplicationContext getContext();
 
