@@ -1,5 +1,6 @@
 package org.stormrealms.stormstats.listeners;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -9,12 +10,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.stormrealms.stormstats.data.RPGPlayerRepository;
 import org.stormrealms.stormstats.model.RPGPlayer;
 
 public class LoginListener implements Listener {
 	@Autowired
 	private RPGPlayerRepository players;
+	@Autowired
+	@Qualifier(value = "player-cache")
+	private Map<UUID, RPGPlayer> cache;
 
 	@EventHandler
 	public void onLogin(PlayerJoinEvent e) {
@@ -22,7 +27,7 @@ public class LoginListener implements Listener {
 		UUID uuid = p.getUniqueId();
 		Optional<RPGPlayer> player = players.findById(uuid);
 		if (!player.isPresent()) {
-			p.kickPlayer("");
+			p.kickPlayer("Failed to load message placeholder");
 		}
 	}
 
