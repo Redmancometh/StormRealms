@@ -1,15 +1,22 @@
 package org.stormrealms.stormcore;
 
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
 
 public abstract class StormPlugin {
 	protected AnnotationConfigApplicationContext context;
+	@Autowired
+	@Qualifier("context-storage")
+	private Map<Class<? extends StormPlugin>, AnnotationConfigApplicationContext> contexts;
 
 	public void init() {
 		AnnotationConfigApplicationContext context = initializeContext();
+		contexts.put(this.getClass(), context);
 		setContext(context);
 	}
 
@@ -18,7 +25,7 @@ public abstract class StormPlugin {
 	}
 
 	public void disable() {
-
+		contexts.remove(this.getClass());
 	}
 
 	public abstract Class<?> getConfigurationClass();
