@@ -34,6 +34,7 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.stormrealms.stormcore.config.DirectoryWatcher;
+import org.stormrealms.stormcore.storage.PluginStorage;
 import org.stormrealms.stormcore.util.ExportSystem;
 import org.stormrealms.stormcore.util.QuadFunction;
 import org.stormrealms.stormcore.util.TriFunction;
@@ -54,6 +55,8 @@ public class ScriptEngineController {
 	protected ApplicationContext context;
 	@Autowired
 	private AutowireCapableBeanFactory factory;
+	@Autowired
+	private PluginStorage storage;
 	private Consumer<File> onChange = (file) -> {
 		try {
 			System.out.println("FILE CHANGED: " + file);

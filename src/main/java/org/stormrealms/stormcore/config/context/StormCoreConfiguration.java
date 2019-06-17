@@ -6,11 +6,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.stormrealms.stormcore.StormPlugin;
 import org.stormrealms.stormcore.storage.PluginStorage;
 
 @Configuration
+@ComponentScan
 public class StormCoreConfiguration {
 	@Bean
 	public PluginStorage pluginStorage() {
