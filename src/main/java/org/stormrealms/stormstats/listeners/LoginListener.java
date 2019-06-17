@@ -23,6 +23,8 @@ public class LoginListener implements Listener {
 
 	@EventHandler
 	public void onLogin(PlayerJoinEvent e) {
+		for (int x = 0; x < 5; x++)
+			System.out.println("TEST");
 		Player p = e.getPlayer();
 		UUID uuid = p.getUniqueId();
 		Optional<RPGPlayer> player = players.findById(uuid);

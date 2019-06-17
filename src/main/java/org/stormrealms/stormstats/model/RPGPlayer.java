@@ -34,5 +34,5 @@ public class RPGPlayer {
 	private int agi;
 	@Column
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	Map<UUID, Integer> entitytMap = new ConcurrentHashMap<UUID, Integer>();
+	Map<UUID, Integer> questMap = new ConcurrentHashMap<UUID, Integer>();
 }
