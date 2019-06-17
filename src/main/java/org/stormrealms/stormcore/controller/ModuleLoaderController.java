@@ -23,6 +23,8 @@ import java.util.jar.JarFile;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 
+import javax.annotation.PostConstruct;
+
 @Controller
 public class ModuleLoaderController {
 
@@ -36,6 +38,7 @@ public class ModuleLoaderController {
         this.plugins = new HashSet<>();
     }
 
+    @PostConstruct
     public void loadModules() {
 
         if (!moduleDir.exists()) {
