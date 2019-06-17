@@ -16,7 +16,10 @@ public class StormCore extends JavaPlugin {
 	private static ConfigManager<SpringConfig> cfgMon = new ConfigManager("spring.json", SpringConfig.class);
 	protected AnnotationConfigApplicationContext context;
 
+	private static StormCore instance;
+
 	public void onEnable() {
+		instance = this;
 		this.context = new AnnotationConfigApplicationContext();
 		cfgMon.init();
 		SpringConfig cfg = cfgMon.getConfig();
@@ -34,5 +37,9 @@ public class StormCore extends JavaPlugin {
 		getCommand("sc").setExecutor(context.getBean(ModuleCommand.class));
 
 		Logger.getLogger(StormCoreConfiguration.class.getName()).info("StormCore has started!");
+	}
+
+	public static StormCore getInstance() {
+		return instance;
 	}
 }

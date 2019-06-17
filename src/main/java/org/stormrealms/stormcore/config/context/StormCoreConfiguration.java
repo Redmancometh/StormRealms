@@ -8,8 +8,10 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.stormrealms.stormcore.StormCore;
 import org.stormrealms.stormcore.StormPlugin;
 import org.stormrealms.stormcore.storage.PluginStorage;
+import org.stormrealms.stormcore.util.CommandUtil;
 
 @Configuration
 @ComponentScan(basePackages = "org.stormrealms.stormcore")
@@ -27,5 +29,15 @@ public class StormCoreConfiguration {
 	@Bean(name = "modules-dir")
 	public File moduleDir() {
 		return new File("plugins/StormCore/modules");
+	}
+
+	@Bean
+	public CommandUtil commandUtil() {
+		return new CommandUtil();
+	}
+
+	@Bean
+	public StormCore plugin() {
+		return StormCore.getInstance();
 	}
 }

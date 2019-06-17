@@ -17,6 +17,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.jar.JarFile;
@@ -128,6 +129,10 @@ public class ModuleLoaderController {
         }
         plugin.disable();
         this.enabledPlugins.remove(plugin);
+    }
+
+    public File findModule(String name) {
+        return Arrays.asList(moduleDir.listFiles()).stream().filter(file -> file.getName().contains(name)).findFirst().orElse(null);
     }
 
     public StormPlugin byName(String name) {

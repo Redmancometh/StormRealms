@@ -9,6 +9,7 @@ import org.stormrealms.stormcore.StormPlugin;
 import org.stormrealms.stormcore.controller.ModuleLoaderController;
 
 import javax.inject.Singleton;
+import java.io.File;
 
 @Singleton
 public class ModuleCommand implements CommandExecutor {
@@ -84,6 +85,26 @@ public class ModuleCommand implements CommandExecutor {
             }
         } else if (args[0].equalsIgnoreCase("load")) {
             //TODO make a loadModule by name and find jar with that name
+            if (args.length != 2) {
+                sender.sendMessage(ChatColor.RED + "/sc load [module]");
+            }
+            else {
+                String moduleName = args[1];
+
+                File module = this.moduleLoaderController.findModule(moduleName);
+                if (module == null) {
+                    sender.sendMessage(ChatColor.RED + "Cannot find module file with name: " + moduleName);
+                    return true;
+                }
+
+                sender.sendMessage(ChatColor.GREEN + "Attempting to load: " + moduleName + "...");
+                try {
+                    this.moduleLoaderController.loadModule(module.toPath());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                sender.sendMessage(ChatColor.GREEN + "Loaded module: " + moduleName);
+            }
         }
 
         return false;
