@@ -27,7 +27,7 @@ public abstract class StormPlugin {
 	private CommandUtil commandUtil;
 
 	@Autowired
-	private StormCore instace;
+	private StormCore instance;
 
 	@Getter
 	@Setter
@@ -52,7 +52,7 @@ public abstract class StormPlugin {
 
 	public final void registerListener(Listener l) {
 		this.listeners.add(l);
-		Bukkit.getPluginManager().registerEvents(l, instace);
+		Bukkit.getPluginManager().registerEvents(l, instance);
 	}
 
 	public final void unregisterListeners() {
@@ -94,8 +94,6 @@ public abstract class StormPlugin {
 	public abstract List<Listener> listeners();
 
 	public void registerListeners() {
-		listeners().forEach((listener) -> {
-			Bukkit.getPluginManager().registerEvents(listener, Bukkit.getPluginManager().getPlugin("StormCore"));
-		});
+		listeners().forEach(this::registerListener);
 	}
 }

@@ -88,7 +88,6 @@ public class ModuleLoaderController {
 //        URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{path.toUri().toURL()});
 		URLClassLoader classLoader = new URLClassLoader(new URL[] { path.toUri().toURL() },
 				getClass().getClassLoader());
-		JarFile jarContainer = new JarFile(path.toFile());
 		Class mainClass = classLoader.loadClass(config.getMain());
 
 		StormPlugin module = (StormPlugin) mainClass.newInstance();
