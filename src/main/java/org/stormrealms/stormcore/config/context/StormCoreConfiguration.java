@@ -12,7 +12,7 @@ import org.stormrealms.stormcore.StormPlugin;
 import org.stormrealms.stormcore.storage.PluginStorage;
 
 @Configuration
-@ComponentScan
+@ComponentScan(basePackages = "org.stormrealms.stormcore")
 public class StormCoreConfiguration {
 	@Bean
 	public PluginStorage pluginStorage() {

@@ -50,7 +50,7 @@ import org.stormrealms.stormcore.util.TriFunction;
 public class ScriptEngineController {
 	private ScheduledExecutorService scriptScheduler = Executors.newScheduledThreadPool(4);
 	private ScheduledExecutorService asyncPool = Executors.newScheduledThreadPool(8);
-	ScriptEngine graal = new ScriptEngineManager().getEngineByName("graal.js");
+	ScriptEngine graal = new ScriptEngineManager().getEngineByName("JavaScript");
 	@Autowired
 	protected ApplicationContext context;
 	@Autowired
