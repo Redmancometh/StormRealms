@@ -55,6 +55,7 @@ public class ScriptEngineController {
 	protected ApplicationContext context;
 	@Autowired
 	private AutowireCapableBeanFactory factory;
+	@SuppressWarnings("unused")
 	@Autowired
 	private PluginStorage storage;
 	private Consumer<File> onChange = (file) -> {

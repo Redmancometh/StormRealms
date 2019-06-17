@@ -4,8 +4,7 @@ import lombok.Data;
 
 @Data
 public class PluginConfig {
-
-    private final String name;
-    private final String main;
-    private final String version;
+	private String name;
+	private String main;
+	private String version;
 }

@@ -34,7 +34,7 @@ public class StormCore extends JavaPlugin {
 		cfg.getProperties().forEach((key, value) -> props.put(key, value));
 		context.getEnvironment().setActiveProfiles(cfg.getProfiles().toArray(new String[cfg.getProfiles().size()]));
 
-		getCommand("sc").setExecutor(context.getBean(ModuleCommand.class));
+		//getCommand("sc").setExecutor(context.getBean(ModuleCommand.class));
 
 		Logger.getLogger(StormCoreConfiguration.class.getName()).info("StormCore has started!");
 	}
