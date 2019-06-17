@@ -3,6 +3,7 @@ package org.stormrealms.stormcore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,14 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.stormrealms.stormcore.command.ModuleCommand;
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
+import org.stormrealms.stormcore.storage.PluginStorage;
 import org.stormrealms.stormcore.util.CommandUtil;
 
 public abstract class StormPlugin {
 	protected AnnotationConfigApplicationContext context;
 	@Autowired
-	@Qualifier("context-storage")
-	private Map<Class<? extends StormPlugin>, AnnotationConfigApplicationContext> contexts;
+	private PluginStorage pluginStorage;
 
 	@Autowired
 	private CommandUtil commandUtil;
@@ -40,7 +42,7 @@ public abstract class StormPlugin {
 		AnnotationConfigApplicationContext context = initializeContext();
 		for (int x = 0; x < 5; x++)
 			System.out.println("Context is null: " + (context == null));
-		contexts.put(this.getClass(), context);
+		//pluginStorage.registerPlugin(this, context, listeners(), commands);
 		setContext(context);
 		registerListeners();
 	}
@@ -68,7 +70,7 @@ public abstract class StormPlugin {
 	public void disable() {
 		commands.forEach(command -> commandUtil.unregisterCommand(command));
 		commands.clear();
-		contexts.remove(this.getClass());
+		//contexts.remove(this.getClass());
 	}
 
 	public abstract Class<?> getConfigurationClass();
@@ -91,7 +93,9 @@ public abstract class StormPlugin {
 
 	public abstract ConfigurableApplicationContext getContext();
 
-	public abstract List<Listener> listeners();
+	public abstract Set<Listener> listeners();
+
+	public abstract Set<ModuleCommand> commands();
 
 	public void registerListeners() {
 		listeners().forEach(this::registerListener);

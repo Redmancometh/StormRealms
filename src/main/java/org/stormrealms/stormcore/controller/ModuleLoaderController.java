@@ -53,6 +53,7 @@ public class ModuleLoaderController {
 			pathStream.filter(path1 -> path1.toString().endsWith(".jar")).forEach(p -> {
 				try {
 					StormPlugin pluginModule = loadModule(p);
+					context.getAutowireCapableBeanFactory().autowireBean(pluginModule);
 					this.plugins.add(pluginModule);
 					enableModule(pluginModule);
 				} catch (Exception e) {
