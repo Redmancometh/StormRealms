@@ -1,5 +1,6 @@
 package org.stormrealms.stormcore.config.context;
 
+import java.io.File;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,5 +20,10 @@ public class StormCoreConfiguration {
 	@Bean(name = "context-storage")
 	public Map<Class<? extends StormPlugin>, AnnotationConfigApplicationContext> contexts() {
 		return new ConcurrentHashMap();
+	}
+
+	@Bean(name = "modules-dir")
+	public File moduleDir() {
+		return new File("plugins/StormCore/modules");
 	}
 }

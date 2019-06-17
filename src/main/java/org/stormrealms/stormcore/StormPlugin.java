@@ -2,6 +2,8 @@ package org.stormrealms.stormcore;
 
 import java.util.Map;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -13,6 +15,10 @@ public abstract class StormPlugin {
 	@Autowired
 	@Qualifier("context-storage")
 	private Map<Class<? extends StormPlugin>, AnnotationConfigApplicationContext> contexts;
+
+	@Getter
+    @Setter
+	private String name;
 
 	public void init() {
 		AnnotationConfigApplicationContext context = initializeContext();
