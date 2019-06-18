@@ -12,13 +12,13 @@ import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.stormrealms.stormcore.command.ModuleCommand;
+import org.stormrealms.stormcore.command.SCommandExecutor;
+import org.stormrealms.stormcore.command.StormCommandHandler;
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
 import org.stormrealms.stormcore.storage.PluginStorage;
-import org.stormrealms.stormcore.util.CommandUtil;
 
 public abstract class StormPlugin {
 	protected AnnotationConfigApplicationContext context;
@@ -26,16 +26,16 @@ public abstract class StormPlugin {
 	private PluginStorage pluginStorage;
 
 	@Autowired
-	private CommandUtil commandUtil;
+	private StormCore instance;
 
 	@Autowired
-	private StormCore instance;
+    private StormCommandHandler commandHandler;
 
 	@Getter
 	@Setter
 	private String name;
 
-	private List<BukkitCommand> commands = new ArrayList<>();
+	private List<SCommandExecutor> commands = new ArrayList<>();
 	private List<Listener> listeners = new ArrayList<>();
 
 	public void init() {
@@ -47,9 +47,10 @@ public abstract class StormPlugin {
 		registerListeners();
 	}
 
-	public final void registerCommand(BukkitCommand executor) {
+	public final void registerCommand(String cmd, SCommandExecutor executor) {
+	    executor.setName(cmd);
 		this.commands.add(executor);
-		commandUtil.registerCommand(executor.getName(), executor);
+		commandHandler.registerCommand(cmd, executor);
 	}
 
 	public final void registerListener(Listener l) {
@@ -68,7 +69,7 @@ public abstract class StormPlugin {
 	}
 
 	public void disable() {
-		commands.forEach(command -> commandUtil.unregisterCommand(command));
+		commands.forEach(command -> commandHandler.unregisterCommand(command));
 		commands.clear();
 		//contexts.remove(this.getClass());
 	}

@@ -8,10 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.stormrealms.stormcore.StormPlugin;
 import org.stormrealms.stormcore.controller.ModuleLoaderController;
 
-import javax.inject.Singleton;
 import java.io.File;
 
-@Singleton
 public class ModuleCommand implements CommandExecutor {
 
     @Autowired
@@ -104,6 +102,12 @@ public class ModuleCommand implements CommandExecutor {
                     e.printStackTrace();
                 }
                 sender.sendMessage(ChatColor.GREEN + "Loaded module: " + moduleName);
+            }
+        } else if (args[0].equalsIgnoreCase("list")) {
+
+            sender.sendMessage(ChatColor.GOLD + "Enabled modules:");
+            for (StormPlugin plugin : moduleLoaderController.getEnabledPlugins()) {
+                sender.sendMessage(ChatColor.GREEN + plugin.getName());
             }
         }
 
