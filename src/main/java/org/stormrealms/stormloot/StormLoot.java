@@ -1,4 +1,4 @@
-package org.stormrealms.stormcombat;
+package org.stormrealms.stormloot;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -6,12 +6,12 @@ import java.util.Set;
 import org.bukkit.event.Listener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.stormrealms.stormcombat.configuration.StormCombatConfiguration;
 import org.stormrealms.stormcore.StormPlugin;
 import org.stormrealms.stormcore.command.ModuleCommand;
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
+import org.stormrealms.stormloot.configuration.StormLootConfiguration;
 
-public class StormCombat extends StormPlugin {
+public class StormLoot extends StormPlugin {
 
 	@Override
 	public Set<ModuleCommand> commands() {
@@ -20,12 +20,12 @@ public class StormCombat extends StormPlugin {
 
 	@Override
 	public Class<?> getConfigurationClass() {
-		return StormCombatConfiguration.class;
+		return StormLootConfiguration.class;
 	}
 
 	@Override
 	public ConfigurableApplicationContext getContext() {
-		return null;
+		return super.context;
 	}
 
 	@Override
@@ -35,12 +35,12 @@ public class StormCombat extends StormPlugin {
 
 	@Override
 	public Set<Listener> listeners() {
-		return null;
+		return new HashSet();
 	}
 
 	@Override
 	public void setContext(AnnotationConfigApplicationContext context) {
-		this.context = context;
+		super.context = context;
 	}
 
 }
