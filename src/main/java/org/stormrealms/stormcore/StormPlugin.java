@@ -8,28 +8,23 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
-import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.stormrealms.stormcore.command.ModuleCommand;
 import org.stormrealms.stormcore.command.SCommandExecutor;
-import org.stormrealms.stormcore.command.StormCommandHandler;
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
-import org.stormrealms.stormcore.storage.PluginStorage;
 
 public abstract class StormPlugin {
 	protected AnnotationConfigApplicationContext context;
-	@Autowired
-	private PluginStorage pluginStorage;
-
-	@Autowired
-	private StormCore instance;
-
-	@Autowired
-    private StormCommandHandler commandHandler;
+	/*
+	 * @Autowired private PluginStorage pluginStorage;
+	 * 
+	 * @Autowired private StormCore instance;
+	 * 
+	 * @Autowired private StormCommandHandler commandHandler;
+	 */
 
 	@Getter
 	@Setter
@@ -42,20 +37,20 @@ public abstract class StormPlugin {
 		AnnotationConfigApplicationContext context = initializeContext();
 		for (int x = 0; x < 5; x++)
 			System.out.println("Context is null: " + (context == null));
-		//pluginStorage.registerPlugin(this, context, listeners(), commands);
+		// pluginStorage.registerPlugin(this, context, listeners(), commands);
 		setContext(context);
 		registerListeners();
 	}
 
 	public final void registerCommand(String cmd, SCommandExecutor executor) {
-	    executor.setName(cmd);
+		executor.setName(cmd);
 		this.commands.add(executor);
-		commandHandler.registerCommand(cmd, executor);
+		// commandHandler.registerCommand(cmd, executor);
 	}
 
 	public final void registerListener(Listener l) {
 		this.listeners.add(l);
-		Bukkit.getPluginManager().registerEvents(l, instance);
+		Bukkit.getPluginManager().registerEvents(l, Bukkit.getPluginManager().getPlugin("StormCore"));
 	}
 
 	public final void unregisterListeners() {
@@ -69,24 +64,30 @@ public abstract class StormPlugin {
 	}
 
 	public void disable() {
-		commands.forEach(command -> commandHandler.unregisterCommand(command));
+		// commands.forEach(command -> commandHandler.unregisterCommand(command));
 		commands.clear();
-		//contexts.remove(this.getClass());
+		// contexts.remove(this.getClass());
 	}
 
 	public abstract Class<?> getConfigurationClass();
 
 	public AnnotationConfigApplicationContext initializeContext() {
 		SpringConfig cfg = getSpringConfig();
-		this.context = new AnnotationConfigApplicationContext();
 		// TODO: This method doesn't exist?
-		this.context.setClassLoader(StormCore.class.getClassLoader());
-		this.context.refresh();
 		this.context.register(getConfigurationClass());
 		Map<String, Object> props = context.getEnvironment().getSystemProperties();
 		cfg.getProperties().forEach((key, value) -> props.put(key, value));
+		this.context.scan(getPackages());
+		this.context.refresh();
 		return context;
 	}
+
+	/**
+	 * Get packages that need to be scanned.
+	 * 
+	 * @return
+	 */
+	public abstract String[] getPackages();
 
 	public abstract SpringConfig getSpringConfig();
 

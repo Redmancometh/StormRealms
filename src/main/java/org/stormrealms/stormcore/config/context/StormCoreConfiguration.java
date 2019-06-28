@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.stormrealms.stormcore.StormCore;
 import org.stormrealms.stormcore.StormPlugin;
 import org.stormrealms.stormcore.command.ModuleCommand;
-import org.stormrealms.stormcore.command.StormCommandHandler;
 import org.stormrealms.stormcore.storage.PluginStorage;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -46,9 +45,9 @@ public class StormCoreConfiguration {
 	}
 
 	@Bean
-    public ModuleCommand mainCommand() {
-	    return new ModuleCommand();
-    }
+	public ModuleCommand mainCommand() {
+		return new ModuleCommand();
+	}
 
 	@Bean
 	public StormCore plugin() {
