@@ -7,8 +7,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.stormrealms.stormcore.StormPlugin;
 import org.stormrealms.stormcore.util.PluginConfig;
@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
@@ -39,8 +40,6 @@ public class ModuleLoaderController {
 	private File moduleDir;
 	private Set<StormPlugin> enabledPlugins;
 	private Set<StormPlugin> plugins;
-	@Autowired
-	private ApplicationContext context;
 
 	public ModuleLoaderController(@Autowired @Qualifier("modules-dir") File moduleDir) {
 		this.moduleDir = moduleDir;
@@ -50,11 +49,10 @@ public class ModuleLoaderController {
 
 	@PostConstruct
 	public void loadModules() {
-
+		System.out.println("LOAD MODULES!");
 		if (!moduleDir.exists()) {
 			moduleDir.mkdir();
 		}
-
 		try (Stream<Path> pathStream = Files.walk(moduleDir.toPath().toAbsolutePath())) {
 			pathStream.filter(path1 -> path1.toString().endsWith(".jar")).forEach(p -> {
 				try {
@@ -104,20 +102,23 @@ public class ModuleLoaderController {
 
 		while (entries.hasMoreElements()) {
 			JarEntry clazz = entries.nextElement();
-
 			if (clazz.getName().equals(mainClass.getName())) {
 				System.out.println("FOUND MAIN AND SKIPPING");
 				continue;
 			}
-
 			if (clazz.isDirectory() || !clazz.getName().endsWith(".class")) {
 				continue;
 			}
 			String className = clazz.getName().substring(0, clazz.getName().length() - 6);
 			className = className.replace('/', '.');
-			classLoader.loadClass(className);
-		}
+			Class<?> clazzLoaded = classLoader.loadClass(className);
+			for (Annotation annotation : clazzLoaded.getAnnotations()) {
+				if (annotation.annotationType().isAssignableFrom(Component.class)) {
+					moduleContext.register(clazzLoaded);
+				}
+			}
 
+		}
 		StormPlugin module = (StormPlugin) mainClass.newInstance();
 		module.setContext(moduleContext);
 		System.out.println(module.getConfigurationClass().getName());
