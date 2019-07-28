@@ -51,6 +51,10 @@ public abstract class StormPlugin {
 		}
 	}
 
+	public void enable() {
+
+	}
+
 	public void disable() {
 		// commands.forEach(command -> commandHandler.unregisterCommand(command));
 		commands.clear();
@@ -65,6 +69,8 @@ public abstract class StormPlugin {
 	 * @return
 	 */
 	public abstract String[] getPackages();
+
+	public abstract Class[] getEntities();
 
 	public abstract SpringConfig getSpringConfig();
 

@@ -104,14 +104,16 @@ public class ModuleLoaderController {
 		module.setModuleLoader(classLoader);
 		moduleContext.setParent(StormCore.getInstance().getContext());
 		module.setContext(moduleContext);
+		module.enable();
+		module.setName(config.getName());
 		moduleContext.scan(module.getPackages());
 		SpringConfig cfg = module.getSpringConfig();
 		moduleContext.register(module.getConfigurationClass());
 		Map<String, Object> props = moduleContext.getEnvironment().getSystemProperties();
 		cfg.getProperties().forEach((key, value) -> props.put(key, value));
+		Thread.currentThread().setContextClassLoader(classLoader);
 		moduleContext.refresh();
 		System.out.println(module.getConfigurationClass().getName());
-		module.setName(config.getName());
 		file.close();
 		classLoader.close();
 		return module;
