@@ -2,7 +2,6 @@ package org.stormrealms.stormcore;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import lombok.Getter;
@@ -32,20 +31,13 @@ public abstract class StormPlugin {
 
 	private List<SCommandExecutor> commands = new ArrayList<>();
 	private List<Listener> listeners = new ArrayList<>();
-
-	public void init() {
-		AnnotationConfigApplicationContext context = initializeContext();
-		for (int x = 0; x < 5; x++)
-			System.out.println("Context is null: " + (context == null));
-		// pluginStorage.registerPlugin(this, context, listeners(), commands);
-		setContext(context);
-		registerListeners();
-	}
+	@Setter
+	@Getter
+	private ClassLoader moduleLoader;
 
 	public final void registerCommand(String cmd, SCommandExecutor executor) {
 		executor.setName(cmd);
 		this.commands.add(executor);
-		// commandHandler.registerCommand(cmd, executor);
 	}
 
 	public final void registerListener(Listener l) {
@@ -59,10 +51,6 @@ public abstract class StormPlugin {
 		}
 	}
 
-	public void enable() {
-		init();
-	}
-
 	public void disable() {
 		// commands.forEach(command -> commandHandler.unregisterCommand(command));
 		commands.clear();
@@ -70,17 +58,6 @@ public abstract class StormPlugin {
 	}
 
 	public abstract Class<?> getConfigurationClass();
-
-	public AnnotationConfigApplicationContext initializeContext() {
-		SpringConfig cfg = getSpringConfig();
-		// TODO: This method doesn't exist?
-		this.context.register(getConfigurationClass());
-		Map<String, Object> props = context.getEnvironment().getSystemProperties();
-		cfg.getProperties().forEach((key, value) -> props.put(key, value));
-		this.context.scan(getPackages());
-		this.context.refresh();
-		return context;
-	}
 
 	/**
 	 * Get packages that need to be scanned.

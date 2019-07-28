@@ -29,12 +29,12 @@ public class StormCore extends JavaPlugin {
 			Logger.getLogger(StormCoreConfiguration.class.getName() + " Properties").info(key);
 			Logger.getLogger(StormCoreConfiguration.class.getName() + " Properties").info(value + "");
 		});
-		this.context.setClassLoader(StormCore.class.getClassLoader());
+		this.context.setClassLoader(this.getClassLoader());
 		this.context.register(StormCoreConfiguration.class);
-		this.context.refresh();
 		Map<String, Object> props = context.getEnvironment().getSystemProperties();
 		cfg.getProperties().forEach((key, value) -> props.put(key, value));
 		context.getEnvironment().setActiveProfiles(cfg.getProfiles().toArray(new String[cfg.getProfiles().size()]));
+		this.context.refresh();
 		getCommand("sc").setExecutor(context.getBean(ModuleCommand.class));
 		Bukkit.getPluginManager().registerEvents(context.getBean(StormCommandHandler.class), this);
 		Logger.getLogger(StormCoreConfiguration.class.getName()).info("StormCore has started!");
@@ -42,5 +42,9 @@ public class StormCore extends JavaPlugin {
 
 	public static StormCore getInstance() {
 		return instance;
+	}
+
+	public AnnotationConfigApplicationContext getContext() {
+		return context;
 	}
 }
