@@ -102,6 +102,7 @@ public class ModuleLoaderController {
 		}
 		StormPlugin module = (StormPlugin) mainClass.newInstance();
 		module.setModuleLoader(classLoader);
+		moduleContext.setParent(StormCore.getInstance().getContext());
 		module.setContext(moduleContext);
 		moduleContext.scan(module.getPackages());
 		SpringConfig cfg = module.getSpringConfig();
