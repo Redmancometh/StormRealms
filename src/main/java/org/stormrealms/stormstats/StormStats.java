@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.event.Listener;
+import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.stormrealms.stormcore.StormPlugin;
@@ -11,14 +12,18 @@ import org.stormrealms.stormcore.command.ModuleCommand;
 import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
 import org.stormrealms.stormstats.configuration.StormStatConfiguration;
-import org.stormrealms.stormstats.listeners.LoginListener;
+import org.stormrealms.stormstats.model.ClassData;
+import org.stormrealms.stormstats.model.RPGClass;
+import org.stormrealms.stormstats.model.RPGPlayer;
+
+@AutoConfigurationPackage
 
 public class StormStats extends StormPlugin {
 	private ConfigManager<SpringConfig> cfgMan = new ConfigManager<SpringConfig>("spring.json", SpringConfig.class);
 
 	@Override
-	public void enable() {
-		super.enable();
+	public Set<ModuleCommand> commands() {
+		return new HashSet();
 	}
 
 	@Override
@@ -27,13 +32,19 @@ public class StormStats extends StormPlugin {
 	}
 
 	@Override
-	public void setContext(AnnotationConfigApplicationContext context) {
-		this.context = context;
+	public ConfigurableApplicationContext getContext() {
+		return super.context;
 	}
 
 	@Override
-	public ConfigurableApplicationContext getContext() {
-		return context;
+	public Class[] getEntities() {
+		return new Class[] { RPGPlayer.class, RPGClass.class, ClassData.class };
+	}
+
+	@Override
+	public String[] getPackages() {
+		return new String[] { "org.stormrealms.stormstats.controllers", "org.stormrealms.stormstats.listeners",
+				"org.stormrealms.stormstats.data", "org.stormrealms.stormstats.model" };
 	}
 
 	@Override
@@ -44,14 +55,12 @@ public class StormStats extends StormPlugin {
 
 	@Override
 	public Set<Listener> listeners() {
-		Set listeners = new HashSet();
-		listeners.add(new LoginListener());
-		return listeners;
+		return new HashSet();
 	}
 
 	@Override
-	public Set<ModuleCommand> commands() {
-		return new HashSet();
+	public void setContext(AnnotationConfigApplicationContext context) {
+		super.context = context;
 	}
 
 }

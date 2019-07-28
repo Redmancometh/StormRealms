@@ -2,20 +2,15 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>StormStats</groupId>
+	<groupId>org.stormrealms</groupId>
 	<artifactId>StormStats</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
-				<configuration>
-					<release>10</release>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+	<version>2.0</version>
+	<properties>
+		<jackson.version>2.9.2</jackson.version>
+		<maven.compiler.source>1.10</maven.compiler.source>
+		<maven.compiler.target>1.10</maven.compiler.target>
+		<webapp.directory>src/main/webapp</webapp.directory>
+	</properties>
 	<repositories>
 		<repository>
 			<id>releases</id>
@@ -24,15 +19,27 @@
 	</repositories>
 	<dependencies>
 		<dependency>
-			<groupId>org.stormrealms</groupId>
-			<artifactId>StormCore</artifactId>
-			<version>2.0.5</version>
-		</dependency>
-		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.14.8</version>
 			<scope>provided</scope>
+			<version>1.16.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.stormrealms</groupId>
+			<artifactId>StormCore</artifactId>
+			<version>3.0.3</version>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<source>1.10</source>
+					<target>1.10</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
