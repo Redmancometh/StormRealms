@@ -3,6 +3,8 @@ package org.stormrealms;
 import java.io.File;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.bukkit.event.Listener;
 import org.json.simple.parser.JSONParser;
@@ -12,6 +14,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.stormrealms.stormcore.StormCore;
 import org.stormrealms.stormcore.StormPlugin;
@@ -51,6 +54,12 @@ public class StormCoreConfiguration {
 	@Bean(name = "modules-dir")
 	public File moduleDir() {
 		return new File("plugins/StormCore/modules");
+	}
+
+	@Bean
+	@Scope("singleton")
+	public ExecutorService pool() {
+		return Executors.newFixedThreadPool(7);
 	}
 
 	@Bean
