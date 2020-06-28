@@ -13,9 +13,7 @@ public class MasterController {
 	private StatLoginListener listener;
 
 	@PostConstruct
-	public void registerListener() {
-		for (int x = 0; x < 2; x++)
-			System.out.println("FOUND");
+	public void registerListeners() {
 		Bukkit.getPluginManager().registerEvents(listener, Bukkit.getPluginManager().getPlugin("StormCore"));
 	}
 }

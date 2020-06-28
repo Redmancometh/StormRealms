@@ -1,57 +1,50 @@
 package org.stormrealms.stormstats.listeners;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-
-import javax.transaction.Transactional;
-
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Component;
-import org.stormrealms.stormstats.data.RPGPlayerRepository;
+import org.stormrealms.stormstats.data.StatRepo;
+import org.stormrealms.stormstats.menus.ClassMenu;
 import org.stormrealms.stormstats.model.RPGPlayer;
+
+import com.redmancometh.redcore.util.SpecialFuture;
 
 @Component
 public class StatLoginListener implements Listener {
 	@Autowired
-	private RPGPlayerRepository players;
+	private StatRepo statRepo;
 	@Autowired
-	@Qualifier(value = "player-cache")
-	private Map<UUID, RPGPlayer> cache;
+	private AutowireCapableBeanFactory factory;
 
 	@EventHandler
-	@Transactional
 	public void onLogin(PlayerJoinEvent e) {
-		Player p = e.getPlayer();
-		UUID uuid = p.getUniqueId();
-		Optional<RPGPlayer> player = players.findById(uuid);
-		if (player.isPresent()) {
-			System.out.println("FOUND");
-			System.out.println(player);
-		} else {
-			System.out.println("MAKING NEW");
-			RPGPlayer newPlayer = new RPGPlayer();
-			newPlayer.setPlayerId(uuid);
-			newPlayer.setAgi(5);
-			RPGPlayer rP = players.saveAndFlush(newPlayer);
-			System.out.println("Size: " + players.findAll().size());
-			System.out.println(rP);
-		}
+		SpecialFuture<RPGPlayer> pF = statRepo.getRecord(e.getPlayer().getUniqueId());
+		pF.thenAccept((p) -> {
+			System.out.println(p);
+		});
+	}
+
+	@EventHandler
+	public void onClick(PlayerItemHeldEvent e) {
+		statRepo.getRecord(e.getPlayer().getUniqueId()).thenAccept((rpgPlayer) -> {
+			ClassMenu menu = factory.getBean(ClassMenu.class);
+			menu.selectObject(rpgPlayer);
+			menu.open(e.getPlayer(), rpgPlayer);
+		});
 	}
 
 	@EventHandler
 	public void onLogout(PlayerQuitEvent e) {
-		Player p = e.getPlayer();
-		UUID uuid = p.getUniqueId();
-		Optional<RPGPlayer> player = players.findById(uuid);
-		RPGPlayer rPlayer = player.get();
-		rPlayer.setAgi(rPlayer.getAgi() + 1);
-
+		statRepo.getRecord(e.getPlayer().getUniqueId()).thenAccept((rpgPlayer) -> {
+			System.out.println(rpgPlayer);
+			statRepo.saveAndPurge(rpgPlayer, e.getPlayer().getUniqueId())
+					.thenRun(() -> System.out.println("DONE SAVING"));
+		});
 	}
+
 }

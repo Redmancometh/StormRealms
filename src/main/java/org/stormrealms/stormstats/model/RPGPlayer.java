@@ -1,9 +1,8 @@
 package org.stormrealms.stormstats.model;
 
+import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -12,21 +11,30 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.hibernate.annotations.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormstats.configuration.pojo.DefaultsConfig;
+import com.redmancometh.redcore.Defaultable;
 
 import lombok.Data;
 
 @Data
 @Entity
 @Table
-public class RPGPlayer {
+public class RPGPlayer implements Defaultable<UUID> {
 	@Autowired
 	private transient ConfigManager<DefaultsConfig> cfgMan;
 	@Id
+	@Type(type = "uuid-char")
+	@Column(nullable = true)
 	private UUID playerId;
+	@Column
+	private int health;
 	@Column
 	private double experience;
 	@Column
@@ -39,8 +47,34 @@ public class RPGPlayer {
 	private int spi;
 	@Column
 	private int agi;
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "player")
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "player")
 	private ClassData data;
 	@ElementCollection(fetch = FetchType.EAGER, targetClass = java.lang.Integer.class)
-	Map<UUID, Integer> questMap = new ConcurrentHashMap<UUID, Integer>();
+	private Map<UUID, Integer> questMap;
+	@Transient
+	private WeakReference<Player> playerRef;
+
+	public Player getPlayer() {
+		if (playerRef != null && playerRef.get() != null)
+			return playerRef.get();
+		return Bukkit.getPlayer(playerId);
+	}
+
+	@Override
+	public UUID getKey() {
+		return playerId;
+	}
+
+	@Override
+	public void setDefaults(UUID playerId) {
+		this.level = 1;
+		this.str = 1;
+		this.intel = 1;
+		this.spi = 1;
+		this.agi = 1;
+		this.playerId = playerId;
+		this.experience = 0;
+		this.health = 0;
+	}
+
 }
