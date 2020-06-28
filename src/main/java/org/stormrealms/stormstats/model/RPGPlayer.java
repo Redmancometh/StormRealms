@@ -14,9 +14,6 @@ import javax.persistence.Transient;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.hibernate.annotations.Type;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.stormrealms.stormcore.config.ConfigManager;
-import org.stormrealms.stormstats.configuration.pojo.DefaultsConfig;
 import com.redmancometh.redcore.Defaultable;
 
 import lombok.Data;
@@ -25,8 +22,6 @@ import lombok.Data;
 @Entity
 @Table
 public class RPGPlayer implements Defaultable<UUID> {
-	@Autowired
-	private transient ConfigManager<DefaultsConfig> cfgMan;
 	@Id
 	@Type(type = "uuid-char")
 	@Column(nullable = true)

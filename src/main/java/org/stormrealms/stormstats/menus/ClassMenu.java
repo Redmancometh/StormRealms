@@ -27,7 +27,8 @@ public class ClassMenu extends TypedMenu<RPGPlayer> {
 	ConfigManager<ClassConfiguration> confMan;
 
 	public ClassMenu() {
-		super("Class Menu");
+		super("Class Menu", 54);
+		setTemplate(confMan.getConfig().getClassMenuTemplate());
 	}
 
 	@PostConstruct

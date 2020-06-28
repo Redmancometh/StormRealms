@@ -20,7 +20,6 @@ import org.stormrealms.stormcore.config.pojo.SpringConfig;
 import org.stormrealms.stormstats.configuration.StormStatConfiguration;
 import org.stormrealms.stormstats.listeners.StatLoginListener;
 import org.stormrealms.stormstats.menus.ClassMenu;
-import org.stormrealms.stormstats.model.RPGClass;
 import org.stormrealms.stormstats.model.RPGPlayer;
 
 import com.redmancometh.redcore.DBRedPlugin;
@@ -87,7 +86,7 @@ public class StormStats extends StormPlugin implements DBRedPlugin {
 	@Override
 	public List<Class> getMappedClasses() {
 		List<Class> classes = new ArrayList();
-		classes.addAll(Arrays.asList(new Class[] { RPGPlayer.class, RPGClass.class }));
+		classes.addAll(Arrays.asList(new Class[] { RPGPlayer.class }));
 		return classes;
 	}
 
