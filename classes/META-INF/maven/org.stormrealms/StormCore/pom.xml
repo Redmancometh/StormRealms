@@ -13,8 +13,8 @@
 	</parent>
 	<properties>
 		<jackson.version>2.9.2</jackson.version>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.10</maven.compiler.source>
+		<maven.compiler.target>1.10</maven.compiler.target>
 		<webapp.directory>src/main/webapp</webapp.directory>
 	</properties>
 	<repositories>
@@ -55,44 +55,16 @@
 			<version>1.15</version>
 			<classifier>b372</classifier>
 		</dependency>
-		<dependency>
-			<groupId>org.stormrealms</groupId>
-			<artifactId>StormMenus</artifactId>
-			<version>1.0.1</version>
-		</dependency>
 	</dependencies>
 	<build>
+		<directory></directory>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>1.10</source>
+					<target>1.10</target>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<configuration>
-					<outputFile>${user.home}/Desktop/Stormrealms/testserver/plugins/StormCore.jar</outputFile>
-					<artifactSet>
-						<includes>
-							<include>*:*</include>
-						</includes>
-						<excludes>
-							<exclude>javax:*</exclude>
-							<exclude>org.stormrealms:StormMenu:*</exclude>
-						</excludes>
-					</artifactSet>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

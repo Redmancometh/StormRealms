@@ -2,7 +2,6 @@ name: StormCore
 main: org.stormrealms.stormcore.StormCore
 version: 1.0
 description: "Core plugin"
-api-version: 1.13
 commands:
   sc:
     description: sc.

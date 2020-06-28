@@ -70,8 +70,6 @@ public abstract class StormPlugin {
 	 */
 	public abstract String[] getPackages();
 
-	public abstract Class[] getEntities();
-
 	public abstract SpringConfig getSpringConfig();
 
 	public abstract void setContext(AnnotationConfigApplicationContext context);

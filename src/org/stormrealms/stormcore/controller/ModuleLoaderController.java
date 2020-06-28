@@ -5,6 +5,8 @@ import com.google.common.io.CharStreams;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.redmancometh.redcore.DBRedPlugin;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -23,7 +25,6 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -47,10 +48,8 @@ public class ModuleLoaderController {
 
 	@PostConstruct
 	public void loadModules() {
-		System.out.println("LOAD MODULES!");
-		if (!moduleDir.exists()) {
+		if (!moduleDir.exists())
 			moduleDir.mkdir();
-		}
 		try (Stream<Path> pathStream = Files.walk(moduleDir.toPath().toAbsolutePath())) {
 			pathStream.filter(path1 -> path1.toString().endsWith(".jar")).forEach(p -> {
 				try {
@@ -66,7 +65,7 @@ public class ModuleLoaderController {
 		}
 	}
 
-	@SuppressWarnings({ "deprecation", "resource" })
+	@SuppressWarnings({ "resource" })
 	public StormPlugin loadModule(Path path) throws Exception {
 		AnnotationConfigApplicationContext moduleContext = new AnnotationConfigApplicationContext();
 		if (!path.toFile().exists())
@@ -109,13 +108,15 @@ public class ModuleLoaderController {
 		moduleContext.scan(module.getPackages());
 		SpringConfig cfg = module.getSpringConfig();
 		moduleContext.register(module.getConfigurationClass());
-		Map<String, Object> props = moduleContext.getEnvironment().getSystemProperties();
-		cfg.getProperties().forEach((key, value) -> props.put(key, value));
+		cfg.getProperties()
+				.forEach((key, value) -> moduleContext.getEnvironment().getSystemProperties().put(key, value));
 		Thread.currentThread().setContextClassLoader(classLoader);
 		moduleContext.refresh();
 		System.out.println(module.getConfigurationClass().getName());
 		file.close();
 		classLoader.close();
+		if (module instanceof DBRedPlugin)
+			((DBRedPlugin) module).initialize();
 		return module;
 	}
 
