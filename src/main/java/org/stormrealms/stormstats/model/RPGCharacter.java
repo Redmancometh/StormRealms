@@ -1,5 +1,11 @@
 package org.stormrealms.stormstats.model;
 
-public class RPGCharacter {
+import javax.persistence.Entity;
 
+import lombok.Data;
+
+@Data
+@Entity
+public class RPGCharacter {
+	
 }

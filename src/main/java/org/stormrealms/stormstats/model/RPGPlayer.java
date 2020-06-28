@@ -44,6 +44,7 @@ public class RPGPlayer implements Defaultable<UUID> {
 	private String chosenClass;
 	@ElementCollection(fetch = FetchType.EAGER, targetClass = java.lang.Integer.class)
 	private Map<UUID, Integer> questMap;
+	
 	@Transient
 	private WeakReference<Player> playerRef;
 

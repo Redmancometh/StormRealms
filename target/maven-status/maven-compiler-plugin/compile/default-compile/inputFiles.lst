@@ -5,11 +5,9 @@ C:\Users\Redmancometh\minecraft\StormStats\src\main\java\org\stormrealms\stormst
 C:\Users\Redmancometh\minecraft\StormStats\src\main\java\org\stormrealms\stormstats\controllers\MasterController.java
 C:\Users\Redmancometh\minecraft\StormStats\src\main\java\org\stormrealms\stormstats\menus\ClassMenu.java
 C:\Users\Redmancometh\minecraft\StormStats\src\main\java\org\stormrealms\stormstats\StormStats.java
+C:\Users\Redmancometh\minecraft\StormStats\src\main\java\org\stormrealms\stormstats\model\RPGCharacter.java
 C:\Users\Redmancometh\minecraft\StormStats\src\main\java\org\stormrealms\stormstats\controllers\StatController.java
-C:\Users\Redmancometh\minecraft\StormStats\src\main\java\org\stormrealms\stormstats\configuration\pojo\DefaultsConfig.java
 C:\Users\Redmancometh\minecraft\StormStats\src\main\java\org\stormrealms\stormstats\configuration\StormStatConfiguration.java
 C:\Users\Redmancometh\minecraft\StormStats\src\main\java\org\stormrealms\stormstats\model\RPGPlayer.java
-C:\Users\Redmancometh\minecraft\StormStats\src\main\java\org\stormrealms\stormstats\model\RPGClass.java
 C:\Users\Redmancometh\minecraft\StormStats\src\main\java\org\stormrealms\stormstats\model\PlayerStat.java
 C:\Users\Redmancometh\minecraft\StormStats\src\main\java\org\stormrealms\stormstats\listeners\StatLoginListener.java
-C:\Users\Redmancometh\minecraft\StormStats\src\main\java\org\stormrealms\stormstats\configuration\DefaultStatConfigManager.java
