@@ -3,13 +3,11 @@ package org.stormrealms.stormstats.model;
 import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.UUID;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -47,8 +45,8 @@ public class RPGPlayer implements Defaultable<UUID> {
 	private int spi;
 	@Column
 	private int agi;
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "player")
-	private ClassData data;
+	@Column
+	private String chosenClass;
 	@ElementCollection(fetch = FetchType.EAGER, targetClass = java.lang.Integer.class)
 	private Map<UUID, Integer> questMap;
 	@Transient

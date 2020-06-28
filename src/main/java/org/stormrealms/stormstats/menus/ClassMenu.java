@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.PostConstruct;
 
+import org.bukkit.ChatColor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
@@ -15,7 +16,6 @@ import org.stormrealms.stormmenus.menus.TypedSelector;
 import org.stormrealms.stormmenus.util.ItemUtil;
 import org.stormrealms.stormstats.configuration.pojo.ClassConfiguration;
 import org.stormrealms.stormstats.configuration.pojo.ClassInformation;
-import org.stormrealms.stormstats.model.ClassData;
 import org.stormrealms.stormstats.model.RPGPlayer;
 
 @Component
@@ -39,18 +39,11 @@ public class ClassMenu extends TypedMenu<RPGPlayer> {
 			});
 			button.setAction((clickType, rpgPlayer, player) -> {
 				setStartingStats(rpgPlayer, classInfo);
-				rpgPlayer.setData(getClassData(classInfo, rpgPlayer));
+				rpgPlayer.setChosenClass(ChatColor.stripColor(classInfo.getClassName()));
 				player.closeInventory();
 			});
 			setButton(x.getAndIncrement(), button);
 		});
-	}
-
-	public ClassData getClassData(ClassInformation info, RPGPlayer player) {
-		ClassData classData = new ClassData();
-		classData.setPlayerId(player.getPlayerId());
-		classData.setChosenClass(info.getClassName());
-		return classData;
 	}
 
 	public void setStartingStats(RPGPlayer rpPlayer, ClassInformation classInfo) {
