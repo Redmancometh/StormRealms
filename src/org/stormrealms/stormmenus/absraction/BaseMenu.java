@@ -13,7 +13,7 @@ public abstract class BaseMenu {
 	private Map<String, Function<Player, String>> placeholders = new ConcurrentHashMap<>();
 	private String name;
 	private boolean lowerMenu = false;
-	private MenuTemplate template;
+	protected MenuTemplate template;
 	private boolean allowLower = false;
 	private int size = 18;
 

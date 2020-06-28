@@ -38,6 +38,7 @@ public abstract class TypedMenu<T> extends BaseTypedMenu<T> {
 			throw new IllegalStateException("You forgot to set the object value in a typed menu before calling open!");
 		Menus.getInstance().getMenuManager().setTypedPlayerMenu(p.getUniqueId(), this);
 		System.out.println("IS E NULL? " + (e == null));
+		System.out.println("Template is null? " + (template == null));
 		this.e = e;
 		p.openInventory(constructInventory.apply(p, e));
 	}
@@ -110,6 +111,10 @@ public abstract class TypedMenu<T> extends BaseTypedMenu<T> {
 		super(name, size, template);
 		this.constructInventory = (p, typedElement) -> {
 			Inventory menuInv = Bukkit.createInventory(null, size, this.getName());
+			System.out.println("Template is null? " + (template == null));
+			if (template != null) {
+				decorateMenu();
+			}
 			actionMap.forEach(
 					(number, button) -> menuInv.setItem(number, button.constructButton(typedElement, this, p)));
 			return menuInv;
