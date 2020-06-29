@@ -1,0 +1,23 @@
+package org.stormrealms.stormcore;
+
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.stormrealms.stormcore.config.pojo.SpringConfig;
+
+public interface SpringPlugin {
+	public abstract Class<?> getConfigurationClass();
+
+	/**
+	 * Get packages that need to be scanned.
+	 * 
+	 * @return
+	 */
+	public abstract String[] getPackages();
+
+	public abstract SpringConfig getSpringConfig();
+
+	public abstract void setContext(AnnotationConfigApplicationContext context);
+
+	public abstract ConfigurableApplicationContext getContext();
+
+}

@@ -9,11 +9,9 @@ import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.stormrealms.stormcore.command.ModuleCommand;
 import org.stormrealms.stormcore.command.SCommandExecutor;
-import org.stormrealms.stormcore.config.pojo.SpringConfig;
 
 public abstract class StormPlugin {
 	protected AnnotationConfigApplicationContext context;
@@ -60,21 +58,6 @@ public abstract class StormPlugin {
 		commands.clear();
 		// contexts.remove(this.getClass());
 	}
-
-	public abstract Class<?> getConfigurationClass();
-
-	/**
-	 * Get packages that need to be scanned.
-	 * 
-	 * @return
-	 */
-	public abstract String[] getPackages();
-
-	public abstract SpringConfig getSpringConfig();
-
-	public abstract void setContext(AnnotationConfigApplicationContext context);
-
-	public abstract ConfigurableApplicationContext getContext();
 
 	public abstract Set<Listener> listeners();
 

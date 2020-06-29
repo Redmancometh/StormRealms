@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.stormrealms.stormcore.SpringPlugin;
 import org.stormrealms.stormcore.StormCore;
 import org.stormrealms.stormcore.StormPlugin;
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
@@ -100,19 +101,40 @@ public class ModuleLoaderController {
 			System.out.println("Loaded class: " + className);
 		}
 		StormPlugin module = (StormPlugin) mainClass.newInstance();
+		if (module instanceof SpringPlugin)
+			return loadSpringPlugin(module, classLoader, moduleContext, config, file);
+		return module;
+	}
+
+	public StormPlugin loadSpringPlugin(StormPlugin module, URLClassLoader classLoader,
+			AnnotationConfigApplicationContext moduleContext, PluginConfig config, JarFile file) throws IOException {
+		SpringPlugin spModule = (SpringPlugin) module;
 		module.setModuleLoader(classLoader);
 		moduleContext.setParent(StormCore.getInstance().getContext());
-		module.setContext(moduleContext);
+		spModule.setContext(moduleContext);
 		module.enable();
 		module.setName(config.getName());
-		moduleContext.scan(module.getPackages());
-		SpringConfig cfg = module.getSpringConfig();
-		moduleContext.register(module.getConfigurationClass());
+		moduleContext.scan(spModule.getPackages());
+		SpringConfig cfg = spModule.getSpringConfig();
+		moduleContext.register(spModule.getConfigurationClass());
 		cfg.getProperties()
 				.forEach((key, value) -> moduleContext.getEnvironment().getSystemProperties().put(key, value));
 		Thread.currentThread().setContextClassLoader(classLoader);
 		moduleContext.refresh();
-		System.out.println(module.getConfigurationClass().getName());
+		file.close();
+		classLoader.close();
+		if (module instanceof DBRedPlugin)
+			((DBRedPlugin) module).initialize();
+		return module;
+
+	}
+
+	public StormPlugin loadStormPlugin(StormPlugin module, URLClassLoader classLoader, PluginConfig config,
+			JarFile file) throws IOException {
+		module.setModuleLoader(classLoader);
+		module.enable();
+		module.setName(config.getName());
+		Thread.currentThread().setContextClassLoader(classLoader);
 		file.close();
 		classLoader.close();
 		if (module instanceof DBRedPlugin)
