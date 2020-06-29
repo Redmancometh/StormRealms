@@ -32,4 +32,5 @@ public class StormStatConfiguration {
 		System.out.print(man.getConfig());
 		return man;
 	}
+
 }

@@ -5,37 +5,30 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.hibernate.SessionFactory;
 import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.stormrealms.stormcore.StormCore;
-import org.stormrealms.stormcore.StormPlugin;
+import org.stormrealms.stormcore.StormSpringPlugin;
 import org.stormrealms.stormcore.command.ModuleCommand;
 import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
 import org.stormrealms.stormstats.configuration.StormStatConfiguration;
 import org.stormrealms.stormstats.listeners.StatLoginListener;
-import org.stormrealms.stormstats.menus.ClassMenu;
 import org.stormrealms.stormstats.model.RPGPlayer;
 
 import com.redmancometh.redcore.DBRedPlugin;
 
 @AutoConfigurationPackage
-public class StormStats extends StormPlugin implements DBRedPlugin {
+public class StormStats extends StormSpringPlugin implements DBRedPlugin {
 	private ConfigManager<SpringConfig> cfgMan = new ConfigManager<SpringConfig>("spring.json", SpringConfig.class);
 	private SessionFactory factory;
 
 	@Override
 	public void initialize() {
 		DBRedPlugin.super.initialize();
-		Bukkit.getScheduler().scheduleSyncDelayedTask(StormCore.getInstance(), () -> {
-			ClassMenu menu = new ClassMenu();
-			getContext().getAutowireCapableBeanFactory().autowireBean(menu);
-		}, 60);
+
 	}
 
 	@Override
