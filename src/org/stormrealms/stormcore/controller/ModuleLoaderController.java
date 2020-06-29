@@ -19,7 +19,6 @@ import org.stormrealms.stormcore.util.PluginConfig;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,10 +35,11 @@ import javax.annotation.PostConstruct;
 
 @Controller
 public class ModuleLoaderController {
-
 	private File moduleDir;
 	private Set<StormPlugin> enabledPlugins;
 	private Set<StormPlugin> plugins;
+	@Autowired
+	private URLClassLoader classLoader;
 
 	public ModuleLoaderController(@Autowired @Qualifier("modules-dir") File moduleDir) {
 		this.moduleDir = moduleDir;
@@ -81,20 +81,15 @@ public class ModuleLoaderController {
 		Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
 				.setPrettyPrinting().create();
 		PluginConfig config = gson.fromJson(moduleJsonSTR, PluginConfig.class);
-		URLClassLoader classLoader = new URLClassLoader(new URL[] { path.toUri().toURL() },
-				StormCore.getInstance().getClass().getClassLoader());
 		moduleContext.setClassLoader(classLoader);
 		Class mainClass = classLoader.loadClass(config.getMain());
 		Enumeration<JarEntry> entries = file.entries();
 		while (entries.hasMoreElements()) {
 			JarEntry clazz = entries.nextElement();
-			if (clazz.getName().equals(mainClass.getName())) {
-				System.out.println("FOUND MAIN AND SKIPPING");
+			if (clazz.getName().equals(mainClass.getName()))
 				continue;
-			}
-			if (clazz.isDirectory() || !clazz.getName().endsWith(".class")) {
+			if (clazz.isDirectory() || !clazz.getName().endsWith(".class"))
 				continue;
-			}
 			String className = clazz.getName().substring(0, clazz.getName().length() - 6);
 			className = className.replace('/', '.');
 			classLoader.loadClass(className);

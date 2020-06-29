@@ -1,13 +1,24 @@
 package org.stormrealms;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.bukkit.event.Listener;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +38,31 @@ import com.google.common.collect.Multimaps;
 		"org.stormrealms.stormstats" })
 @EnableAutoConfiguration
 public class StormCoreConfiguration {
+
+	Function<Path, URL> pathMapperFunc = (p) -> {
+		try {
+			return p.toUri().toURL();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	};
+
+	@Bean("mod-paths")
+	public List<URL> modulePaths(@Qualifier("modules-dir") File moduleDir) throws IOException {
+		try (Stream<Path> pathStream = Files.walk(moduleDir.toPath().toAbsolutePath())) {
+			return pathStream.filter(path1 -> path1.toString().endsWith(".jar")).map(pathMapperFunc)
+					.collect(Collectors.toList());
+		}
+	}
+
+	@Bean
+	public URLClassLoader pluginLoader(@Qualifier("mod-paths") List<URL> modulePaths) {
+		URLClassLoader classLoader = new URLClassLoader(modulePaths.toArray(new URL[modulePaths.size()]),
+				StormCore.getInstance().getClass().getClassLoader());
+		return classLoader;
+	}
+
 	@Bean
 	public PluginStorage pluginStorage() {
 		return new PluginStorage();
