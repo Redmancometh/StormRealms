@@ -1,38 +1,15 @@
 package org.stormrealms.stormcore.storage;
 
 import java.util.Map;
-import java.util.Set;
-
-import org.bukkit.event.Listener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.stormrealms.stormcore.StormPlugin;
-import org.stormrealms.stormcore.command.ModuleCommand;
-
-import com.google.common.collect.Multimap;
 
 public class PluginStorage {
 	@Autowired
 	@Qualifier("context-storage")
 	private Map<Class<? extends StormPlugin>, AnnotationConfigApplicationContext> contexts;
-
-	/**
-	 * Will use these just in case we need to read them in some way.
-	 */
-	@Autowired
-	@Qualifier("listener-storage")
-	private Multimap<Class<? extends StormPlugin>, Listener> listenerMap;
-	@Autowired
-	@Qualifier("command-storage")
-	private Multimap<Class<? extends StormPlugin>, ModuleCommand> commandMap;
-
-	public void registerPlugin(Class<? extends StormPlugin> pluginClass, AnnotationConfigApplicationContext context,
-			Set<Listener> listeners, Set<ModuleCommand> commands) {
-		contexts.put(pluginClass, context);
-		listenerMap.putAll(pluginClass, listeners);
-		commandMap.putAll(pluginClass, commands);
-	}
 
 	/**
 	 * 

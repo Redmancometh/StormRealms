@@ -8,7 +8,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.stormrealms.StormCoreConfiguration;
-import org.stormrealms.stormcore.command.ModuleCommand;
 import org.stormrealms.stormcore.command.StormCommandHandler;
 import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
@@ -35,7 +34,6 @@ public class StormCore extends JavaPlugin {
 		cfg.getProperties().forEach((key, value) -> props.put(key, value));
 		context.getEnvironment().setActiveProfiles(cfg.getProfiles().toArray(new String[cfg.getProfiles().size()]));
 		this.context.refresh();
-		getCommand("sc").setExecutor(context.getBean(ModuleCommand.class));
 		Bukkit.getPluginManager().registerEvents(context.getBean(StormCommandHandler.class), this);
 		Logger.getLogger(StormCoreConfiguration.class.getName()).info("StormCore has started!");
 	}

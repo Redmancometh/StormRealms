@@ -10,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.stormrealms.stormcore.command.ModuleCommand;
 import org.stormrealms.stormcore.command.SCommandExecutor;
 
 public abstract class StormPlugin {
@@ -60,8 +59,6 @@ public abstract class StormPlugin {
 	}
 
 	public abstract Set<Listener> listeners();
-
-	public abstract Set<ModuleCommand> commands();
 
 	public void registerListeners() {
 		listeners().forEach(this::registerListener);

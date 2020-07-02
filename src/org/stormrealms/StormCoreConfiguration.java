@@ -27,7 +27,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.stormrealms.stormcore.StormCore;
 import org.stormrealms.stormcore.StormPlugin;
-import org.stormrealms.stormcore.command.ModuleCommand;
 import org.stormrealms.stormcore.storage.PluginStorage;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -78,11 +77,6 @@ public class StormCoreConfiguration {
 		return Multimaps.synchronizedSetMultimap(HashMultimap.<Class<? extends StormPlugin>, Listener>create());
 	}
 
-	@Bean(name = "command-storage")
-	public Multimap<Class<? extends StormPlugin>, ModuleCommand> commands() {
-		return Multimaps.synchronizedSetMultimap(HashMultimap.<Class<? extends StormPlugin>, ModuleCommand>create());
-	}
-
 	@Bean(name = "modules-dir")
 	public File moduleDir() {
 		return new File("plugins/StormCore/modules");
@@ -92,11 +86,6 @@ public class StormCoreConfiguration {
 	@Scope("singleton")
 	public ExecutorService pool() {
 		return Executors.newFixedThreadPool(7);
-	}
-
-	@Bean
-	public ModuleCommand mainCommand() {
-		return new ModuleCommand();
 	}
 
 	@Bean
