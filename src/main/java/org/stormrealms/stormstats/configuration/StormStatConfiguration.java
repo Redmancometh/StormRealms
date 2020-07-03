@@ -12,8 +12,7 @@ import org.stormrealms.stormstats.configuration.pojo.ClassConfiguration;
 import org.stormrealms.stormstats.model.RPGPlayer;
 
 @Configuration
-@ComponentScan(basePackages = { "org.stormrealms.stormstats.listeners", "org.stormrealms.stormstats.menus",
-		"org.stormrealms.stormstats.menus" })
+@ComponentScan(basePackages = { "org.stormrealms.stormstats.listeners" })
 public class StormStatConfiguration {
 
 	@Bean(name = "player-cache")

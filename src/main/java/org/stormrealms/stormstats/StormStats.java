@@ -9,25 +9,22 @@ import org.bukkit.event.Listener;
 import org.hibernate.SessionFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.DBRedPlugin;
-import org.stormrealms.stormcore.SpringPlugin;
-import org.stormrealms.stormcore.StormPlugin;
+import org.stormrealms.stormcore.StormSpringPlugin;
 import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
 import org.stormrealms.stormstats.configuration.StormStatConfiguration;
 import org.stormrealms.stormstats.model.RPGPlayer;
 
-@ComponentScan
-public class StormStats extends StormPlugin implements DBRedPlugin, SpringPlugin {
+@Component
+public class StormStats extends StormSpringPlugin implements DBRedPlugin {
 	private ConfigManager<SpringConfig> cfgMon = new ConfigManager<SpringConfig>("spring.json", SpringConfig.class);
 	private SessionFactory factory;
 
 	@Override
 	public void initialize() {
 		DBRedPlugin.super.initialize();
-		RPGPlayer player = new RPGPlayer();
-		System.out.println("PLAYER " + player);
 	}
 
 	@Override

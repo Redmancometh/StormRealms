@@ -1,4 +1,5 @@
 {
 	"name": "StormStats",
-	"main": "org.stormrealms.stormstats.StormStats"
+	"main": "org.stormrealms.stormstats.StormStats",
+	"load-order": 1
 }

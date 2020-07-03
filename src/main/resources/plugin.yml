@@ -1,4 +1,0 @@
-name: StormStats
-main: org.stormrealms.stormstats.StormStats
-version: 1.0
-depend: [RedCore, StormCore]
