@@ -14,8 +14,8 @@ import org.stormrealms.stormmenus.menus.ClickType;
 import org.stormrealms.stormmenus.menus.MenuButton;
 import org.stormrealms.stormmenus.util.ItemUtil;
 import org.stormrealms.stormmenus.util.PaneUtil;
+import org.stormrealms.stormmenus.MenuManager;
 import org.stormrealms.stormmenus.MenuTemplate;
-import org.stormrealms.stormmenus.Menus;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -23,11 +23,11 @@ public abstract class Menu extends BaseMenu {
 	protected Map<Integer, MenuButton> actionMap = new ConcurrentHashMap<>();
 	protected Function<Player, Inventory> constructInventory;
 	@Autowired
-	private Menus manager;
+	private MenuManager manager;
 
 	public void open(Player p) {
 		constructInventory.apply(p);
-		manager.getMenuManager().setPlayerMenu(p.getUniqueId(), this);
+		manager.setPlayerMenu(p.getUniqueId(), this);
 	}
 
 	/**

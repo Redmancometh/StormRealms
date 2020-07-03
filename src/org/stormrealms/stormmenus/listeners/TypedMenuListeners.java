@@ -22,9 +22,11 @@ public class TypedMenuListeners implements Listener {
 
 	@EventHandler
 	public void listenForBasicClick(InventoryClickEvent e) {
+		System.out.println("IS MANAGER NULL? " + (manager == null));
 		UUID uuid = e.getWhoClicked().getUniqueId();
 		if (e.getClickedInventory() != null && e.getView().getTitle() != null) {
 			if (manager.playerHasTypedMenuOpen(uuid)) {
+				System.out.println("PLAYER HAS TYPED MENU OPEN");
 				e.setCancelled(true);
 				TypedMenu m = manager.getTypedMenuFromUUID(uuid);
 				if (m != null && m.hasActionAt(e.getRawSlot())) {
@@ -39,6 +41,11 @@ public class TypedMenuListeners implements Listener {
 					ClickType type = getClickType(e.isShiftClick(), e.isRightClick());
 					m.getActionAt(e.getRawSlot()).accept(type, selected, p);
 				}
+			} else {
+				System.out.println("NO TYPED MENU DAFUQ YO");
+				manager.map().forEach((id, menu) -> {
+					System.out.println("UUID " + id + " has menu of type " + menu.getClass() + " open1");
+				});
 			}
 
 		}

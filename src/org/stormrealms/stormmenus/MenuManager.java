@@ -16,6 +16,10 @@ public class MenuManager {
 	protected static Map<UUID, TypedMenu> typedMap = new ConcurrentHashMap();
 	protected static Map<UUID, Menu> menuMap = new ConcurrentHashMap();
 
+	public Map<UUID, TypedMenu> map() {
+		return typedMap;
+	}
+
 	public boolean playerHasTypedMenuOpen(UUID uuid) {
 		return typedMap.containsKey(uuid);
 	}

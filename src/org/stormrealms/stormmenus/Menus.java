@@ -11,21 +11,10 @@ import org.stormrealms.stormmenus.configuration.StormMenuConfiguration;
 
 @Component
 public class Menus extends StormSpringPlugin {
-	private MenuManager menuManager;
 
 	@Override
 	public void enable() {
-		System.out.println("ENABLING MENUS");
 		super.enable();
-		this.menuManager = new MenuManager();
-	}
-
-	public MenuManager getMenuManager() {
-		return menuManager;
-	}
-
-	public void setMenuManager(MenuManager menuManager) {
-		this.menuManager = menuManager;
 	}
 
 	@Override
