@@ -14,6 +14,7 @@ public class MasterController {
 
 	@PostConstruct
 	public void registerListeners() {
+		System.out.println("POST CONSTRUCT!");
 		Bukkit.getPluginManager().registerEvents(listener, Bukkit.getPluginManager().getPlugin("StormCore"));
 	}
 }

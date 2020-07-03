@@ -5,11 +5,16 @@
 	<groupId>org.stormrealms</groupId>
 	<artifactId>StormStats</artifactId>
 	<version>2.0</version>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.6.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
 	<properties>
 		<jackson.version>2.9.2</jackson.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<webapp.directory>src/main/webapp</webapp.directory>
 	</properties>
 	<repositories>
 		<repository>
@@ -26,12 +31,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.stormrealms</groupId>
-			<artifactId>RedCore</artifactId>
-			<version>3.0.0</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.stormrealms</groupId>
 			<artifactId>StormMenus</artifactId>
 			<version>1.0.1</version>
 		</dependency>
@@ -39,26 +38,46 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
-			<version>1.16.2</version>
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>StormStats</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.3.2</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
 				<configuration>
-					<outputDirectory>${user.home}/Desktop/stormrealms/testserver/plugins/stormcore/modules</outputDirectory>
+					<outputFile>${user.home}/Desktop/Stormrealms/testserver/plugins/StormCore/modules/StormStats.jar</outputFile>
+					<artifactSet>
+						<includes>
+							<include>*:*</include>
+						</includes>
+						<excludes>
+							<exclude>javax:*</exclude>
+							<exclude>org.hibernate:*</exclude>
+							<exclude>org.stormrealms:StormMenu:*</exclude>
+							<!-- exclude>org.stormrealms:spigot:*</exclude -->
+							<exclude>org.yaml:snakeyaml:*</exclude>
+							<exclude>javax.annotation:*</exclude>
+							<exclude>org.stormrealms:spigot:*</exclude>
+							<exclude>org.stormrealms:StormMenus:*</exclude>
+						</excludes>
+					</artifactSet>
 				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

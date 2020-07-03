@@ -28,10 +28,13 @@ public class ClassMenu extends TypedMenu<RPGPlayer> {
 
 	public ClassMenu() {
 		super("Class Menu", 54);
+		System.out.println("CONF MAN " + confMan);
 	}
 
 	@PostConstruct
 	public void addButtons() {
+		System.out.println("ADDING BUTTONS CONFIG INC");
+		System.out.println(confMan.getConfig());
 		AtomicInteger x = new AtomicInteger(0);
 		confMan.getConfig().getClassMap().forEach((className, classInfo) -> {
 			TypedMenuButton<RPGPlayer> button = new TypedMenuButton<>((p, t) -> {

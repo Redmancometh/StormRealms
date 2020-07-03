@@ -14,7 +14,7 @@ import javax.persistence.Transient;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.hibernate.annotations.Type;
-import com.redmancometh.redcore.Defaultable;
+import org.stormrealms.stormcore.Defaultable;
 
 import lombok.Data;
 
@@ -44,7 +44,7 @@ public class RPGPlayer implements Defaultable<UUID> {
 	private String chosenClass;
 	@ElementCollection(fetch = FetchType.EAGER, targetClass = java.lang.Integer.class)
 	private Map<UUID, Integer> questMap;
-	
+
 	@Transient
 	private WeakReference<Player> playerRef;
 

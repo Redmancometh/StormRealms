@@ -8,11 +8,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Component;
+import org.stormrealms.stormcore.util.SpecialFuture;
 import org.stormrealms.stormstats.data.StatRepo;
 import org.stormrealms.stormstats.menus.ClassMenu;
 import org.stormrealms.stormstats.model.RPGPlayer;
-
-import com.redmancometh.redcore.util.SpecialFuture;
 
 @Component
 public class StatLoginListener implements Listener {
@@ -23,6 +22,7 @@ public class StatLoginListener implements Listener {
 
 	@EventHandler
 	public void onLogin(PlayerJoinEvent e) {
+		System.out.println("JOIN EVENT");
 		SpecialFuture<RPGPlayer> pF = statRepo.getRecord(e.getPlayer().getUniqueId());
 		pF.thenAccept((p) -> {
 			System.out.println(p);
