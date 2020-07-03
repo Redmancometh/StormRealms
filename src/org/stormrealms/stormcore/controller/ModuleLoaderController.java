@@ -8,7 +8,6 @@ import com.google.gson.GsonBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.stormrealms.stormcore.DBRedPlugin;
@@ -20,8 +19,6 @@ import org.stormrealms.stormcore.config.pojo.PluginLoadTask;
 import org.stormrealms.stormcore.config.pojo.PluginLoadTaskContainer;
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
 import org.stormrealms.stormcore.util.PluginConfig;
-import org.stormrealms.stormcore.util.SpringUtil;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;

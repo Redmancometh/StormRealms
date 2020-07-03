@@ -22,4 +22,8 @@ public interface SpringPlugin {
 
 	public abstract ConfigurableApplicationContext getContext();
 
+	public default <U> U getBean(Class<U> clazz) {
+		return getContext().getAutowireCapableBeanFactory().getBean(clazz);
+	}
+
 }

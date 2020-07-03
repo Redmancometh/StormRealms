@@ -48,6 +48,8 @@ public interface DBRedPlugin extends RedPlugin {
 		settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL5Dialect");
 		settings.put(Environment.SHOW_SQL, "false");
 		settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
+		settings.put(Environment.AUTOCOMMIT, "true");
+		settings.put(Environment.CONNECTION_PROVIDER, "org.hibernate.hikaricp.internal.HikariCPConnectionProvider");
 		settings.put(Environment.HBM2DDL_AUTO, "update");
 		getMappedClasses().forEach((mappedClass) -> configuration.addAnnotatedClass(mappedClass));
 		configuration.setProperties(settings);
@@ -60,7 +62,7 @@ public interface DBRedPlugin extends RedPlugin {
 	}
 
 	default void saveDefaultConfigFromJar() {
-		
+
 	}
 
 	default SessionFactory getSessionFactory() {
