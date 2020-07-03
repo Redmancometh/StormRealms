@@ -1,4 +1,5 @@
 {
 	"name": "StormMenus",
-	"main": "org.stormrealms.stormmenus.Menus"
+	"main": "org.stormrealms.stormmenus.Menus",
+	"load-order": 0
 }

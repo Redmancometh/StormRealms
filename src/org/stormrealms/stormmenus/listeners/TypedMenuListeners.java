@@ -7,20 +7,26 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.StormCore;
-import org.stormrealms.stormmenus.Menus;
+import org.stormrealms.stormmenus.MenuManager;
 import org.stormrealms.stormmenus.absraction.SubMenu;
 import org.stormrealms.stormmenus.absraction.TypedMenu;
 import org.stormrealms.stormmenus.menus.ClickType;
 
+@Component
 public class TypedMenuListeners implements Listener {
+	@Autowired
+	private MenuManager manager;
+
 	@EventHandler
 	public void listenForBasicClick(InventoryClickEvent e) {
 		UUID uuid = e.getWhoClicked().getUniqueId();
 		if (e.getClickedInventory() != null && e.getView().getTitle() != null) {
-			if (Menus.getInstance().getMenuManager().playerHasTypedMenuOpen(uuid)) {
+			if (manager.playerHasTypedMenuOpen(uuid)) {
 				e.setCancelled(true);
-				TypedMenu m = Menus.getInstance().getMenuManager().getTypedMenuFromUUID(uuid);
+				TypedMenu m = manager.getTypedMenuFromUUID(uuid);
 				if (m != null && m.hasActionAt(e.getRawSlot())) {
 					Player p = (Player) e.getWhoClicked();
 					if (m.getActionAt(e.getRawSlot()) == null)
@@ -55,8 +61,8 @@ public class TypedMenuListeners implements Listener {
 	public void cancelLowerClick(InventoryCloseEvent e) {
 		UUID uuid = e.getPlayer().getUniqueId();
 		if (e.getInventory() != null && e.getView() != null) {
-			if (Menus.getInstance().getMenuManager().playerHasTypedMenuOpen(uuid)) {
-				TypedMenu m = Menus.getInstance().getMenuManager().getTypedMenuFromUUID(uuid);
+			if (manager.playerHasTypedMenuOpen(uuid)) {
+				TypedMenu m = manager.getTypedMenuFromUUID(uuid);
 				if (m instanceof SubMenu && (!e.getPlayer().hasMetadata("lowermenu"))) {
 					((SubMenu) m).closeMenu((Player) e.getPlayer());
 					e.getPlayer().removeMetadata("lowermenu", StormCore.getInstance());
@@ -71,9 +77,9 @@ public class TypedMenuListeners implements Listener {
 	public void cancelLowerClick(InventoryClickEvent e) {
 		UUID uuid = e.getWhoClicked().getUniqueId();
 		if (e.getInventory() != null && e.getView().getTitle() != null) {
-			if (Menus.getInstance().getMenuManager().playerHasTypedMenuOpen(uuid)) {
+			if (manager.playerHasTypedMenuOpen(uuid)) {
 				e.setCancelled(true);
-				TypedMenu m = Menus.getInstance().getMenuManager().getTypedMenuFromUUID(uuid);
+				TypedMenu m = manager.getTypedMenuFromUUID(uuid);
 				// Player p = (Player) e.getWhoClicked();
 				if (!m.allowsClickLower()) {
 					e.setCancelled(true);

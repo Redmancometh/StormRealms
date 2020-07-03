@@ -9,6 +9,7 @@ import java.util.function.BiFunction;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.stormrealms.stormmenus.menus.ClickType;
 import org.stormrealms.stormmenus.menus.TypedMenuButton;
 import org.stormrealms.stormmenus.menus.TypedSelector;
@@ -28,6 +29,8 @@ import org.stormrealms.stormmenus.Menus;
  */
 
 public abstract class TypedMenu<T> extends BaseTypedMenu<T> {
+	@Autowired
+	private Menus menus;
 	protected Map<Integer, TypedMenuButton<T>> actionMap = new ConcurrentHashMap<>();
 	protected BiFunction<Player, T, Inventory> constructInventory;
 	protected BiConsumer<Player, T> onClose;
@@ -36,7 +39,9 @@ public abstract class TypedMenu<T> extends BaseTypedMenu<T> {
 	public void open(Player p, T e) {
 		if (e == null)
 			throw new IllegalStateException("You forgot to set the object value in a typed menu before calling open!");
-		Menus.getInstance().getMenuManager().setTypedPlayerMenu(p.getUniqueId(), this);
+		System.out.println("MENUS " + (menus == null));
+		System.out.println("MENUS CONTEXT " + (menus.getContext() == null));
+		menus.getMenuManager().setTypedPlayerMenu(p.getUniqueId(), this);
 		System.out.println("IS E NULL? " + (e == null));
 		System.out.println("Template is null? " + (template == null));
 		this.e = e;

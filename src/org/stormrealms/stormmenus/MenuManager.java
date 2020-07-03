@@ -4,9 +4,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.stereotype.Component;
 import org.stormrealms.stormmenus.absraction.Menu;
 import org.stormrealms.stormmenus.absraction.TypedMenu;
 
+@Component
 public class MenuManager {
 	/**
 	 * These are mapped by title
@@ -34,7 +36,12 @@ public class MenuManager {
 		return menuMap.get(uuid);
 	}
 
+	public boolean manager(UUID uuid) {
+		return menuMap.containsKey(uuid);
+	}
+
 	public boolean playerHasMenuOpen(UUID uuid) {
 		return menuMap.containsKey(uuid);
 	}
+
 }

@@ -9,6 +9,7 @@ import java.util.function.Function;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.stormrealms.stormmenus.menus.ClickType;
 import org.stormrealms.stormmenus.menus.MenuButton;
 import org.stormrealms.stormmenus.util.ItemUtil;
@@ -21,10 +22,12 @@ import net.md_5.bungee.api.ChatColor;
 public abstract class Menu extends BaseMenu {
 	protected Map<Integer, MenuButton> actionMap = new ConcurrentHashMap<>();
 	protected Function<Player, Inventory> constructInventory;
+	@Autowired
+	private Menus manager;
 
 	public void open(Player p) {
 		constructInventory.apply(p);
-		Menus.getInstance().getMenuManager().setPlayerMenu(p.getUniqueId(), this);
+		manager.getMenuManager().setPlayerMenu(p.getUniqueId(), this);
 	}
 
 	/**
