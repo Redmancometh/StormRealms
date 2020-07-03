@@ -5,12 +5,12 @@ import com.google.common.io.CharStreams;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.redmancometh.redcore.DBRedPlugin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.stormrealms.stormcore.DBRedPlugin;
 import org.stormrealms.stormcore.SpringPlugin;
 import org.stormrealms.stormcore.StormCore;
 import org.stormrealms.stormcore.StormPlugin;
@@ -38,8 +38,6 @@ public class ModuleLoaderController {
 	private File moduleDir;
 	private Set<StormPlugin> enabledPlugins;
 	private Set<StormPlugin> plugins;
-	@Autowired
-	private URLClassLoader classLoader;
 
 	public ModuleLoaderController(@Autowired @Qualifier("modules-dir") File moduleDir) {
 		this.moduleDir = moduleDir;
@@ -51,12 +49,15 @@ public class ModuleLoaderController {
 	public void loadModules() {
 		if (!moduleDir.exists())
 			moduleDir.mkdir();
+
 		try (Stream<Path> pathStream = Files.walk(moduleDir.toPath().toAbsolutePath())) {
 			pathStream.filter(path1 -> path1.toString().endsWith(".jar")).forEach(p -> {
 				try {
 					StormPlugin pluginModule = loadModule(p);
 					this.plugins.add(pluginModule);
 					enableModule(pluginModule);
+				} catch (IllegalStateException e) {
+					System.out.println("No module.json found in " + p.toFile() + " skipping.");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -75,36 +76,34 @@ public class ModuleLoaderController {
 		ZipEntry moduleJson = file.getEntry("module.json");
 		System.out.println(path.toUri().toURL());
 		if (moduleJson == null)
-			throw new Exception(String.format("Could not find module json at %s", path.toAbsolutePath()));
+			throw new IllegalStateException(String.format("Could not find module json at %s", path.toAbsolutePath()));
 		String moduleJsonSTR = CharStreams
 				.toString(new InputStreamReader(file.getInputStream(moduleJson), Charsets.UTF_8));
 		Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
 				.setPrettyPrinting().create();
 		PluginConfig config = gson.fromJson(moduleJsonSTR, PluginConfig.class);
-		moduleContext.setClassLoader(classLoader);
-		Class mainClass = classLoader.loadClass(config.getMain());
+		moduleContext.setClassLoader(StormCore.getInstance().getPLClassLoader());
+		Class mainClass = StormCore.getInstance().getPLClassLoader().loadClass(config.getMain());
 		Enumeration<JarEntry> entries = file.entries();
 		while (entries.hasMoreElements()) {
 			JarEntry clazz = entries.nextElement();
-			if (clazz.getName().equals(mainClass.getName()))
-				continue;
 			if (clazz.isDirectory() || !clazz.getName().endsWith(".class"))
 				continue;
 			String className = clazz.getName().substring(0, clazz.getName().length() - 6);
 			className = className.replace('/', '.');
-			classLoader.loadClass(className);
 			System.out.println("Loaded class: " + className);
 		}
+
 		StormPlugin module = (StormPlugin) mainClass.newInstance();
 		if (module instanceof SpringPlugin)
-			return loadSpringPlugin(module, classLoader, moduleContext, config, file);
+			return loadSpringPlugin(module, moduleContext, config, file);
 		return module;
 	}
 
-	public StormPlugin loadSpringPlugin(StormPlugin module, URLClassLoader classLoader,
-			AnnotationConfigApplicationContext moduleContext, PluginConfig config, JarFile file) throws IOException {
+	public StormPlugin loadSpringPlugin(StormPlugin module, AnnotationConfigApplicationContext moduleContext,
+			PluginConfig config, JarFile file) throws IOException {
 		SpringPlugin spModule = (SpringPlugin) module;
-		module.setModuleLoader(classLoader);
+		module.setModuleLoader(StormCore.getInstance().getPLClassLoader());
 		moduleContext.setParent(StormCore.getInstance().getContext());
 		spModule.setContext(moduleContext);
 		module.enable();
@@ -114,10 +113,8 @@ public class ModuleLoaderController {
 		moduleContext.register(spModule.getConfigurationClass());
 		cfg.getProperties()
 				.forEach((key, value) -> moduleContext.getEnvironment().getSystemProperties().put(key, value));
-		Thread.currentThread().setContextClassLoader(classLoader);
 		moduleContext.refresh();
 		file.close();
-		classLoader.close();
 		if (module instanceof DBRedPlugin)
 			((DBRedPlugin) module).initialize();
 		return module;
@@ -126,12 +123,10 @@ public class ModuleLoaderController {
 
 	public StormPlugin loadStormPlugin(StormPlugin module, URLClassLoader classLoader, PluginConfig config,
 			JarFile file) throws IOException {
-		module.setModuleLoader(classLoader);
+		module.setModuleLoader(StormCore.getInstance().getPLClassLoader());
 		module.enable();
 		module.setName(config.getName());
-		Thread.currentThread().setContextClassLoader(classLoader);
 		file.close();
-		classLoader.close();
 		if (module instanceof DBRedPlugin)
 			((DBRedPlugin) module).initialize();
 		return module;

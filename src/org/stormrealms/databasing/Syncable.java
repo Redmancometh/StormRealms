@@ -1,8 +1,7 @@
-package org.stormrealms.mediators;
+package org.stormrealms.databasing;
 
 import org.bukkit.entity.Player;
-
-import com.redmancometh.redcore.Defaultable;
+import org.stormrealms.stormcore.Defaultable;
 
 public interface Syncable<T> extends Defaultable<T> {
 	public default void trySync(T key) {

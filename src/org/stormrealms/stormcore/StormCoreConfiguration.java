@@ -1,4 +1,4 @@
-package org.stormrealms;
+package org.stormrealms.stormcore;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,14 +19,11 @@ import java.util.stream.Stream;
 import org.bukkit.event.Listener;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import org.stormrealms.stormcore.StormCore;
-import org.stormrealms.stormcore.StormPlugin;
 import org.stormrealms.stormcore.storage.PluginStorage;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -35,7 +32,6 @@ import com.google.common.collect.Multimaps;
 @Configuration
 @ComponentScan(basePackages = { "org.stormrealms.stormcore", "org.stormrealms.stormcombat",
 		"org.stormrealms.stormstats" })
-@EnableAutoConfiguration
 public class StormCoreConfiguration {
 
 	Function<Path, URL> pathMapperFunc = (p) -> {
@@ -58,7 +54,7 @@ public class StormCoreConfiguration {
 	@Bean
 	public URLClassLoader pluginLoader(@Qualifier("mod-paths") List<URL> modulePaths) {
 		URLClassLoader classLoader = new URLClassLoader(modulePaths.toArray(new URL[modulePaths.size()]),
-				StormCore.getInstance().getClass().getClassLoader());
+				StormCore.getInstance().getPLClassLoader().getParent());
 		return classLoader;
 	}
 
@@ -79,7 +75,7 @@ public class StormCoreConfiguration {
 
 	@Bean(name = "modules-dir")
 	public File moduleDir() {
-		return new File("plugins/StormCore/modules");
+		return new File("plugins/");
 	}
 
 	@Bean

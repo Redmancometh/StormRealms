@@ -1,11 +1,12 @@
-package org.stormrealms.mediators;
+package org.stormrealms.databasing;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.redmancometh.redcore.util.SpecialFuture;
 import java.io.Serializable;
 import java.lang.reflect.Modifier;
+
+import org.stormrealms.stormcore.util.SpecialFuture;
 
 public abstract class XComManager<K extends Serializable, T extends Syncable> extends ObjectManager<K, T> {
 

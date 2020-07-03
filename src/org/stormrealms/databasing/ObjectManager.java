@@ -1,13 +1,12 @@
-package org.stormrealms.mediators;
-
-import com.redmancometh.redcore.Defaultable;
-import com.redmancometh.redcore.RedCore;
-import com.redmancometh.redcore.databasing.SubDatabase;
-import com.redmancometh.redcore.exceptions.ObjectNotPresentException;
-import com.redmancometh.redcore.util.SpecialFuture;
+package org.stormrealms.databasing;
 
 import java.io.Serializable;
 import java.util.List;
+
+import org.stormrealms.exceptions.ObjectNotPresentException;
+import org.stormrealms.stormcore.Defaultable;
+import org.stormrealms.stormcore.StormCore;
+import org.stormrealms.stormcore.util.SpecialFuture;
 
 public class ObjectManager<K extends Serializable, T extends Defaultable<?>> implements BaseObjectManager<K, T> {
 	private final Class<T> type;
@@ -44,7 +43,7 @@ public class ObjectManager<K extends Serializable, T extends Defaultable<?>> imp
 	 * @return
 	 */
 	public SubDatabase<K, T> getSubDB() {
-		return RedCore.getInstance().getMasterDB().getSubDBForType(type);
+		return StormCore.getInstance().getMasterDB().getSubDBForType(type);
 	}
 
 	@Override
@@ -96,7 +95,7 @@ public class ObjectManager<K extends Serializable, T extends Defaultable<?>> imp
 	 * @return
 	 */
 	public SpecialFuture<?> save(T e) {
-		return RedCore.getInstance().getMasterDB().getSubDBForType(type).saveObject(e);
+		return StormCore.getInstance().getMasterDB().getSubDBForType(type).saveObject(e);
 	}
 
 	/**

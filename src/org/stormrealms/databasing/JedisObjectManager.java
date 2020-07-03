@@ -1,4 +1,4 @@
-package org.stormrealms.mediators;
+package org.stormrealms.databasing;
 
 import java.io.Serializable;
 import lombok.Getter;
