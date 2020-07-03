@@ -1,31 +1,18 @@
 package org.stormrealms.stormmenus;
 
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.stormrealms.stormmenus.listeners.MenuListeners;
-import org.stormrealms.stormmenus.listeners.TypedMenuListeners;
+import java.util.HashSet;
+import java.util.Set;
 
-public class Menus extends JavaPlugin {
+import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
+import org.stormrealms.stormcore.StormPlugin;
+
+public class Menus extends StormPlugin {
 	private MenuManager menuManager;
 
 	@Override
-	public void onEnable() {
-		setMenuManager(new MenuManager());
-		/**
-		 * This is done to ensure reloadability, but also compartmentalize the menu
-		 * implementations to their respective plugins.
-		 */
-		Bukkit.getPluginManager().registerEvents(new MenuListeners(), this);
-		Bukkit.getPluginManager().registerEvents(new TypedMenuListeners(), this);
-	}
-
-	@Override
-	public void onDisable() {
-		/**
-		 * Tell all plugins to unregister their menus before ArkhamMenus shuts down to
-		 * prevent deep GC roots.
-		 */
-		super.onDisable();
+	public void enable() {
+		super.enable();
 	}
 
 	public static Menus getInstance() {
@@ -39,4 +26,11 @@ public class Menus extends JavaPlugin {
 	public void setMenuManager(MenuManager menuManager) {
 		this.menuManager = menuManager;
 	}
+
+	@Override
+	public Set<Listener> listeners() {
+		Set<Listener> listeners = new HashSet();
+		return listeners;
+	}
+
 }

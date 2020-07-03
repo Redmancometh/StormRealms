@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.stormrealms.stormcore.StormCore;
 import org.stormrealms.stormmenus.Menus;
 import org.stormrealms.stormmenus.absraction.SubMenu;
 import org.stormrealms.stormmenus.absraction.TypedMenu;
@@ -58,7 +59,7 @@ public class TypedMenuListeners implements Listener {
 				TypedMenu m = Menus.getInstance().getMenuManager().getTypedMenuFromUUID(uuid);
 				if (m instanceof SubMenu && (!e.getPlayer().hasMetadata("lowermenu"))) {
 					((SubMenu) m).closeMenu((Player) e.getPlayer());
-					e.getPlayer().removeMetadata("lowermenu", Menus.getInstance());
+					e.getPlayer().removeMetadata("lowermenu", StormCore.getInstance());
 				}
 				m.onClose((Player) e.getPlayer());
 			}

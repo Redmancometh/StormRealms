@@ -33,7 +33,7 @@
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.3.2</version>
 				<configuration>
-					<outputDirectory>${user.home}/Desktop/stormrealms/testserver/plugins</outputDirectory>
+					<outputDirectory>${user.home}/Desktop/stormrealms/testserver/plugins/StormCore/modules</outputDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -41,7 +41,7 @@
 			<resource>
 				<directory>lib</directory>
 				<includes>
-					<include>plugin.yml</include>
+					<include>module.json</include>
 				</includes>
 			</resource>
 		</resources>
@@ -53,6 +53,12 @@
 		</repository>
 	</repositories>
 	<dependencies>
+		<dependency>
+			<groupId>org.stormrealms</groupId>
+			<artifactId>StormCore</artifactId>
+			<version>2.0</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.stormrealms</groupId>
 			<artifactId>spigot</artifactId>
