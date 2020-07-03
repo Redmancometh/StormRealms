@@ -7,8 +7,10 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,8 +32,8 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 
 @Configuration
-@ComponentScan(basePackages = { "org.stormrealms.stormcore", "org.stormrealms.stormcombat",
-		"org.stormrealms.stormstats" })
+@ComponentScan(basePackages = { "org.stormrealms.stormcore", "org.stormrealms.stormmenus",
+		"org.stormrealms.stormcombat", "org.stormrealms.stormstats" })
 public class StormCoreConfiguration {
 
 	Function<Path, URL> pathMapperFunc = (p) -> {
@@ -49,6 +51,11 @@ public class StormCoreConfiguration {
 			return pathStream.filter(path1 -> path1.toString().endsWith(".jar")).map(pathMapperFunc)
 					.collect(Collectors.toList());
 		}
+	}
+
+	@Bean(name = "enabled-plugins")
+	public Set<StormPlugin> enabledPlugins() {
+		return new HashSet();
 	}
 
 	@Bean

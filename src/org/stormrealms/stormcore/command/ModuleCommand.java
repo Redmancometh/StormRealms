@@ -97,7 +97,7 @@ public class ModuleCommand implements CommandExecutor {
 
                 sender.sendMessage(ChatColor.GREEN + "Attempting to load: " + moduleName + "...");
                 try {
-                    this.moduleLoaderController.loadModule(module.toPath());
+                    this.moduleLoaderController.queueModule(module.toPath());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

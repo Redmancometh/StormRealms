@@ -49,7 +49,11 @@ public abstract class StormPlugin {
 	}
 
 	public void enable() {
-
+		System.out.println("Calling stormplugin.enable");
+		if (this instanceof SpringPlugin) {
+			System.out.println("ON ENABLE CONTEXT " + (this.context == null));
+			System.out.println(this.context);
+		}
 	}
 
 	public void disable() {

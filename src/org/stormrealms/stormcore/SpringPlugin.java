@@ -14,7 +14,9 @@ public interface SpringPlugin {
 	 */
 	public abstract String[] getPackages();
 
-	public abstract SpringConfig getSpringConfig();
+	public default SpringConfig getSpringConfig() {
+		return StormCore.getInstance().springCfg();
+	}
 
 	public abstract void setContext(AnnotationConfigApplicationContext context);
 

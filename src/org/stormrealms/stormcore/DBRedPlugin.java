@@ -6,7 +6,6 @@ import java.util.Properties;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
@@ -28,6 +27,7 @@ public interface DBRedPlugin extends RedPlugin {
 
 	List<Class> getMappedClasses();
 
+	@SuppressWarnings("deprecation")
 	default SessionFactory buildSessionFactory() {
 		System.out.println("NEW FACTORY");
 		JSONObject jsonConfig = getConfiguration();
@@ -60,7 +60,7 @@ public interface DBRedPlugin extends RedPlugin {
 	}
 
 	default void saveDefaultConfigFromJar() {
-
+		
 	}
 
 	default SessionFactory getSessionFactory() {

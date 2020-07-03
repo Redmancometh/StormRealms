@@ -35,6 +35,7 @@ public class StormCore extends JavaPlugin {
 	protected AnnotationConfigApplicationContext context;
 	private ClassLoader masterLoader;
 	private static StormCore instance;
+	private SpringConfig springCfg;
 	private RedPlugins getPlugins;
 	private Executor pool = Executors.newFixedThreadPool(8,
 			new ThreadFactoryBuilder().setNameFormat("RedCore-%d").build());
@@ -56,13 +57,15 @@ public class StormCore extends JavaPlugin {
 		instance = this;
 		this.context = new AnnotationConfigApplicationContext();
 		cfgMon.init();
-		SpringConfig cfg = cfgMon.getConfig();
+		this.springCfg = cfgMon.getConfig();
 		this.masterLoader = masterLoader();
 		this.context.setClassLoader(masterLoader);
 		this.context.register(StormCoreConfiguration.class);
 		Map<String, Object> props = context.getEnvironment().getSystemProperties();
-		cfg.getProperties().forEach((key, value) -> props.put(key, value));
-		context.getEnvironment().setActiveProfiles(cfg.getProfiles().toArray(new String[cfg.getProfiles().size()]));
+		this.springCfg.getProperties().forEach((key, value) -> props.put(key, value));
+		context.getEnvironment().setActiveProfiles(
+				this.springCfg.getProfiles().toArray(new String[this.springCfg.getProfiles().size()]));
+		this.context.close();
 		this.context.refresh();
 		Bukkit.getPluginManager().registerEvents(context.getBean(StormCommandHandler.class), this);
 		Logger.getLogger(StormCoreConfiguration.class.getName()).info("StormCore has started!");
@@ -117,5 +120,9 @@ public class StormCore extends JavaPlugin {
 
 	public ClassLoader getPLClassLoader() {
 		return this.masterLoader;
+	}
+
+	public SpringConfig springCfg() {
+		return springCfg;
 	}
 }
