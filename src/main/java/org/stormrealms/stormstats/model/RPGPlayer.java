@@ -2,15 +2,17 @@ package org.stormrealms.stormstats.model;
 
 import java.lang.ref.WeakReference;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.hibernate.annotations.Type;
@@ -20,12 +22,14 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table
+@Table(name = "rpg_player")
 public class RPGPlayer implements Defaultable<UUID> {
-	@Id
 	@Type(type = "uuid-char")
-	@Column(nullable = true)
+	@Column(name = "player_id")
+	@Id
 	private UUID playerId;
+	@OneToMany(mappedBy = "id", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private Set<RPGCharacter> characters;
 	@Column
 	private int health;
 	@Column
@@ -42,15 +46,16 @@ public class RPGPlayer implements Defaultable<UUID> {
 	private int agi;
 	@Column
 	private String chosenClass;
+
 	@ElementCollection(fetch = FetchType.EAGER, targetClass = java.lang.Integer.class)
 	private Map<UUID, Integer> questMap;
 
-	@Transient
-	private WeakReference<Player> playerRef;
+	// @Transient
+	// private WeakReference<Player> playerRef;
 
 	public Player getPlayer() {
-		if (playerRef != null && playerRef.get() != null)
-			return playerRef.get();
+		// if (playerRef != null && playerRef.get() != null)
+		// return playerRef.get();
 		return Bukkit.getPlayer(playerId);
 	}
 
