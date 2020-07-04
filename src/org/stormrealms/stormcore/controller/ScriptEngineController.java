@@ -21,7 +21,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -50,7 +49,7 @@ import org.stormrealms.stormcore.util.TriFunction;
 public class ScriptEngineController {
 	private ScheduledExecutorService scriptScheduler = Executors.newScheduledThreadPool(4);
 	private ScheduledExecutorService asyncPool = Executors.newScheduledThreadPool(8);
-	ScriptEngine graal = new ScriptEngineManager().getEngineByName("graal.js");
+	ScriptEngine graal = new ScriptEngineManager().getEngineByName("nashhorn");
 	@Autowired
 	protected ApplicationContext context;
 	@Autowired
@@ -82,15 +81,7 @@ public class ScriptEngineController {
 
 	@PostConstruct
 	public void addGlobals() {
-		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit.javascript.StrictErrorReporter")
-				.setLevel(Level.OFF);
-		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit.javascript.host.WindowProxy")
-				.setLevel(Level.OFF);
-		java.util.logging.Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.OFF);
-		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit.javascript.host.ActiveXObject")
-				.setLevel(Level.OFF);
-		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit.javascript.host.html.HTMLDocument")
-				.setLevel(Level.OFF);
+		System.out.println("GRAAL NULL? " + (graal == null));
 		graal.put("HashMap", HashMap.class);
 		graal.put("HashSet", HashSet.class);
 		graal.put("async", asyncPool);
