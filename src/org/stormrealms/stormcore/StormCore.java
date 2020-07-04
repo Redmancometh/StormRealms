@@ -71,6 +71,14 @@ public class StormCore extends JavaPlugin {
 		Logger.getLogger(StormCoreConfiguration.class.getName()).info("StormCore has started!");
 	}
 
+	@Override
+	public void onDisable() {
+		super.onDisable();
+		this.context.close();
+		instance = null;
+		context = null;
+	}
+
 	private URLClassLoader masterLoader() {
 		try (Stream<Path> pathStream = Files.walk(new File("").toPath().toAbsolutePath())) {
 			List<URL> urls = pathStream.filter(path1 -> path1.toString().endsWith(".jar")).map(pathMapperFunc)

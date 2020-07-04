@@ -210,6 +210,7 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
 				session.beginTransaction();
 				session.saveOrUpdate(e);
 				session.getTransaction().commit();
+				session.close();
 			}
 		});
 	}
