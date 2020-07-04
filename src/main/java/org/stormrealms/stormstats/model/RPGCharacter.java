@@ -33,9 +33,6 @@ public class RPGCharacter {
 	private RPGCharacter character;
 
 	@Column
-	private String className;
-
-	@Column
 	private String characterName;
 
 	@Column
@@ -49,5 +46,4 @@ public class RPGCharacter {
 
 	@Column
 	private String world;
-
 }

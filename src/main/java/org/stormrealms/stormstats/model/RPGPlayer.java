@@ -1,6 +1,5 @@
 package org.stormrealms.stormstats.model;
 
-import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
