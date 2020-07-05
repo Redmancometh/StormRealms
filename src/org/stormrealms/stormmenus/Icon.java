@@ -18,10 +18,10 @@ public class Icon {
 
 	}
 
-	// TODO: Add data values for now it's uninmportant.
 	// TODO: Add placeholders
+	@SuppressWarnings("deprecation")
 	public ItemStack build() {
-		ItemStack i = new ItemStack(material);
+		ItemStack i = new ItemStack(material, 1, (short) dataValue);
 		ItemMeta meta = i.getItemMeta();
 		meta.setDisplayName(displayName);
 		meta.setLore(lore);
