@@ -1,7 +1,9 @@
 package org.stormrealms.stormstats.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,7 +23,7 @@ public class ClassData {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long characterId;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@MapsId
 	private RPGCharacter character;
 

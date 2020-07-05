@@ -7,30 +7,23 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
 
-@Data
 @Entity
+@Data
 @Table(name = "rpg_character")
 public class RPGCharacter {
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "player_id")
-	private RPGPlayer rpgPlayer;
+
+	@OneToOne(mappedBy = "character", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private ClassData data;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "character_id")
 	private long id;
-
-	@OneToOne
-	@MapsId
-	private RPGCharacter character;
 
 	@Column
 	private String characterName;
@@ -46,4 +39,5 @@ public class RPGCharacter {
 
 	@Column
 	private String world;
+
 }

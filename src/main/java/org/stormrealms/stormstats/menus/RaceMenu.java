@@ -18,13 +18,13 @@ import org.stormrealms.stormstats.model.RPGPlayer;
 
 @Component
 @Scope("prototype")
-public class ClassMenu extends TypedMenu<RPGPlayer> {
+public class RaceMenu extends TypedMenu<RPGPlayer> {
 	private TypedSelector typeSelector = new TypedSelector<RPGPlayer>();
 	@Autowired
 	@Qualifier("class-config")
 	ConfigManager<ClassConfiguration> confMan;
 
-	public ClassMenu() {
+	public RaceMenu() {
 		super("Class Menu", 54);
 	}
 

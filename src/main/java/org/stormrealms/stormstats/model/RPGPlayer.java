@@ -1,15 +1,14 @@
 package org.stormrealms.stormstats.model;
 
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.bukkit.Bukkit;
@@ -27,7 +26,8 @@ public class RPGPlayer implements Defaultable<UUID> {
 	@Column(name = "player_id")
 	@Id
 	private UUID playerId;
-	@OneToMany(mappedBy = "id", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "player_id")
 	private Set<RPGCharacter> characters;
 	@Column
 	private int health;
@@ -43,11 +43,6 @@ public class RPGPlayer implements Defaultable<UUID> {
 	private int spi;
 	@Column
 	private int agi;
-	@Column
-	private String chosenClass;
-
-	@ElementCollection(fetch = FetchType.EAGER, targetClass = java.lang.Integer.class)
-	private Map<UUID, Integer> questMap;
 
 	// @Transient
 	// private WeakReference<Player> playerRef;
