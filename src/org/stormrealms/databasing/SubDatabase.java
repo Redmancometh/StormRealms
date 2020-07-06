@@ -14,10 +14,10 @@ import org.stormrealms.stormcore.StormCore;
 import org.stormrealms.stormcore.util.SpecialFuture;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -32,24 +32,23 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
 	private final Class<V> type;
 	private SessionFactory factory;
 	public Function<K, V> defaultObjectBuilder;
-	LoadingCache<K, SpecialFuture<V>> cache = CacheBuilder.newBuilder().expireAfterWrite(15, TimeUnit.MINUTES)
-			.build(new CacheLoader<K, SpecialFuture<V>>() {
-				@Override
-				public SpecialFuture<V> load(K key) {
-					return SpecialFuture.supplyAsync(() -> {
-						try (Session session = factory.openSession()) {
-							V result = session.get(type, key);
-							if (result == null)
-								return defaultObjectBuilder.apply(key);
-							return result;
-						} catch (SecurityException | IllegalArgumentException e) {
-							SpecialFuture.runSync(
-									() -> Bukkit.getLogger().log(Level.SEVERE, "Failed to get database object", e));
-							throw new RuntimeException(e);
-						}
-					});
+	LoadingCache<K, SpecialFuture<V>> cache = CacheBuilder.newBuilder().build(new CacheLoader<K, SpecialFuture<V>>() {
+		@Override
+		public SpecialFuture<V> load(K key) {
+			return SpecialFuture.supplyAsync(() -> {
+				try (Session session = factory.openSession()) {
+					V result = session.get(type, key);
+					if (result == null)
+						return defaultObjectBuilder.apply(key);
+					return result;
+				} catch (SecurityException | IllegalArgumentException e) {
+					SpecialFuture
+							.runSync(() -> Bukkit.getLogger().log(Level.SEVERE, "Failed to get database object", e));
+					throw new RuntimeException(e);
 				}
 			});
+		}
+	});
 
 	public SubDatabase(Class<V> type, SessionFactory factory) {
 		super();
@@ -57,10 +56,11 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
 		this.type = type;
 		this.defaultObjectBuilder = (key) -> {
 			try {
-				V v = type.newInstance();
+				V v = (V) type.getConstructors()[0].newInstance(new Object[0]);
 				v.setDefaults(key);
 				return v;
-			} catch (InstantiationException | IllegalAccessException e) {
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException | SecurityException e) {
 				e.printStackTrace();
 			}
 			return null;
@@ -207,8 +207,9 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
 	public SpecialFuture<?> saveObject(V e) {
 		return SpecialFuture.runAsync(() -> {
 			try (Session session = factory.openSession()) {
+				Object e2 = session.merge(e);
 				session.beginTransaction();
-				session.saveOrUpdate(e);
+				session.saveOrUpdate(e2);
 				session.getTransaction().commit();
 				session.close();
 			}

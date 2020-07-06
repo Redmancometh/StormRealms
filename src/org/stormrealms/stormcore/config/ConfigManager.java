@@ -6,6 +6,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -29,6 +32,7 @@ public class ConfigManager<T> {
 	private Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED)
 			.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
 			.registerTypeHierarchyAdapter(String.class, new PathAdapter())
+			.registerTypeHierarchyAdapter(Material.class, new MaterialAdapter())
 			.registerTypeHierarchyAdapter(Class.class, new ClassAdapter()).setPrettyPrinting().create();
 	private String fileName;
 	private Class clazz;
@@ -107,6 +111,21 @@ public class ConfigManager<T> {
 		this.config = config;
 	}
 
+	public static class MaterialAdapter extends TypeAdapter<Material> {
+
+		@Override
+		public Material read(JsonReader arg0) throws IOException {
+			String materialValue = arg0.nextString();
+			return Material.valueOf(materialValue.replace(" ", "_").toUpperCase());
+		}
+
+		@Override
+		public void write(JsonWriter arg0, Material arg1) throws IOException {
+			arg0.value(arg1.toString());
+		}
+
+	}
+
 	public static class ClassAdapter extends TypeAdapter<Class> {
 		@Override
 		public void write(JsonWriter jsonWriter, Class material) throws IOException {
@@ -132,7 +151,8 @@ public class ConfigManager<T> {
 			String string = arg0.nextString();
 			if (string.contains("http"))
 				return string;
-			return string.replace("//", File.separator).replace("\\", File.separator);
+			return ChatColor.translateAlternateColorCodes('&',
+					string.replace("//", File.separator).replace("\\", File.separator));
 		}
 
 		@Override
