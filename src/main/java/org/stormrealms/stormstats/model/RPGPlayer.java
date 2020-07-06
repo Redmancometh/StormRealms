@@ -1,5 +1,7 @@
 package org.stormrealms.stormstats.model;
 
+import java.lang.ref.WeakReference;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -11,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.hibernate.annotations.Type;
@@ -29,23 +33,11 @@ public class RPGPlayer implements Defaultable<UUID> {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "player_id")
 	private Set<RPGCharacter> characters;
-	@Column
-	private int health;
-	@Column
-	private double experience;
-	@Column
-	private int level;
-	@Column
-	private int str;
-	@Column
-	private int intel;
-	@Column
-	private int spi;
-	@Column
-	private int agi;
 
-	// @Transient
-	// private WeakReference<Player> playerRef;
+	@Transient
+	private RPGCharacter chosenCharacter;
+	@Transient
+	private WeakReference<Player> playerRef;
 
 	public Player getPlayer() {
 		// if (playerRef != null && playerRef.get() != null)
@@ -60,14 +52,12 @@ public class RPGPlayer implements Defaultable<UUID> {
 
 	@Override
 	public void setDefaults(UUID playerId) {
-		this.level = 1;
-		this.str = 1;
-		this.intel = 1;
-		this.spi = 1;
-		this.agi = 1;
 		this.playerId = playerId;
-		this.experience = 0;
-		this.health = 0;
+		RPGCharacter character = new RPGCharacter();
+		character.setDefaults();
+		if (this.characters == null)
+			this.characters = new HashSet();
+		this.characters.add(character);
 	}
 
 }

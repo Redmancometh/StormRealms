@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 public class GUIConfig {
-	private Icon setName, setClass, setRace, charIcon;
+	private Icon setName, setClass, setRace, charIcon, createChar;
 	private int charsStartAt;
 }

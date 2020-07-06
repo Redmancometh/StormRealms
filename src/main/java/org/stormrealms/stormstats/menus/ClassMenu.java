@@ -14,6 +14,7 @@ import org.stormrealms.stormmenus.menus.TypedSelector;
 import org.stormrealms.stormmenus.util.ItemUtil;
 import org.stormrealms.stormstats.configuration.pojo.ClassConfiguration;
 import org.stormrealms.stormstats.configuration.pojo.ClassInformation;
+import org.stormrealms.stormstats.model.RPGCharacter;
 import org.stormrealms.stormstats.model.RPGPlayer;
 
 @Component
@@ -36,19 +37,14 @@ public class ClassMenu extends TypedMenu<RPGPlayer> {
 				return ItemUtil.buildItem(classInfo.getClassItem(), classInfo.getClassName(), classInfo.getClassLore());
 			});
 			button.setAction((clickType, rpgPlayer, player) -> {
-				setStartingStats(rpgPlayer, classInfo);
 				player.closeInventory();
 			});
 			setButton(x.getAndIncrement(), button);
 		});
 	}
 
-	public void setStartingStats(RPGPlayer rpPlayer, ClassInformation classInfo) {
-		rpPlayer.setAgi(classInfo.getStartingAgi());
-		rpPlayer.setStr(classInfo.getStartingStr());
-		rpPlayer.setSpi(classInfo.getStartingSpi());
-		rpPlayer.setIntel(classInfo.getStartingIntel());
-
+	public void setStartingStats(RPGCharacter rpChar, ClassInformation classInfo) {
+		
 	}
 
 	@Override

@@ -44,11 +44,11 @@ public class RaceMenu extends TypedMenu<RPGPlayer> {
 	}
 
 	public void setStartingStats(RPGPlayer rpPlayer, ClassInformation classInfo) {
-		rpPlayer.setAgi(classInfo.getStartingAgi());
+		/*rpPlayer.setAgi(classInfo.getStartingAgi());
 		rpPlayer.setStr(classInfo.getStartingStr());
 		rpPlayer.setSpi(classInfo.getStartingSpi());
 		rpPlayer.setIntel(classInfo.getStartingIntel());
-
+		*/
 	}
 
 	@Override
