@@ -1,14 +1,24 @@
 package org.stormrealms.stormcombat.gear;
 
-import lombok.Data;
+import java.util.Map;
+import java.util.Set;
 
-@Data
 /**
  * Hopefully we can just stick this in the NBT a la aloreable.
  * 
  * @author Redmancometh
  *
  */
-public class RPGWeapon {
-	private int lowDmg, highDmg;
+public interface RPGWeapon extends RPGItem {
+	public int getLow();
+
+	public int getHigh();
+
+	public Set<WeaponEffect> effects();
+
+	public Map<RPGStat, Integer> getStats();
+
+	public default Integer getStat(RPGStat stat) {
+		return getStats().get(stat);
+	}
 }
