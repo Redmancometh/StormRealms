@@ -1,0 +1,39 @@
+{
+	"id": 0,
+	"start": {
+		"type": "talk-to-quest-start",
+		"start-dialogue": "Please go do my thing for me"
+	},
+	"steps": [
+		{
+			"type": "single-objective-step",
+			"prompt-dialogue": "Talk to my friend in that cool city over there.",
+			"objective": [
+				{
+					"type": "talk-to-objective",
+					"id": 0,
+					"complete-dialogue": "Thank god you've come %cn!"
+				},
+			],
+			"complete-dialogue": "I'm going to need you to get a stick, a gold nugget, and an iron shovel. Then come back to me."
+		},
+		{
+			"type": "multi-objective-step",
+			"incomplete-dialogue": "You have not yet gotten me the goods I asked you to fetch. I need a stick, a gold nuget, and an iron shovel.",
+			"objectives": [
+				{
+					"type": "gather-objective",
+					"id": 0
+				},
+				{
+					"type": "gather-objective",
+					"id": 1
+				},
+				{
+					"type": "gather-objective",
+					"id": 2
+				}
+			]
+		}
+	]
+}

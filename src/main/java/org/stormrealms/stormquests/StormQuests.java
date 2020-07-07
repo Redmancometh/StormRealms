@@ -1,4 +1,4 @@
-package org.stormrealms.stormmobs;
+package org.stormrealms.stormquests;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -6,13 +6,14 @@ import java.util.Set;
 import org.bukkit.event.Listener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.stormrealms.stormmobs.config.context.StormQuestContext;
-import org.stormrealms.stormcore.StormPlugin;
-import org.stormrealms.stormcore.command.ModuleCommand;
+import org.springframework.stereotype.Component;
+import org.stormrealms.stormcore.StormSpringPlugin;
 import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
+import org.stormrealms.stormquests.config.context.StormQuestContext;
 
-public class StormQuests extends StormPlugin {
+@Component
+public class StormQuests extends StormSpringPlugin {
 
 	@Override
 	public Class<?> getConfigurationClass() {
@@ -42,8 +43,8 @@ public class StormQuests extends StormPlugin {
 	}
 
 	@Override
-	public Set<ModuleCommand> commands() {
-		return new HashSet();
+	public String[] getPackages() {
+		return new String[] { "org.stormrealms.stormquests.controller" };
 	}
 
 }
