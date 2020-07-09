@@ -9,13 +9,18 @@ import java.util.function.BiFunction;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.stormrealms.stormmenus.menus.ClickType;
 import org.stormrealms.stormmenus.menus.TypedMenuButton;
-import org.stormrealms.stormmenus.menus.TypedSelector;
 import org.stormrealms.stormmenus.util.ItemUtil;
 import org.stormrealms.stormmenus.util.PaneUtil;
 import org.stormrealms.stormmenus.util.TriConsumer;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import org.stormrealms.stormcore.StormCore;
 import org.stormrealms.stormmenus.MenuManager;
 import org.stormrealms.stormmenus.MenuTemplate;
 
@@ -34,24 +39,58 @@ public abstract class TypedMenu<T> extends BaseTypedMenu<T> {
 	protected Map<Integer, TypedMenuButton<T>> actionMap = new ConcurrentHashMap<>();
 	protected BiFunction<Player, T, Inventory> constructInventory;
 	protected BiConsumer<Player, T> onClose;
-	private T e;
+	@Getter
+	@Setter
+	private T selected;
+	@Getter
+	@Setter
+	protected boolean shouldReopen = false;
+	@Getter
+	@Setter
+	protected boolean openingNewMenu = false;
+
+	public void openInstead(Player p, T e) {
+		p.setMetadata("opening", new FixedMetadataValue(StormCore.getInstance(), true));
+		open(p, e);
+		p.removeMetadata("opening", StormCore.getInstance());
+
+	}
 
 	public void open(Player p, T e) {
-		if (e == null)
+		if (e == null) {
 			throw new IllegalStateException("You forgot to set the object value in a typed menu before calling open!");
-		System.out.println("MENUS MANAGER IN TYPED MENU " + (manager) == null);
+		}
+		this.selected = e;
 		manager.setTypedPlayerMenu(p.getUniqueId(), this);
-		System.out.println("ADDING PLAYER TO TYPED PLAYER MENU");
-		this.e = e;
+		this.selected = e;
 		p.openInventory(constructInventory.apply(p, e));
 	}
 
 	public void onClose(Player p) {
+		System.out.println("on close");
+		if (openingNewMenu) {
+			System.out.println("Opening new menu");
+			return;
+		}
+		System.out.println("ON CLOSE CALLBACK CALLED");
+		if (this.shouldReopen()) {
+			System.out.println("SHOULD REOPEN");
+			this.openingNewMenu = true;
+			Bukkit.getScheduler().scheduleSyncDelayedTask(StormCore.getInstance(), () -> {
+				this.open(p, selected);
+				p.updateInventory();
+				this.openingNewMenu = false;
+			});
+			return;
+		}
+		System.out.println("NVM SHOULDNT OPEN");
 		if (this.onClose != null)
-			this.onClose.accept(p, e);
+			this.onClose.accept(p, selected);
 	}
 
-	public abstract TypedSelector getSelector();
+	public T getElement() {
+		return selected;
+	}
 
 	/**
 	 * Construct a menu, and provide your own generified inventory constructor
@@ -75,7 +114,7 @@ public abstract class TypedMenu<T> extends BaseTypedMenu<T> {
 		super(name, 18);
 		this.constructInventory = (p, typedElement) -> {
 			Inventory menuInv = Bukkit.createInventory(null, getSize(), this.getName());
-			getSelector().select(p.getUniqueId(), typedElement);
+			this.selected = typedElement;
 			actionMap.forEach((number, button) -> {
 				menuInv.setItem(number, button.constructButton(typedElement, this, p));
 			});
@@ -94,7 +133,7 @@ public abstract class TypedMenu<T> extends BaseTypedMenu<T> {
 	public TypedMenu(String name, int size) {
 		super(name, size);
 		this.constructInventory = (p, typedElement) -> {
-			getSelector().select(p.getUniqueId(), typedElement);
+			this.selected = typedElement;
 			Inventory menuInv = Bukkit.createInventory(null, size, this.getName());
 			actionMap.forEach(
 					(number, button) -> menuInv.setItem(number, button.constructButton(typedElement, this, p)));
@@ -179,11 +218,5 @@ public abstract class TypedMenu<T> extends BaseTypedMenu<T> {
 		return -1;
 	}
 
-	public T getSelected() {
-		return e;
-	}
-
-	public void selectObject(T e) {
-		this.e = e;
-	}
+	public abstract boolean shouldReopen();
 }

@@ -9,9 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.stormrealms.stormcore.StormCore;
 import org.stormrealms.stormmenus.MenuManager;
-import org.stormrealms.stormmenus.absraction.SubMenu;
 import org.stormrealms.stormmenus.absraction.TypedMenu;
 import org.stormrealms.stormmenus.menus.ClickType;
 
@@ -22,7 +20,6 @@ public class TypedMenuListeners implements Listener {
 
 	@EventHandler
 	public void listenForBasicClick(InventoryClickEvent e) {
-		System.out.println("IS MANAGER NULL? " + (manager == null));
 		UUID uuid = e.getWhoClicked().getUniqueId();
 		if (e.getClickedInventory() != null && e.getView().getTitle() != null) {
 			if (manager.playerHasTypedMenuOpen(uuid)) {
@@ -33,8 +30,7 @@ public class TypedMenuListeners implements Listener {
 					Player p = (Player) e.getWhoClicked();
 					if (m.getActionAt(e.getRawSlot()) == null)
 						return;
-					m.getSelected();
-					Object selected = m.getSelector().get(p.getUniqueId());
+					Object selected = m.getElement();
 					if (selected == null)
 						throw new IllegalStateException(
 								"A menu of type has been clicked with no selector! Error. Type: " + m.getClass());
@@ -42,7 +38,6 @@ public class TypedMenuListeners implements Listener {
 					m.getActionAt(e.getRawSlot()).accept(type, selected, p);
 				}
 			} else {
-				System.out.println("NO TYPED MENU DAFUQ YO");
 				manager.map().forEach((id, menu) -> {
 					System.out.println("UUID " + id + " has menu of type " + menu.getClass() + " open1");
 				});
@@ -65,15 +60,14 @@ public class TypedMenuListeners implements Listener {
 	}
 
 	@EventHandler
-	public void cancelLowerClick(InventoryCloseEvent e) {
+	public void closeMenu(InventoryCloseEvent e) {
+		System.out.println("Close");
 		UUID uuid = e.getPlayer().getUniqueId();
 		if (e.getInventory() != null && e.getView() != null) {
 			if (manager.playerHasTypedMenuOpen(uuid)) {
+				if (e.getPlayer().hasMetadata("submenu"))
+					return;
 				TypedMenu m = manager.getTypedMenuFromUUID(uuid);
-				if (m instanceof SubMenu && (!e.getPlayer().hasMetadata("lowermenu"))) {
-					((SubMenu) m).closeMenu((Player) e.getPlayer());
-					e.getPlayer().removeMetadata("lowermenu", StormCore.getInstance());
-				}
 				m.onClose((Player) e.getPlayer());
 			}
 		}

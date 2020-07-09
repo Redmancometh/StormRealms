@@ -9,10 +9,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.stormrealms.stormcore.StormCore;
 import org.stormrealms.stormmenus.MenuManager;
 import org.stormrealms.stormmenus.absraction.Menu;
-import org.stormrealms.stormmenus.absraction.SubMenu;
 import org.stormrealms.stormmenus.menus.ClickType;
 
 @Component
@@ -33,7 +31,6 @@ public class MenuListeners implements Listener {
 						return;
 					m.getActionAt(e.getRawSlot()).accept(getClickType(e.isShiftClick(), e.isRightClick()), p);
 				}
-				// TODO: This cannot stay like this
 			}
 		}
 	}
@@ -57,10 +54,7 @@ public class MenuListeners implements Listener {
 		if (e.getInventory() != null && e.getView().getTitle() != null) {
 			if (manager.playerHasMenuOpen(uuid)) {
 				Menu m = manager.getMenuFromTitle(uuid);
-				if (m instanceof SubMenu && (!e.getPlayer().hasMetadata("lowermenu"))) {
-					((SubMenu) m).closeMenu((Player) e.getPlayer());
-					e.getPlayer().removeMetadata("lowermenu", StormCore.getInstance());
-				}
+				m.closeMenu((Player) e.getPlayer());
 			}
 		}
 	}

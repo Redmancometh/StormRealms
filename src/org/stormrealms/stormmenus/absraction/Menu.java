@@ -30,6 +30,10 @@ public abstract class Menu extends BaseMenu {
 		manager.setPlayerMenu(p.getUniqueId(), this);
 	}
 
+	public void closeMenu(Player p) {
+
+	}
+
 	/**
 	 * Construct a menu, and provide your own generified inventory constructor
 	 * 

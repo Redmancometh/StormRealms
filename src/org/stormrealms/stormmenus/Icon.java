@@ -7,13 +7,15 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import lombok.Data;
+
+@Data
 public class Icon {
 	private int index;
-
 	private List<String> lore;
 	private String displayName;
 	private Material material;
-	private Short dataValue;
+	private Short dataValue = 0;
 
 	public Icon() {
 
@@ -52,46 +54,6 @@ public class Icon {
 			lore.set(x, ogString);
 		}
 		return lore;
-	}
-
-	public int getIndex() {
-		return index;
-	}
-
-	public void setIndex(int index) {
-		this.index = index;
-	}
-
-	public List<String> getLore() {
-		return lore;
-	}
-
-	public void setLore(List<String> lore) {
-		this.lore = lore;
-	}
-
-	public String getDisplayName() {
-		return displayName;
-	}
-
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
-	}
-
-	public Material getMaterial() {
-		return material;
-	}
-
-	public void setMaterial(Material material) {
-		this.material = material;
-	}
-
-	public Short getDataValue() {
-		return dataValue;
-	}
-
-	public void setDataValue(Short dataValue) {
-		this.dataValue = dataValue;
 	}
 
 }
