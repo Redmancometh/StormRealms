@@ -112,6 +112,7 @@ public abstract class TypedMenu<T> extends BaseTypedMenu<T> {
 	 */
 	public TypedMenu(String name) {
 		super(name, 18);
+		decorateMenu();
 		this.constructInventory = (p, typedElement) -> {
 			Inventory menuInv = Bukkit.createInventory(null, getSize(), this.getName());
 			this.selected = typedElement;
@@ -151,12 +152,10 @@ public abstract class TypedMenu<T> extends BaseTypedMenu<T> {
 	 */
 	public TypedMenu(String name, MenuTemplate template, int size) {
 		super(name, size, template);
+		System.out.println("Template is null? " + (template == null));
+		System.out.println("Called typed menu constructor with template: " + template);
 		this.constructInventory = (p, typedElement) -> {
 			Inventory menuInv = Bukkit.createInventory(null, size, this.getName());
-			System.out.println("Template is null? " + (template == null));
-			if (template != null) {
-				decorateMenu();
-			}
 			actionMap.forEach(
 					(number, button) -> menuInv.setItem(number, button.constructButton(typedElement, this, p)));
 			return menuInv;
@@ -197,6 +196,7 @@ public abstract class TypedMenu<T> extends BaseTypedMenu<T> {
 	}
 
 	public TypedMenu decorateMenu() {
+		System.out.println("Is template null: " + (getTemplate() == null));
 		getTemplate().forEach((pane) -> pane.forEach((index) -> setButton(index, new TypedMenuButton(
 				(p, t) -> ItemUtil.buildItem(PaneUtil.getPaneFor(pane.getColor()), "", new ArrayList())))));
 		return this;
