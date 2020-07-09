@@ -18,6 +18,8 @@ import javax.persistence.Transient;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.hibernate.annotations.Type;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.Defaultable;
 
 import lombok.Data;
@@ -25,6 +27,8 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "rpg_player")
+@Component
+@Scope("prototype")
 public class RPGPlayer implements Defaultable<UUID> {
 	@Type(type = "uuid-char")
 	@Column(name = "player_id")

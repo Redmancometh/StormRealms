@@ -10,19 +10,19 @@ import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormmenus.absraction.TypedMenu;
 import org.stormrealms.stormmenus.menus.TypedMenuButton;
-import org.stormrealms.stormmenus.menus.TypedSelector;
 import org.stormrealms.stormmenus.util.ItemUtil;
 import org.stormrealms.stormstats.configuration.pojo.ClassConfiguration;
 import org.stormrealms.stormstats.configuration.pojo.ClassInformation;
+import org.stormrealms.stormstats.model.ClassData;
 import org.stormrealms.stormstats.model.RPGPlayer;
 
 @Component
 @Scope("prototype")
 public class RaceMenu extends TypedMenu<RPGPlayer> {
-	private TypedSelector typeSelector = new TypedSelector<RPGPlayer>();
 	@Autowired
 	@Qualifier("class-config")
 	ConfigManager<ClassConfiguration> confMan;
+	private boolean raceChosen = false;
 
 	public RaceMenu() {
 		super("Class Menu", 54);
@@ -37,23 +37,28 @@ public class RaceMenu extends TypedMenu<RPGPlayer> {
 			});
 			button.setAction((clickType, rpgPlayer, player) -> {
 				setStartingStats(rpgPlayer, classInfo);
+				raceChosen = true;
 				player.closeInventory();
+				CreateCharacterMenu menu = new CreateCharacterMenu();
+				menu.open(player, rpgPlayer);
 			});
 			setButton(x.getAndIncrement(), button);
 		});
 	}
 
-	public void setStartingStats(RPGPlayer rpPlayer, ClassInformation classInfo) {
-		/*rpPlayer.setAgi(classInfo.getStartingAgi());
-		rpPlayer.setStr(classInfo.getStartingStr());
-		rpPlayer.setSpi(classInfo.getStartingSpi());
-		rpPlayer.setIntel(classInfo.getStartingIntel());
-		*/
+	@Override
+	public boolean shouldReopen() {
+		return raceChosen;
 	}
 
-	@Override
-	public TypedSelector getSelector() {
-		return typeSelector;
+	public void setStartingStats(RPGPlayer rpPlayer, ClassInformation classInfo) {
+		rpPlayer.getChosenCharacter().setAgi(classInfo.getStartingAgi());
+		rpPlayer.getChosenCharacter().setStr(classInfo.getStartingStr());
+		rpPlayer.getChosenCharacter().setSpi(classInfo.getStartingSpi());
+		rpPlayer.getChosenCharacter().setIntel(classInfo.getStartingIntel());
+		ClassData data = rpPlayer.getChosenCharacter().getData();
+		data.setCharacter(rpPlayer.getChosenCharacter());
+		data.setClassName(classInfo.getClassName());
 	}
 
 }

@@ -3,7 +3,6 @@ package org.stormrealms.stormstats.menus;
 import javax.annotation.PostConstruct;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +10,12 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormmenus.absraction.TypedMenu;
 import org.stormrealms.stormmenus.menus.TypedMenuButton;
-import org.stormrealms.stormmenus.menus.TypedSelector;
 import org.stormrealms.stormstats.configuration.pojo.GUIConfig;
 import org.stormrealms.stormstats.model.RPGCharacter;
 import org.stormrealms.stormstats.model.RPGPlayer;
 
 @Component
 public class CharacterMenu extends TypedMenu<RPGPlayer> {
-	private TypedSelector typeSelector = new TypedSelector<RPGPlayer>();
 	@Autowired
 	private GUIConfig config;
 	@Autowired
@@ -49,7 +46,6 @@ public class CharacterMenu extends TypedMenu<RPGPlayer> {
 					}));
 				}
 			}
-			getSelector().select(p.getUniqueId(), rp);
 			actionMap.forEach((number, button) -> {
 				i.setItem(number, button.constructButton(rp, this, p));
 			});
@@ -57,19 +53,15 @@ public class CharacterMenu extends TypedMenu<RPGPlayer> {
 		});
 	}
 
-	@Override
-	public void onClose(Player p) {
-
-		super.onClose(p);
-	}
-
 	public void chooseCharacter(RPGPlayer rp, RPGCharacter rpgChar) {
 
 	}
 
 	@Override
-	public TypedSelector getSelector() {
-		return typeSelector;
+	public boolean shouldReopen() {
+		if (getElement().getChosenCharacter() != null && getElement().getChosenCharacter().isCharacterComplete())
+			return false;
+		return true;
 	}
 
 }

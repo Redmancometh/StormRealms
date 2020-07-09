@@ -11,11 +11,16 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import lombok.Data;
 
 @Entity
 @Data
 @Table(name = "rpg_character")
+@Component
+@Scope("prototype")
 public class RPGCharacter {
 
 	@PrePersist
@@ -32,6 +37,8 @@ public class RPGCharacter {
 	@Column
 	private String characterName;
 	@Column
+	private String race;
+	@Column
 	private double x;
 	@Column
 	private double y;
@@ -41,6 +48,7 @@ public class RPGCharacter {
 	private String world;
 	@Column
 	private int health;
+	
 	@Column
 	private double experience;
 	@Column
@@ -53,6 +61,20 @@ public class RPGCharacter {
 	private int spi;
 	@Column
 	private int agi;
+
+	public boolean isCharacterComplete() {
+		System.out.println("RACE IS NULL: " + (this.getRace() == null));
+		System.out.println("NAME IS NULL: " + (this.getCharacterName() == null));
+		System.out.println("CLASSDATA IS NULL: " + (this.getData() == null));
+		System.out.println("IS CHAR COMPLETE?");
+		if (this.getRace() != null && this.getCharacterName() != null && this.getData() != null
+				&& this.getData().getClassName() != null) {
+			System.out.println("CHARACTER COMPLETE");
+			return true;
+		}
+		System.out.println("CHARACTER IS NOT COMPLETE");
+		return false;
+	}
 
 	public void setDefaults() {
 		this.level = 1;

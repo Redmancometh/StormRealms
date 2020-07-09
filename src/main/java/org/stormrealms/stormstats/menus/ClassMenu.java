@@ -3,27 +3,31 @@ package org.stormrealms.stormstats.menus;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.PostConstruct;
+
+import org.bukkit.entity.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormmenus.absraction.TypedMenu;
 import org.stormrealms.stormmenus.menus.TypedMenuButton;
-import org.stormrealms.stormmenus.menus.TypedSelector;
 import org.stormrealms.stormmenus.util.ItemUtil;
 import org.stormrealms.stormstats.configuration.pojo.ClassConfiguration;
 import org.stormrealms.stormstats.configuration.pojo.ClassInformation;
+import org.stormrealms.stormstats.model.ClassData;
 import org.stormrealms.stormstats.model.RPGCharacter;
 import org.stormrealms.stormstats.model.RPGPlayer;
 
 @Component
 @Scope("prototype")
 public class ClassMenu extends TypedMenu<RPGPlayer> {
-	private TypedSelector typeSelector = new TypedSelector<RPGPlayer>();
 	@Autowired
 	@Qualifier("class-config")
 	ConfigManager<ClassConfiguration> confMan;
+	@Autowired
+	private AutowireCapableBeanFactory factory;
 
 	public ClassMenu() {
 		super("Class Menu", 54);
@@ -37,19 +41,30 @@ public class ClassMenu extends TypedMenu<RPGPlayer> {
 				return ItemUtil.buildItem(classInfo.getClassItem(), classInfo.getClassName(), classInfo.getClassLore());
 			});
 			button.setAction((clickType, rpgPlayer, player) -> {
-				player.closeInventory();
+				ClassData data = new ClassData();
+				data.setClassName(className);
+				RPGCharacter character = rpgPlayer.getChosenCharacter();
+				data.setCharacter(character);
+				character.setData(data);
+				CreateCharacterMenu charMenu = factory.getBean(CreateCharacterMenu.class);
+				charMenu.open(player, rpgPlayer);
 			});
 			setButton(x.getAndIncrement(), button);
 		});
 	}
 
+	@Override
+	public void onClose(Player p) {
+		super.onClose(p);
+	}
+
 	public void setStartingStats(RPGCharacter rpChar, ClassInformation classInfo) {
-		
+
 	}
 
 	@Override
-	public TypedSelector getSelector() {
-		return typeSelector;
+	public boolean shouldReopen() {
+		return false;
 	}
 
 }

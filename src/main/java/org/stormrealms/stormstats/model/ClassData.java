@@ -9,6 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +21,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@Component
+@Scope("prototype")
 public class ClassData {
 	@Id
 	@Column(name = "character_id")

@@ -55,7 +55,7 @@ public class StormStatConfiguration {
 		return man;
 	}
 
-	@Bean
+	@Bean(name = "gui-cfg")
 	@Scope("prototype")
 	public GUIConfig guiCfg(@Qualifier("gui-config") ConfigManager<GUIConfig> guiConfig) {
 		return guiConfig.getConfig();
