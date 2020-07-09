@@ -7,6 +7,6 @@ import org.stormrealms.stormresources.configuration.ResourceNode;
 import lombok.Data;
 
 @Data
-public class HerbsConfiguration {
+public class ResourceConfiguration {
 	private List<ResourceNode> resources;
 }

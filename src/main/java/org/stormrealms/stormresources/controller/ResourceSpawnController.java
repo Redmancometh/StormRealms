@@ -16,14 +16,14 @@ import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormresources.configuration.HerbNode;
 import org.stormrealms.stormresources.configuration.OreNode;
 import org.stormrealms.stormresources.configuration.ResourceNode;
-import org.stormrealms.stormresources.configuration.pojo.HerbsConfiguration;
+import org.stormrealms.stormresources.configuration.pojo.ResourceConfiguration;
 import org.stormrealms.stormresources.listeners.GatherListeners;
 
 @Controller
 public class ResourceSpawnController {
 	@Autowired
-	@Qualifier("resources-config")
-	private ConfigManager<HerbsConfiguration> confMan;
+	@Qualifier("resource-config")
+	private ConfigManager<ResourceConfiguration> confMan;
 	@Autowired
 	private GatherListeners gatherListener;
 
@@ -42,7 +42,7 @@ public class ResourceSpawnController {
 				resource.getLocations().forEach((loc) -> {
 					Block b = loc.getBlock();
 					b.setType(resource.getItem().getMaterial());
-					b.setMetadata("resourcenode", new FixedMetadataValue(StormCore.getInstance(), true));
+					b.setMetadata("resourcenode", new FixedMetadataValue(StormCore.getInstance(), resource));
 				});
 		}
 	}
@@ -53,7 +53,7 @@ public class ResourceSpawnController {
 		for (int x = 0; x < spawns; x++) {
 			Block nodeBlock = node.getLocations().get(x).getBlock();
 			nodeBlock.setType(node.getItem().getMaterial());
-			nodeBlock.setMetadata("resourcenode", new FixedMetadataValue(StormCore.getInstance(), true));
+			nodeBlock.setMetadata("resourcenode", new FixedMetadataValue(StormCore.getInstance(), node));
 		}
 	}
 

@@ -31,7 +31,8 @@ public class StormResources extends StormSpringPlugin {
 
 	@Override
 	public String[] getPackages() {
-		return new String[] { "org.stormrealms.stormresources" };
+		return new String[] { "org.stormrealms.stormresources.*", "org.stormrealms.stormresources.configuration",
+				"org.stormrealms.stormresources.controller", "org.stormrealms.stormresources.listeners" };
 	}
 
 	@Override

@@ -10,6 +10,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.stormrealms.stormcore.StormCore;
+import org.stormrealms.stormresources.configuration.HerbNode;
+
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 
@@ -29,6 +31,8 @@ public class GatherListeners implements Listener {
 			StringBuilder line = new StringBuilder("■");
 			for (int x = 0; x < countDown.get(); x++)
 				line.append("■");
+			HerbNode node = (HerbNode) b.getMetadata("resourcenode").get(0);
+			e.getPlayer().getInventory().addItem(node.getItem().build());
 			task.cancel();
 		}, 10, 10);
 	}
