@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormstats.configuration.pojo.ClassConfiguration;
 import org.stormrealms.stormstats.configuration.pojo.GUIConfig;
+import org.stormrealms.stormstats.configuration.pojo.RaceConfig;
 import org.stormrealms.stormstats.data.OtherStatRepo;
 import org.stormrealms.stormstats.model.RPGPlayer;
 
@@ -45,6 +46,20 @@ public class StormStatConfiguration {
 		man.init();
 		System.out.print("CFG INITIAL " + man.getConfig());
 		return man;
+	}
+
+	@Bean(name = "race-config")
+	public ConfigManager<RaceConfig> raceConfig() {
+		ConfigManager<RaceConfig> man = new ConfigManager("races.json", RaceConfig.class);
+		man.init();
+		System.out.print("CFG INITIAL " + man.getConfig());
+		return man;
+	}
+
+	@Bean(name = "race-cfg")
+	@Scope("prototype")
+	public RaceConfig raceCfg(@Qualifier("race-config") ConfigManager<RaceConfig> guiConfig) {
+		return guiConfig.getConfig();
 	}
 
 	@Bean(name = "gui-config")

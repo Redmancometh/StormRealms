@@ -8,12 +8,18 @@ import javax.annotation.PostConstruct;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Component;
+import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormmenus.Icon;
 import org.stormrealms.stormmenus.absraction.TypedMenu;
 import org.stormrealms.stormmenus.menus.TypedMenuButton;
+import org.stormrealms.stormstats.configuration.pojo.ClassConfiguration;
 import org.stormrealms.stormstats.configuration.pojo.GUIConfig;
+import org.stormrealms.stormstats.configuration.pojo.Race;
+import org.stormrealms.stormstats.configuration.pojo.RaceConfig;
+import org.stormrealms.stormstats.model.ClassData;
 import org.stormrealms.stormstats.model.RPGCharacter;
 import org.stormrealms.stormstats.model.RPGPlayer;
 
@@ -21,6 +27,12 @@ import org.stormrealms.stormstats.model.RPGPlayer;
 public class CreateCharacterMenu extends TypedMenu<RPGPlayer> {
 	@Autowired
 	private GUIConfig cfg;
+	@Autowired
+	private RaceConfig raceCfg;
+	@Autowired
+	@Qualifier("class-config")
+	ConfigManager<ClassConfiguration> confMan;
+
 	@Autowired
 	private AutowireCapableBeanFactory factory;
 
@@ -30,22 +42,46 @@ public class CreateCharacterMenu extends TypedMenu<RPGPlayer> {
 
 	@PostConstruct
 	public void addButtons() {
-
 		setButton(cfg.getSetClass().getIndex(),
-				new TypedMenuButton<RPGPlayer>((p, rp) -> cfg.getSetClass().build(), (clickType, rPlayer, player) -> {
+				new TypedMenuButton<RPGPlayer>((p, rp) -> getClassIcon().build(), (clickType, rPlayer, player) -> {
 					ClassMenu classMenu = factory.getBean(ClassMenu.class);
-					classMenu.open(player, rPlayer);
+					classMenu.openInstead(player, rPlayer);
 				}));
 		setButton(cfg.getSetName().getIndex(),
 				new TypedMenuButton<RPGPlayer>((p, rp) -> cfg.getSetName().build(), (clickType, rPlayer, player) -> {
 					rPlayer.getChosenCharacter().setCharacterName("Test Character");
+					this.openInstead(player, rPlayer);
 				}));
 		setButton(cfg.getSetRace().getIndex(),
-				new TypedMenuButton<RPGPlayer>((p, rp) -> cfg.getSetRace().build(), (clickType, rPlayer, player) -> {
-					// RaceMenu raceMenu = factory.getBean(RaceMenu.class);
-					// raceMenu.open(player, rPlayer);
-					rPlayer.getChosenCharacter().setRace("Elf");
+				new TypedMenuButton<RPGPlayer>((p, rp) -> getRaceIcon().build(), (clickType, rPlayer, player) -> {
+					RaceMenu raceMenu = factory.getBean(RaceMenu.class);
+					raceMenu.openInstead(player, rPlayer);
 				}));
+		setButton(26,
+				new TypedMenuButton<RPGPlayer>((p, rp) -> cfg.getSetRace().build(), (clickType, rPlayer, player) -> {
+					player.kickPlayer("Aborted character creation!");
+				}));
+	}
+
+	private Icon getRaceIcon() {
+		String race = getSelected().getChosenCharacter().getRace();
+		if (race != null) {
+			for (Race cfgRace : raceCfg.getRaces()) {
+				if (cfgRace.getName().equals(race))
+					return cfgRace.getRaceIcon();
+			}
+		}
+		return cfg.getSetRace();
+	}
+
+	private Icon getClassIcon() {
+		ClassData data = getSelected().getChosenCharacter().getData();
+		if (data == null || data.getClassName() == null)
+			return cfg.getSetClass();
+		String clazz = getSelected().getChosenCharacter().getData().getClassName();
+		if (clazz != null)
+			return confMan.getConfig().getClassMap().get(clazz.toLowerCase()).getClassItem();
+		return cfg.getSetClass();
 	}
 
 	private Icon getTestIcon() {
@@ -78,11 +114,6 @@ public class CreateCharacterMenu extends TypedMenu<RPGPlayer> {
 
 	@Override
 	public boolean shouldReopen() {
-		System.out.println("ASKING SHOULD REOPEN!");
-		System.out.println("ELEMENT NULL ");
-		System.out.println("ELEMENT NULL " + (getElement() == null));
-		System.out.println("ELEMENT NULL " + (getElement() == null));
-		System.out.println("CHOSEN CHAR NULL: " + (getElement().getChosenCharacter() == null));
 		boolean charComplete = getElement().getChosenCharacter() != null
 				&& getElement().getChosenCharacter().isCharacterComplete();
 		return !charComplete;

@@ -37,9 +37,7 @@ public class ClassMenu extends TypedMenu<RPGPlayer> {
 	public void addButtons() {
 		AtomicInteger x = new AtomicInteger(0);
 		confMan.getConfig().getClassMap().forEach((className, classInfo) -> {
-			TypedMenuButton<RPGPlayer> button = new TypedMenuButton<>((p, t) -> {
-				return ItemUtil.buildItem(classInfo.getClassItem(), classInfo.getClassName(), classInfo.getClassLore());
-			});
+			TypedMenuButton<RPGPlayer> button = new TypedMenuButton<>((p, t) -> classInfo.getClassItem().build());
 			button.setAction((clickType, rpgPlayer, player) -> {
 				ClassData data = new ClassData();
 				data.setClassName(className);
@@ -59,7 +57,7 @@ public class ClassMenu extends TypedMenu<RPGPlayer> {
 	}
 
 	public void setStartingStats(RPGCharacter rpChar, ClassInformation classInfo) {
-
+		
 	}
 
 	@Override
