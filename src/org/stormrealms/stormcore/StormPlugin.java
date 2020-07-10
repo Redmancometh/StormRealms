@@ -1,5 +1,6 @@
 package org.stormrealms.stormcore;
 
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -25,12 +26,11 @@ public abstract class StormPlugin {
 	@Getter
 	@Setter
 	private String name;
-
 	private List<SCommandExecutor> commands = new ArrayList<>();
 	private List<Listener> listeners = new ArrayList<>();
 	@Setter
 	@Getter
-	private ClassLoader moduleLoader;
+	private URLClassLoader moduleLoader;
 
 	public final void registerCommand(String cmd, SCommandExecutor executor) {
 		executor.setName(cmd);

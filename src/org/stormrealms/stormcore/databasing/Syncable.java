@@ -1,4 +1,4 @@
-package org.stormrealms.databasing;
+package org.stormrealms.stormcore.databasing;
 
 import org.bukkit.entity.Player;
 import org.stormrealms.stormcore.Defaultable;

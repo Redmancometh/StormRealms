@@ -1,11 +1,11 @@
-package org.stormrealms.databasing;
+package org.stormrealms.stormcore.databasing;
 
 import java.io.Serializable;
 import java.util.List;
 
-import org.stormrealms.exceptions.ObjectNotPresentException;
 import org.stormrealms.stormcore.Defaultable;
 import org.stormrealms.stormcore.StormCore;
+import org.stormrealms.stormcore.exceptions.ObjectNotPresentException;
 import org.stormrealms.stormcore.util.SpecialFuture;
 
 public class ObjectManager<K extends Serializable, T extends Defaultable<?>> implements BaseObjectManager<K, T> {

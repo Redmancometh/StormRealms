@@ -33,7 +33,9 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Controller;
+import org.stormrealms.stormcore.StormCore;
 import org.stormrealms.stormcore.config.DirectoryWatcher;
 import org.stormrealms.stormcore.util.ExportSystem;
 import org.stormrealms.stormcore.util.QuadFunction;
@@ -47,6 +49,7 @@ import org.stormrealms.stormcore.util.TriFunction;
  * @author Brendan T Curry
  *
  */
+@Order(1)
 public class ScriptEngineController {
 	private ScheduledExecutorService scriptScheduler = Executors.newScheduledThreadPool(4);
 	private ScheduledExecutorService asyncPool = Executors.newScheduledThreadPool(8);
@@ -73,6 +76,15 @@ public class ScriptEngineController {
 		return scriptScheduler.scheduleAtFixedRate(runnable, initialDelay, repeatDelay, units);
 	};
 
+	private Function<String, Class> type = (name) -> {
+		try {
+			return StormCore.getInstance().getPLClassLoader().loadClass(name);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	};
+
 	private DirectoryWatcher dirWatcher = new DirectoryWatcher(onChange, "scripts", "js");
 	private ExportSystem exports = new ExportSystem();
 
@@ -82,6 +94,7 @@ public class ScriptEngineController {
 
 	@PostConstruct
 	public void addGlobals() {
+		Thread.currentThread().setContextClassLoader(StormCore.getInstance().getPLClassLoader());
 		for (ScriptEngineFactory se : new ScriptEngineManager().getEngineFactories()) {
 			System.out.println("se = " + se.getEngineName());
 			System.out.println("se = " + se.getEngineVersion());
@@ -89,7 +102,9 @@ public class ScriptEngineController {
 			System.out.println("se = " + se.getLanguageVersion());
 			System.out.println("se = " + se.getNames());
 		}
+		graal.put("StormCore", StormCore.getInstance());
 		System.out.println("GRAAL NULL? " + (graal == null));
+		graal.put("type", type);
 		graal.put("HashMap", HashMap.class);
 		graal.put("HashSet", HashSet.class);
 		graal.put("async", asyncPool);
@@ -114,9 +129,16 @@ public class ScriptEngineController {
 		graal.put("schedule", schedule);
 		graal.put("context", context);
 		graal.put("exports", exports);
+		addListenerPoints();
 		dirWatcher.start();
 	}
 
+	public void addListenerPoints() {
+		
+	}
+	
+	
+	
 	public ArrayList list() {
 		return new ArrayList();
 	}

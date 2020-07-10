@@ -1,4 +1,4 @@
-package org.stormrealms.exceptions;
+package org.stormrealms.stormcore.exceptions;
 
 public class ObjectNotPresentException extends Exception
 {

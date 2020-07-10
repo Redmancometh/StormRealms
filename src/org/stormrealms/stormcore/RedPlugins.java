@@ -34,6 +34,7 @@ public class RedPlugins implements Iterable<RedPlugin> {
 		loadedMap.put(plugin.getClass(), plugin);
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean loadPluginFromClass(Class<? extends RedPlugin> clazz) {
 		if (loadedMap.containsKey(clazz))
 			return false;

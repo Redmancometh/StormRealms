@@ -1,4 +1,4 @@
-package org.stormrealms.databasing;
+package org.stormrealms.stormcore.databasing;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -8,9 +8,9 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
-import org.stormrealms.exceptions.ObjectNotPresentException;
 import org.stormrealms.stormcore.Defaultable;
 import org.stormrealms.stormcore.StormCore;
+import org.stormrealms.stormcore.exceptions.ObjectNotPresentException;
 import org.stormrealms.stormcore.util.SpecialFuture;
 
 import java.io.Serializable;

@@ -21,10 +21,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-import org.stormrealms.databasing.MasterDatabase;
 import org.stormrealms.stormcore.command.StormCommandHandler;
 import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
+import org.stormrealms.stormcore.databasing.MasterDatabase;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 

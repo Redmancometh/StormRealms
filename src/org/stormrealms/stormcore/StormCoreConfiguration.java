@@ -7,6 +7,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import org.stormrealms.stormcore.storage.PluginStorage;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
@@ -53,6 +53,11 @@ public class StormCoreConfiguration {
 		}
 	}
 
+	@Bean("classloader-map")
+	public Map<String, URLClassLoader> loaderMap() {
+		return new HashMap();
+	}
+
 	@Bean(name = "enabled-plugins")
 	public Set<StormPlugin> enabledPlugins() {
 		return new HashSet();
@@ -63,11 +68,6 @@ public class StormCoreConfiguration {
 		URLClassLoader classLoader = new URLClassLoader(modulePaths.toArray(new URL[modulePaths.size()]),
 				StormCore.getInstance().getPLClassLoader().getParent());
 		return classLoader;
-	}
-
-	@Bean
-	public PluginStorage pluginStorage() {
-		return new PluginStorage();
 	}
 
 	@Bean(name = "context-storage")

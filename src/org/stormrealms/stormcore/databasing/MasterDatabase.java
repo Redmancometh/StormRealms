@@ -1,4 +1,4 @@
-package org.stormrealms.databasing;
+package org.stormrealms.stormcore.databasing;
 
 import lombok.Getter;
 import org.hibernate.SessionFactory;

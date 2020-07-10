@@ -6,7 +6,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 
 import com.google.gson.FieldNamingPolicy;
@@ -14,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import lombok.Data;
@@ -28,11 +31,11 @@ import lombok.Setter;
  */
 @Data
 public class ConfigManager<T> {
-	@Getter
-	private Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED)
+	protected Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED)
 			.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
 			.registerTypeHierarchyAdapter(String.class, new PathAdapter())
 			.registerTypeHierarchyAdapter(Material.class, new MaterialAdapter())
+			.registerTypeAdapter(Location.class, new LocationAdapter())
 			.registerTypeHierarchyAdapter(Class.class, new ClassAdapter()).setPrettyPrinting().create();
 	private String fileName;
 	private Class clazz;
@@ -144,6 +147,56 @@ public class ConfigManager<T> {
 		}
 	}
 
+	public static class LocationAdapter extends TypeAdapter<Location> {
+		@Override
+		public Location read(JsonReader reader) throws IOException {
+			reader.beginObject();
+			JsonToken token = reader.peek();
+			Double x = null;
+			Double y = null;
+			Double z = null;
+			String worldName = null;
+			while (reader.hasNext()) {
+				if (token.equals(JsonToken.NAME)) {
+					String fieldName = reader.nextName();
+					if (fieldName.equalsIgnoreCase("x")) {
+						System.out.println("X");
+						x = reader.nextDouble();
+					} else if (fieldName.equalsIgnoreCase("y")) {
+						System.out.println("Y");
+						y = reader.nextDouble();
+					} else if (fieldName.equalsIgnoreCase("z")) {
+						System.out.println("Z");
+						z = reader.nextDouble();
+					} else if (fieldName.equalsIgnoreCase("world")) {
+						System.out.println("WORLD");
+						worldName = reader.nextString();
+					}
+				}
+			}
+			if (x == null)
+				throw new IllegalStateException("Invalid config on location (x is null) " + reader.getPath());
+			else if (y == null)
+				throw new IllegalStateException("Invalid config on location (y is null) " + reader.getPath());
+			else if (z == null)
+				throw new IllegalStateException("Invalid config on location (z is null) " + reader.getPath());
+			else if (worldName == null)
+				throw new IllegalStateException("Invalid world on location " + reader.getPath());
+			if (Bukkit.getWorld(worldName) == null)
+				// might not want to use this.
+				throw new IllegalStateException(
+						"Location at " + reader.getPath() + " contains areference to a world that does not exist!");
+			reader.endObject();
+			return new Location(Bukkit.getWorld(worldName), x.doubleValue(), y.doubleValue(), z.doubleValue());
+		}
+
+		@Override
+		public void write(JsonWriter arg0, Location arg1) throws IOException {
+			arg0.value(arg1.toString());
+		}
+
+	}
+
 	public static class PathAdapter extends TypeAdapter<String> {
 
 		@Override
@@ -159,7 +212,6 @@ public class ConfigManager<T> {
 		public void write(JsonWriter arg0, String arg1) throws IOException {
 			arg0.value(arg1);
 		}
-
 	}
 
 }

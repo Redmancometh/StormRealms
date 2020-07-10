@@ -1,4 +1,4 @@
-package org.stormrealms.databasing;
+package org.stormrealms.stormcore.databasing;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;

@@ -8,7 +8,9 @@ import com.google.gson.GsonBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Controller;
 import org.stormrealms.stormcore.DBRedPlugin;
 import org.stormrealms.stormcore.SpringPlugin;
@@ -19,12 +21,18 @@ import org.stormrealms.stormcore.config.pojo.PluginLoadTask;
 import org.stormrealms.stormcore.config.pojo.PluginLoadTaskContainer;
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
 import org.stormrealms.stormcore.util.PluginConfig;
+import org.stormrealms.stormcore.util.SpringUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.stream.Stream;
@@ -33,12 +41,17 @@ import java.util.zip.ZipEntry;
 import javax.annotation.PostConstruct;
 
 @Controller
+@Order(0)
 public class ModuleLoaderController {
 	private File moduleDir;
 	@Autowired
 	private PluginLoadTaskContainer container;
 	@Autowired
+	@Qualifier("enabled-plugins")
 	private Set<StormPlugin> enabledPlugins;
+	@Autowired
+	@Qualifier("classloader-map")
+	private Map<String, URLClassLoader> loaderMap;
 
 	public ModuleLoaderController(@Autowired @Qualifier("modules-dir") File moduleDir) {
 		this.moduleDir = moduleDir;
@@ -63,32 +76,68 @@ public class ModuleLoaderController {
 			e.printStackTrace();
 		}
 		for (int x = 0; x < 50; x++) {
-			System.out.println("Loading plugin #" + x);
 			if (!container.hasPass(x))
-				return;
+				continue;
+			System.out.println("Loading plugin layer #" + x);
 			for (PluginLoadTask task : container.getPass(x)) {
-				try {
-					PluginConfig config = task.getConfig();
-					Class mainClass = StormCore.getInstance().getPLClassLoader().loadClass(config.getMain());
-					StormSpringPlugin module = null;
-					// SpringUtil.addSpringBean(mainClass, config.getName(),
-					// BeanDefinition.SCOPE_SINGLETON);
-					module = (StormSpringPlugin) StormCore.getInstance().getContext().getAutowireCapableBeanFactory()
-							.getBean(mainClass);
-					module.setName(config.getName());
-					System.out.println("Loading spring plugin with config " + config + " during pass #" + x);
-					loadSpringPlugin((StormSpringPlugin) module, config);
-					if (module instanceof DBRedPlugin)
-						((DBRedPlugin) module).initialize();
-				} catch (IOException | ClassNotFoundException e) {
-					e.printStackTrace();
-				}
+				loadPlugin(task, x);
 			}
 		}
 	}
 
-	@SuppressWarnings({ "resource" })
-	public void queueModule(Path path) throws Exception {
+	public void loadPlugin(PluginLoadTask task, int pluginIndex) {
+		try {
+			PluginConfig config = task.getConfig();
+			Class mainClass = StormCore.getInstance().getPLClassLoader().loadClass(config.getMain());
+			StormSpringPlugin module = null;
+			SpringUtil.addSpringBean(mainClass, config.getName(), BeanDefinition.SCOPE_SINGLETON);
+			module = (StormSpringPlugin) StormCore.getInstance().getContext().getAutowireCapableBeanFactory()
+					.getBean(config.getName());
+			module.setName(config.getName());
+			System.out.println("Loading spring plugin with config " + config + " during pass #" + pluginIndex);
+			loadSpringPlugin((StormSpringPlugin) module, config);
+			if (module instanceof DBRedPlugin)
+				((DBRedPlugin) module).initialize();
+			enabledPlugins.add(module);
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private StormSpringPlugin loadSpringPlugin(StormSpringPlugin module, PluginConfig config) throws IOException {
+		AnnotationConfigApplicationContext moduleContext = new AnnotationConfigApplicationContext();
+		Path path = Paths.get("plugins/StormCore/modules/" + module.getName() + ".jar");
+		URLClassLoader moduleLoader = new URLClassLoader(module.getName(), new URL[] { path.toUri().toURL() },
+				StormCore.getInstance().getPLClassLoader());
+		loaderMap.put(module.getName(), moduleLoader);
+		module.setModuleLoader(moduleLoader);
+		moduleContext.setParent(StormCore.getInstance().getContext());
+		moduleContext.setClassLoader(module.getModuleLoader());
+		SpringPlugin spModule = (SpringPlugin) module;
+		module.setModuleLoader(module.getModuleLoader());
+		moduleContext.setParent(StormCore.getInstance().getContext());
+		spModule.setContext(moduleContext);
+		module.enable();
+		module.setName(config.getName());
+		moduleContext.scan(spModule.getPackages());
+		moduleContext.register(spModule.getConfigurationClass());
+		moduleContext.refresh();
+
+		return module;
+	}
+
+	public StormPlugin loadStormPlugin(StormPlugin module, PluginConfig config) throws IOException {
+		Path path = Paths.get("plugins/StormCore/modules/" + module.getName() + ".jar");
+		URLClassLoader moduleLoader = new URLClassLoader(module.getName(), new URL[] { path.toUri().toURL() },
+				StormCore.getInstance().getPLClassLoader());
+		loaderMap.put(module.getName(), moduleLoader);
+		module.setModuleLoader(moduleLoader);
+		module.enable();
+		module.setName(config.getName());
+		return module;
+	}
+
+	public PluginConfig getPluginConfigFromPath(Path path) throws Exception {
 		if (!path.toFile().exists())
 			throw new Exception(String.format("Could not find module at %s", path.toAbsolutePath()));
 		JarFile file = new JarFile(path.toFile());
@@ -100,33 +149,11 @@ public class ModuleLoaderController {
 		Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES).setPrettyPrinting()
 				.create();
 		PluginConfig config = gson.fromJson(moduleJsonSTR, PluginConfig.class);
-		container.addTask(new PluginLoadTask(config));
+		return config;
 	}
 
-	public StormSpringPlugin loadSpringPlugin(StormSpringPlugin module, PluginConfig config) throws IOException {
-		AnnotationConfigApplicationContext moduleContext = new AnnotationConfigApplicationContext();
-		moduleContext.setParent(StormCore.getInstance().getContext());
-		moduleContext.setClassLoader(StormCore.getInstance().getPLClassLoader());
-		SpringPlugin spModule = (SpringPlugin) module;
-		module.setModuleLoader(StormCore.getInstance().getPLClassLoader());
-		moduleContext.setParent(StormCore.getInstance().getContext());
-		spModule.setContext(moduleContext);
-		module.enable();
-		module.setName(config.getName());
-		moduleContext.scan(spModule.getPackages());
-		SpringConfig cfg = spModule.getSpringConfig();
-		moduleContext.register(spModule.getConfigurationClass());
-		cfg.getProperties()
-				.forEach((key, value) -> moduleContext.getEnvironment().getSystemProperties().put(key, value));
-		moduleContext.refresh();
-		return module;
-	}
-
-	public StormPlugin loadStormPlugin(StormPlugin module, PluginConfig config) throws IOException {
-		module.setModuleLoader(StormCore.getInstance().getPLClassLoader());
-		module.enable();
-		module.setName(config.getName());
-		return module;
+	public void queueModule(Path path) throws Exception {
+		container.addTask(new PluginLoadTask(getPluginConfigFromPath(path)));
 	}
 
 	public void enableModule(StormPlugin plugin) {
@@ -138,15 +165,23 @@ public class ModuleLoaderController {
 
 	public void disableModule(String name) {
 		StormPlugin p = byName(name);
-		disableModule(p);
+		try {
+			disableModule(p);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public void disableModule(StormPlugin plugin) {
+	public void disableModule(StormPlugin plugin) throws IOException {
 		if (plugin == null) {
 			return;
 		}
 		plugin.disable();
+		if (plugin instanceof SpringPlugin)
+			((SpringPlugin) plugin).getContext().close();
 		this.enabledPlugins.remove(plugin);
+		this.loaderMap.get(plugin.getName()).close();
+		this.loaderMap.remove(plugin.getName());
 	}
 
 	public File findModule(String name) {
@@ -159,6 +194,20 @@ public class ModuleLoaderController {
 	}
 
 	public StormPlugin byName(String name) {
+		System.out.println("PLUGIN SIZE " + enabledPlugins.size());
+		enabledPlugins.forEach((plugin) -> plugin.getName());
 		return enabledPlugins.stream().filter(p -> p.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+	}
+
+	public void reloadModule(StormPlugin pl) {
+		Path path = Paths.get("plugins/StormCore/modules/" + pl.getName() + ".jar");
+		try {
+			PluginLoadTask task = new PluginLoadTask(getPluginConfigFromPath(path));
+			disableModule(pl);
+			loadPlugin(task, 0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 }
