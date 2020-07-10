@@ -1,0 +1,10 @@
+{
+	"roots": [
+		{
+			"item": {
+				"display-name": "Rusty Sword",
+				"material": "iron_sword",
+			}
+		}
+	]
+}

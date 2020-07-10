@@ -1,12 +1,15 @@
 package org.stormrealms.stormloot.configuration;
 
-import org.bukkit.Bukkit;
-import org.springframework.context.annotation.Bean;
-import org.stormrealms.stormcore.StormCore;
+import java.util.List;
 
+import org.stormrealms.stormloot.configuration.pojo.LootPrefix;
+import org.stormrealms.stormloot.configuration.pojo.LootSuffix;
+
+import lombok.Data;
+
+@Data
 public class StormLootConfiguration {
-	@Bean
-	public StormCore stormCore() {
-		return (StormCore) Bukkit.getPluginManager().getPlugin("StormCore");
-	}
+	private List<LootPrefix> prefixes;
+	private List<LootSuffix> suffixes;
+
 }

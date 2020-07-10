@@ -6,21 +6,17 @@ import java.util.Set;
 import org.bukkit.event.Listener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.stormrealms.stormcore.StormPlugin;
-import org.stormrealms.stormcore.command.ModuleCommand;
+import org.springframework.stereotype.Component;
+import org.stormrealms.stormcore.StormSpringPlugin;
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
-import org.stormrealms.stormloot.configuration.StormLootConfiguration;
+import org.stormrealms.stormloot.configuration.StormLootContext;
 
-public class StormLoot extends StormPlugin {
-
-	@Override
-	public Set<ModuleCommand> commands() {
-		return new HashSet();
-	}
+@Component
+public class StormLoot extends StormSpringPlugin {
 
 	@Override
 	public Class<?> getConfigurationClass() {
-		return StormLootConfiguration.class;
+		return StormLootContext.class;
 	}
 
 	@Override
@@ -41,6 +37,12 @@ public class StormLoot extends StormPlugin {
 	@Override
 	public void setContext(AnnotationConfigApplicationContext context) {
 		super.context = context;
+	}
+
+	@Override
+	public String[] getPackages() {
+		return new String[] { "org.stormrealms.stormloot", "org.stormrealms.stormloot.controller",
+				"org.stormrealms.stormloot.listeners", "org.stormrealms.stormloot.configuration", "org.stormrealms.stormloot.configuration.pojo" };
 	}
 
 }
