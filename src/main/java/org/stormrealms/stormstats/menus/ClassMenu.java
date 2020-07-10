@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormmenus.absraction.TypedMenu;
 import org.stormrealms.stormmenus.menus.TypedMenuButton;
-import org.stormrealms.stormmenus.util.ItemUtil;
 import org.stormrealms.stormstats.configuration.pojo.ClassConfiguration;
 import org.stormrealms.stormstats.configuration.pojo.ClassInformation;
 import org.stormrealms.stormstats.model.ClassData;
@@ -57,7 +56,7 @@ public class ClassMenu extends TypedMenu<RPGPlayer> {
 	}
 
 	public void setStartingStats(RPGCharacter rpChar, ClassInformation classInfo) {
-		
+
 	}
 
 	@Override

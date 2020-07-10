@@ -1,8 +1,10 @@
 package org.stormrealms.stormstats.configuration;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,7 +17,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.stormrealms.stormcore.StormPlugin;
 import org.stormrealms.stormcore.config.ConfigManager;
+import org.stormrealms.stormmenus.MenuTemplate;
 import org.stormrealms.stormstats.configuration.pojo.ClassConfiguration;
 import org.stormrealms.stormstats.configuration.pojo.GUIConfig;
 import org.stormrealms.stormstats.configuration.pojo.RaceConfig;
@@ -30,14 +34,26 @@ import org.stormrealms.stormstats.model.RPGPlayer;
 @EnableAutoConfiguration
 public class StormStatConfiguration {
 
+	@Bean
+	public Set<StormPlugin> enabled() {
+		Set<StormPlugin> enabledPlugins = new HashSet();
+		return enabledPlugins;
+	}
+
 	@Bean(name = "needs-character")
 	public List<UUID> characterless() {
+		System.out.println("CHARACTERLESS");
 		return new ArrayList();
 	}
 
 	@Bean(name = "player-cache")
 	public Map<UUID, RPGPlayer> playerCache() {
 		return new ConcurrentHashMap<UUID, RPGPlayer>();
+	}
+
+	@Bean("create-char-template")
+	public MenuTemplate createCharTemplate(GUIConfig guiCfg) {
+		return guiCfg.getCreateCharTemplate();
 	}
 
 	@Bean(name = "class-config")

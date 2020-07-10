@@ -32,7 +32,7 @@ public class StormStats extends StormSpringPlugin implements DBRedPlugin {
 	@Override
 	public void disable() {
 		super.disable();
-		
+
 	}
 
 	@Override

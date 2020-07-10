@@ -2,7 +2,7 @@ package org.stormrealms.stormstats.data;
 
 import java.util.UUID;
 import org.springframework.stereotype.Component;
-import org.stormrealms.databasing.ObjectManager;
+import org.stormrealms.stormcore.databasing.ObjectManager;
 import org.stormrealms.stormstats.model.RPGPlayer;
 
 @Component

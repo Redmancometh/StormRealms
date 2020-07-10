@@ -48,7 +48,6 @@ public class RPGCharacter {
 	private String world;
 	@Column
 	private int health;
-	
 	@Column
 	private double experience;
 	@Column
@@ -63,10 +62,10 @@ public class RPGCharacter {
 	private int agi;
 
 	public boolean isCharacterComplete() {
-		//System.out.println("RACE IS NULL: " + (this.getRace() == null));
-		//System.out.println("NAME IS NULL: " + (this.getCharacterName() == null));
-		//System.out.println("CLASSDATA IS NULL: " + (this.getData() == null));
-		//System.out.println("IS CHAR COMPLETE?");
+		// System.out.println("RACE IS NULL: " + (this.getRace() == null));
+		// System.out.println("NAME IS NULL: " + (this.getCharacterName() == null));
+		// System.out.println("CLASSDATA IS NULL: " + (this.getData() == null));
+		// System.out.println("IS CHAR COMPLETE?");
 		if (this.getRace() != null && this.getCharacterName() != null && this.getData() != null
 				&& this.getData().getClassName() != null) {
 			System.out.println("CHARACTER COMPLETE");
