@@ -10,5 +10,5 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class ArmorRoot extends ItemRoot {
-	
+	private int armor;
 }
