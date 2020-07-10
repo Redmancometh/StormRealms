@@ -1,12 +1,10 @@
 package org.stormrealms.stormresources.configuration.pojo;
 
-import java.util.List;
-
-import org.stormrealms.stormresources.configuration.ResourceNode;
+import java.util.Map;
 
 import lombok.Data;
 
 @Data
 public class ResourceConfiguration {
-	private List<ResourceNode> resources;
+	private Map<String, ResourceNode> resources;
 }

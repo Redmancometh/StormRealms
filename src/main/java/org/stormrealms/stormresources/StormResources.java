@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.StormSpringPlugin;
 import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
+import org.stormrealms.stormresources.configuration.ResourcesContextConfiguration;
 
 @Component
 public class StormResources extends StormSpringPlugin {
@@ -21,7 +22,7 @@ public class StormResources extends StormSpringPlugin {
 
 	@Override
 	public Class<?> getConfigurationClass() {
-		return StormResources.class;
+		return ResourcesContextConfiguration.class;
 	}
 
 	@Override

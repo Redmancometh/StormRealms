@@ -9,21 +9,17 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.stormrealms.stormcore.StormCore;
-import org.stormrealms.stormcore.config.ConfigManager;
-import org.stormrealms.stormresources.configuration.HerbNode;
-import org.stormrealms.stormresources.configuration.OreNode;
-import org.stormrealms.stormresources.configuration.ResourceNode;
-import org.stormrealms.stormresources.configuration.pojo.ResourceConfiguration;
+import org.stormrealms.stormresources.configuration.ResourceConfigurationManager;
+import org.stormrealms.stormresources.configuration.pojo.HerbNode;
+import org.stormrealms.stormresources.configuration.pojo.OreNode;
 import org.stormrealms.stormresources.listeners.GatherListeners;
 
 @Controller
 public class ResourceSpawnController {
 	@Autowired
-	@Qualifier("resource-config")
-	private ConfigManager<ResourceConfiguration> confMan;
+	private ResourceConfigurationManager confMan;
 	@Autowired
 	private GatherListeners gatherListener;
 
@@ -34,34 +30,40 @@ public class ResourceSpawnController {
 
 	@PostConstruct
 	public void spawnResources() {
+		System.out.println("REGISTER LISTENERS RESOURCE SPAWN CONTROLLER");
+		System.out.println("Wiping resources");
 		wipeResources();
-		for (ResourceNode resource : confMan.getConfig().getResources()) {
+		confMan.getConfig().getResources().forEach((key, resource) -> {
+			System.out.println("Resource node " + resource.getClass());
 			if (resource instanceof HerbNode)
-				spawnHerbs((HerbNode) resource);
-			if (resource instanceof OreNode)
+				spawnHerbs(key, (HerbNode) resource);
+			if (resource instanceof OreNode) {
 				resource.getLocations().forEach((loc) -> {
 					Block b = loc.getBlock();
 					b.setType(resource.getItem().getMaterial());
-					b.setMetadata("resourcenode", new FixedMetadataValue(StormCore.getInstance(), resource));
+					b.setMetadata("orenode", new FixedMetadataValue(StormCore.getInstance(), key));
 				});
-		}
+			}
+		});
 	}
 
-	private void spawnHerbs(HerbNode node) {
+	private void spawnHerbs(String key, HerbNode node) {
 		int spawns = node.getNumSpawns();
 		Collections.shuffle(node.getLocations());
 		for (int x = 0; x < spawns; x++) {
 			Block nodeBlock = node.getLocations().get(x).getBlock();
 			nodeBlock.setType(node.getItem().getMaterial());
-			nodeBlock.setMetadata("resourcenode", new FixedMetadataValue(StormCore.getInstance(), node));
+			nodeBlock.setMetadata("herbnode", new FixedMetadataValue(StormCore.getInstance(), key));
 		}
 	}
 
 	private void wipeResources() {
-		for (ResourceNode resource : confMan.getConfig().getResources()) {
+		confMan.getConfig().getResources().forEach((key, resource) -> {
 			if (resource instanceof OreNode)
-				continue;
+				return;
+			System.out.println(resource);
 			resource.getLocations().forEach((loc) -> loc.getBlock().setType(Material.AIR));
-		}
+		});
+
 	}
 }
