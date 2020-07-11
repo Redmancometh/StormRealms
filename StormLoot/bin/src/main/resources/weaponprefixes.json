@@ -1,0 +1,10 @@
+{
+	"prefixes": [
+		{
+			"prefix": "Sharpened",
+			"mapping-function-map": {
+				"agi": "x*2"
+			}
+		}
+	]
+}

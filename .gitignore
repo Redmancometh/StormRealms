@@ -3,4 +3,5 @@
 .settings
 StormLoot/.classpath
 StormLoot/.classpath
-*.prefs
+*.class
+target/
