@@ -3,7 +3,7 @@ package org.stormrealms.stormcombat.combatsystem;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.stormrealms.stormcombat.events.WeaponAttackEvent;
-import org.stormrealms.stormcombat.gear.RPGWeapon;
+import org.stormrealms.stormcore.outfacing.RPGGearData;
 import org.stormrealms.stormstats.model.RPGPlayer;
 
 public interface CombatProcessor {
@@ -19,7 +19,7 @@ public interface CombatProcessor {
 
 	public void giveLoot(WeaponAttackEvent e);
 
-	public RPGWeapon getRPGWeapon(ItemStack weapon);
+	public RPGGearData getRPGWeapon(ItemStack weapon);
 
 	public RPGPlayer getRPGPlayer(Player player);
 

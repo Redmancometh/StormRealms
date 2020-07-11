@@ -3,7 +3,7 @@ package org.stormrealms.stormcombat.events;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.stormrealms.stormcombat.gear.RPGWeapon;
+import org.stormrealms.stormcore.outfacing.RPGGearData;
 import org.stormrealms.stormstats.model.RPGPlayer;
 
 import lombok.Data;
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class WeaponAttackEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	@NonNull
-	private final RPGWeapon weapon;
+	private final RPGGearData weapon;
 	@NonNull
 	private final RPGPlayer player;
 	@NonNull

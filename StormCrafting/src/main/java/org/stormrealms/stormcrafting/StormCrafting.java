@@ -1,22 +1,28 @@
-package org.stormrealms.stormloot;
+package org.stormrealms.stormcrafting;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import org.bukkit.event.Listener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.StormSpringPlugin;
+import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
-import org.stormrealms.stormloot.configuration.StormLootContext;
+import org.stormrealms.stormcrafting.configuration.CraftingContext;
 
 @Component
-public class StormLoot extends StormSpringPlugin {
+public class StormCrafting extends StormSpringPlugin {
+	private ConfigManager<SpringConfig> cfgMon = new ConfigManager<SpringConfig>("spring.json", SpringConfig.class);
+
+	@Override
+	public void disable() {
+		super.disable();
+	}
 
 	@Override
 	public Class<?> getConfigurationClass() {
-		return StormLootContext.class;
+		return CraftingContext.class;
 	}
 
 	@Override
@@ -25,24 +31,26 @@ public class StormLoot extends StormSpringPlugin {
 	}
 
 	@Override
+	public String[] getPackages() {
+		return new String[] { "org.stormrealms.stormresources.*", "org.stormrealms.stormresources.configuration",
+				"org.stormrealms.stormresources.controller", "org.stormrealms.stormresources.listeners" };
+	}
+
+	@Override
 	public SpringConfig getSpringConfig() {
-		return null;
+		cfgMon.init();
+		return cfgMon.getConfig();
 	}
 
 	@Override
 	public Set<Listener> listeners() {
-		return new HashSet();
+		Set<Listener> listeners = new HashSet();
+		return listeners;
 	}
 
 	@Override
 	public void setContext(AnnotationConfigApplicationContext context) {
 		super.context = context;
-	}
-
-	@Override
-	public String[] getPackages() {
-		return new String[] { "org.stormrealms.stormloot", "org.stormrealms.stormloot.controller",
-				"org.stormrealms.stormloot.listeners", "org.stormrealms.stormloot.configuration", "org.stormrealms.stormloot.configuration.pojo" };
 	}
 
 }
