@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
@@ -95,13 +94,6 @@ public class ScriptEngineController {
 	@PostConstruct
 	public void addGlobals() {
 		Thread.currentThread().setContextClassLoader(StormCore.getInstance().getPLClassLoader());
-		for (ScriptEngineFactory se : new ScriptEngineManager().getEngineFactories()) {
-			System.out.println("se = " + se.getEngineName());
-			System.out.println("se = " + se.getEngineVersion());
-			System.out.println("se = " + se.getLanguageName());
-			System.out.println("se = " + se.getLanguageVersion());
-			System.out.println("se = " + se.getNames());
-		}
 		graal.put("StormCore", StormCore.getInstance());
 		System.out.println("GRAAL NULL? " + (graal == null));
 		graal.put("type", type);
@@ -134,11 +126,9 @@ public class ScriptEngineController {
 	}
 
 	public void addListenerPoints() {
-		
+
 	}
-	
-	
-	
+
 	public ArrayList list() {
 		return new ArrayList();
 	}

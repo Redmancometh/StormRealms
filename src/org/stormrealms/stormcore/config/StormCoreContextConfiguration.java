@@ -1,4 +1,4 @@
-package org.stormrealms.stormcore;
+package org.stormrealms.stormcore.config;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +19,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+
 import org.bukkit.event.Listener;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,6 +30,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.stormrealms.stormcore.StormCore;
+import org.stormrealms.stormcore.StormPlugin;
+
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
@@ -34,7 +40,7 @@ import com.google.common.collect.Multimaps;
 @Configuration
 @ComponentScan(basePackages = { "org.stormrealms.stormcore", "org.stormrealms.stormmenus",
 		"org.stormrealms.stormcombat", "org.stormrealms.stormstats" })
-public class StormCoreConfiguration {
+public class StormCoreContextConfiguration {
 
 	Function<Path, URL> pathMapperFunc = (p) -> {
 		try {
@@ -44,6 +50,11 @@ public class StormCoreConfiguration {
 		}
 		return null;
 	};
+
+	@Bean
+	public ScriptEngine basicScriptEngine() {
+		return new ScriptEngineManager().getEngineByName("ecmascript");
+	}
 
 	@Bean("mod-paths")
 	public List<URL> modulePaths(@Qualifier("modules-dir") File moduleDir) throws IOException {

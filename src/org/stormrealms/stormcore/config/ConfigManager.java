@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.stormrealms.stormcore.outfacing.RPGStat;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -36,7 +37,8 @@ public class ConfigManager<T> {
 			.registerTypeHierarchyAdapter(String.class, new PathAdapter())
 			.registerTypeHierarchyAdapter(Material.class, new MaterialAdapter())
 			.registerTypeAdapter(Location.class, new LocationAdapter())
-			.registerTypeHierarchyAdapter(Class.class, new ClassAdapter()).setPrettyPrinting().create();
+			.registerTypeAdapter(RPGStat.class, new RPGStatAdapter())
+			.registerTypeHierarchyAdapter(Class.class, new ClassAdapter()).setLenient().setPrettyPrinting().create();
 	private String fileName;
 	private Class clazz;
 	private T config;
@@ -114,6 +116,21 @@ public class ConfigManager<T> {
 		this.config = config;
 	}
 
+	public static class RPGStatAdapter extends TypeAdapter<RPGStat> {
+
+		@Override
+		public RPGStat read(JsonReader arg0) throws IOException {
+			String materialValue = arg0.nextString();
+			RPGStat stat = RPGStat.valueOf(materialValue.replace(" ", "_").toUpperCase());
+			return stat;
+		}
+
+		@Override
+		public void write(JsonWriter arg0, RPGStat arg1) throws IOException {
+			arg0.value(arg1.toString());
+		}
+	}
+
 	public static class MaterialAdapter extends TypeAdapter<Material> {
 
 		@Override
@@ -126,7 +143,6 @@ public class ConfigManager<T> {
 		public void write(JsonWriter arg0, Material arg1) throws IOException {
 			arg0.value(arg1.toString());
 		}
-
 	}
 
 	public static class ClassAdapter extends TypeAdapter<Class> {
