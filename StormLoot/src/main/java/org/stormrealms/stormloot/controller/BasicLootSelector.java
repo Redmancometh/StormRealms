@@ -59,10 +59,11 @@ public class BasicLootSelector implements LootSelector {
 
 	private List<String> buildLore(int level, Icon icon, LootRoll prefixRoll, LootRoll suffixRoll, RPGGearData data) {
 		List<String> lore = new ArrayList();
-		data.getBonuses().forEach((key, value) -> {
-			String symbol = value > 0 ? "+" : "";
-			lore.add("Overall " + key.getName() + ": " + symbol + value);
-		});
+		data.getBonuses()
+				.forEach((key, value) -> {
+					String symbol = value > 0 ? "+" : "";
+					lore.add("Overall " + key.getName() + ": " + symbol + value);
+				});
 		prefixRoll.forEach((key, value) -> {
 			String symbol = value > 0 ? "+" : "";
 			lore.add(prefixRoll.getText() + ": " + symbol + value + " " + key.getName());
