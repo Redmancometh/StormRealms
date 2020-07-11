@@ -13,6 +13,6 @@ import org.stormrealms.stormcore.util.RateLimiter;
 public class ChatContext {
 	@Bean("shop-click-limiter")
 	public RateLimiter limiter() {
-		return new RateLimiter(TimeUnit.MILLISECONDS, 200);
+		return new RateLimiter(TimeUnit.MILLISECONDS, 200);	
 	}
 }

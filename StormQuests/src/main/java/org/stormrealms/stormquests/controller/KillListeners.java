@@ -9,11 +9,8 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.stormrealms.stormquests.pojo.Quest;
-import org.stormrealms.stormstats.data.StatRepo;
 
 public class KillListeners implements Listener {
-	@Autowired
-	private StatRepo stats;
 	@Autowired
 	@Qualifier("quests")
 	private Map<Integer, Quest> quests;

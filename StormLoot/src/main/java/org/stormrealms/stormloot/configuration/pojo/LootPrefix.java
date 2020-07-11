@@ -1,6 +1,7 @@
 package org.stormrealms.stormloot.configuration.pojo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.script.ScriptEngine;
@@ -14,6 +15,7 @@ import lombok.Data;
 public class LootPrefix {
 	private String prefix;
 	private Map<RPGStat, String> mappingFunctionMap = new HashMap();
+	private List<Integer> itemEffects;
 
 	public LootRoll rollStats(int level) {
 		LootRoll roll = new LootRoll();

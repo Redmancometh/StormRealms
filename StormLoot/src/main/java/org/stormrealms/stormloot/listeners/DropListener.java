@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,5 +30,10 @@ public class DropListener implements Listener {
 			.registerTypeHierarchyAdapter(Material.class, new MaterialAdapter())
 			.registerTypeAdapter(Location.class, new LocationAdapter())
 			.registerTypeAdapter(RPGStat.class, new RPGStatAdapter()).setLenient().setPrettyPrinting().create();
+
+	@EventHandler
+	public void onHit() {
+		
+	}
 
 }

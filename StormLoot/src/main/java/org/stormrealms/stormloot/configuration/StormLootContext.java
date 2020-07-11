@@ -8,13 +8,12 @@ import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormloot.configuration.pojo.ArmorPrefixes;
 import org.stormrealms.stormloot.configuration.pojo.ArmorRoots;
 import org.stormrealms.stormloot.configuration.pojo.ArmorSuffixes;
+import org.stormrealms.stormloot.configuration.pojo.ItemEffects;
 import org.stormrealms.stormloot.configuration.pojo.WeaponPrefixes;
 import org.stormrealms.stormloot.configuration.pojo.WeaponRoots;
 import org.stormrealms.stormloot.configuration.pojo.WeaponSuffixes;
 
 /**
- * TODO: I don't know why manually autowiringis required here this is supposed
- * to happen automatically..
  * 
  * @author Redmancometh
  *
@@ -96,11 +95,24 @@ public class StormLootContext {
 		weaponRootCfg.init();
 		return weaponRootCfg;
 	}
-
+	
 	@Bean
 	@Scope("prototype")
 	public ArmorSuffixes armorSuffixes(ConfigManager<ArmorSuffixes> armorSuffixesCfg) {
 		return armorSuffixesCfg.getConfig();
+	}
+
+	@Bean
+	@Scope("prototype")
+	public ItemEffects itemEffects(ConfigManager<ItemEffects> itemEffects) {
+		return itemEffects.getConfig();
+	}
+
+	@Bean
+	public ConfigManager<ItemEffects> itemEffects() {
+		ConfigManager<ItemEffects> weaponRootCfg = new ConfigManager("itemeffects.json", ArmorSuffixes.class);
+		weaponRootCfg.init();
+		return weaponRootCfg;
 	}
 
 }

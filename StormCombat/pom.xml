@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.stormrealms</groupId>
-	<artifactId>StormMobs</artifactId>
+	<artifactId>StormCombat</artifactId>
 	<version>2.0</version>
 	<properties>
 		<jackson.version>2.9.2</jackson.version>
