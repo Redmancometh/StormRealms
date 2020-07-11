@@ -176,6 +176,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<configuration>
+					<outputFile>${user.home}/Desktop/Stormrealms/testserver/plugins/StormCore.jar</outputFile>
 					<artifactSet>
 						<includes>
 							<include>*:*</include>

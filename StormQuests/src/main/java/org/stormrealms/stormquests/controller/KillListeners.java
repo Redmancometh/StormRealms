@@ -22,16 +22,15 @@ public class KillListeners implements Listener {
 	public void onDeath(EntityDeathEvent e) {
 		Player p = e.getEntity().getKiller();
 		if (p != null) {
-			/*stats.getRecord(p.getUniqueId()).thenAccept((rpgPlayer) -> {
-				RPGCharacter character = rpgPlayer.getChosenCharacter();
-				character.getQuestMap().forEach((id, stepNo) -> {
-					Quest quest = quests.get(id);
-					QuestStep step = quest.getSteps().get(stepNo);
-					step.getObjectives().forEach((objective) -> {
-						
-					});
-				});
-			});*/
+			/*
+			 * stats.getRecord(p.getUniqueId()).thenAccept((rpgPlayer) -> { RPGCharacter
+			 * character = rpgPlayer.getChosenCharacter();
+			 * character.getQuestMap().forEach((id, stepNo) -> { Quest quest =
+			 * quests.get(id); QuestStep step = quest.getSteps().get(stepNo);
+			 * step.getObjectives().forEach((objective) -> {
+			 * 
+			 * }); }); });
+			 */
 		}
 	}
 }

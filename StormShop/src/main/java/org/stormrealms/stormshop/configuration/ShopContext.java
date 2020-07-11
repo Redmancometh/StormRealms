@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.stormrealms.stormcore.util.RateLimiter;
 
 @Configuration
-@ComponentScan(basePackages = { "org.stormrealms.stormresources.*", "org.stormrealms.stormresources.configuration",
-		"org.stormrealms.stormresources.controller", "org.stormrealms.stormresources.listeners" })
+@ComponentScan(basePackages = { "org.stormrealms.stormshops.*", "org.stormrealms.stormshops.configuration",
+		"org.stormrealms.stormshops.controller", "org.stormrealms.stormshops.listeners" })
 public class ShopContext {
 	@Bean("shop-click-limiter")
 	public RateLimiter limiter() {
