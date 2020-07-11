@@ -1,8 +1,0 @@
-name: StormCore
-main: org.stormrealms.stormcore.StormCore
-version: 1.0
-description: "Core plugin"
-commands:
-  sc:
-    description: sc.
-    usage: /sc
