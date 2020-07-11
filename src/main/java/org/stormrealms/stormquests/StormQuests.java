@@ -44,7 +44,8 @@ public class StormQuests extends StormSpringPlugin {
 
 	@Override
 	public String[] getPackages() {
-		return new String[] { "org.stormrealms.stormquests.controller" };
+		return new String[] { "org.stormrealms.stormquests.controllers", "org.stormrealms.stormquests.*",
+				"org.stormrealms.stormquests.config.context" };
 	}
 
 }

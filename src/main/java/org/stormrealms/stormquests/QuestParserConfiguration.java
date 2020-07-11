@@ -15,10 +15,7 @@ import org.stormrealms.stormquests.pojo.InteractStartType;
 import org.stormrealms.stormquests.pojo.InteractWithObjective;
 import org.stormrealms.stormquests.pojo.KillObjective;
 import org.stormrealms.stormquests.pojo.KillStartType;
-import org.stormrealms.stormquests.pojo.MultiObjectiveStep;
 import org.stormrealms.stormquests.pojo.QuestObjective;
-import org.stormrealms.stormquests.pojo.QuestStep;
-import org.stormrealms.stormquests.pojo.SingleObjectiveStep;
 import org.stormrealms.stormquests.pojo.QuestStart;
 import org.stormrealms.stormquests.pojo.TalkToObjective;
 import org.stormrealms.stormquests.pojo.TalkToStartType;
@@ -31,14 +28,13 @@ import com.google.gson.GsonBuilder;
 @Configuration
 public class QuestParserConfiguration {
 	@Bean(name = "quest-parser")
-	public Gson parser(@Qualifier("step-factory") RuntimeTypeAdapterFactory<QuestStep> stepFactory,
-			@Qualifier("objective-factory") RuntimeTypeAdapterFactory<QuestObjective> objectiveFactory,
+	public Gson parser(@Qualifier("objective-factory") RuntimeTypeAdapterFactory<QuestObjective> objectiveFactory,
 			@Qualifier("start-factory") RuntimeTypeAdapterFactory<QuestStart> startFactory) {
 		Gson newGson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED)
 				.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
 				.registerTypeHierarchyAdapter(String.class, new PathAdapter())
 				.registerTypeHierarchyAdapter(Material.class, new MaterialAdapter())
-				.registerTypeHierarchyAdapter(Class.class, new ClassAdapter()).registerTypeAdapterFactory(stepFactory)
+				.registerTypeHierarchyAdapter(Class.class, new ClassAdapter())
 				.registerTypeAdapterFactory(objectiveFactory).registerTypeAdapterFactory(startFactory)
 				.setPrettyPrinting().create();
 		return newGson;
@@ -51,13 +47,6 @@ public class QuestParserConfiguration {
 				.registerSubtype(TalkToStartType.class).registerSubtype(UseItemStartType.class);
 		return stepFactory;
 
-	}
-
-	@Bean(name = "step-factory")
-	public RuntimeTypeAdapterFactory<QuestStep> stepFactory() {
-		RuntimeTypeAdapterFactory<QuestStep> stepFactory = RuntimeTypeAdapterFactory.of(QuestStep.class)
-				.registerSubtype(SingleObjectiveStep.class).registerSubtype(MultiObjectiveStep.class);
-		return stepFactory;
 	}
 
 	@Bean(name = "objective-factory")

@@ -1,5 +1,5 @@
 C:\Users\Redmancometh\minecraft\StormQuests\src\main\java\org\stormrealms\stormquests\pojo\GatherObjective.java
-C:\Users\Redmancometh\minecraft\StormQuests\src\main\java\org\stormrealms\stormquests\pojo\SingleObjectiveStep.java
+C:\Users\Redmancometh\minecraft\StormQuests\src\main\java\org\stormrealms\stormquests\controller\InteractListeners.java
 C:\Users\Redmancometh\minecraft\StormQuests\src\main\java\org\stormrealms\stormquests\controller\InitializationController.java
 C:\Users\Redmancometh\minecraft\StormQuests\src\main\java\org\stormrealms\stormquests\pojo\KillObjective.java
 C:\Users\Redmancometh\minecraft\StormQuests\src\main\java\org\stormrealms\stormquests\pojo\InteractStartType.java
@@ -10,9 +10,10 @@ C:\Users\Redmancometh\minecraft\StormQuests\src\main\java\org\stormrealms\stormq
 C:\Users\Redmancometh\minecraft\StormQuests\src\main\java\org\stormrealms\stormquests\pojo\QuestObjective.java
 C:\Users\Redmancometh\minecraft\StormQuests\src\main\java\org\stormrealms\stormquests\pojo\UseItemStartType.java
 C:\Users\Redmancometh\minecraft\StormQuests\src\main\java\org\stormrealms\stormquests\pojo\TalkToObjective.java
+C:\Users\Redmancometh\minecraft\StormQuests\src\main\java\org\stormrealms\stormquests\controller\ItemListeners.java
 C:\Users\Redmancometh\minecraft\StormQuests\src\main\java\org\stormrealms\stormquests\pojo\KillStartType.java
-C:\Users\Redmancometh\minecraft\StormQuests\src\main\java\org\stormrealms\stormquests\pojo\MultiObjectiveStep.java
 C:\Users\Redmancometh\minecraft\StormQuests\src\main\java\org\stormrealms\stormquests\pojo\Quest.java
 C:\Users\Redmancometh\minecraft\StormQuests\src\main\java\org\stormrealms\stormquests\config\context\StormQuestContext.java
+C:\Users\Redmancometh\minecraft\StormQuests\src\main\java\org\stormrealms\stormquests\controller\KillListeners.java
 C:\Users\Redmancometh\minecraft\StormQuests\src\main\java\org\stormrealms\stormquests\pojo\InteractWithObjective.java
 C:\Users\Redmancometh\minecraft\StormQuests\src\main\java\org\stormrealms\stormquests\pojo\TalkToStartType.java
