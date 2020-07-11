@@ -32,6 +32,8 @@ public class Icon {
 		return i;
 	}
 
+	
+	// TODO: Add placeholders
 	@SuppressWarnings("deprecation")
 	public ItemStack build(Function<String, String>... replacements) {
 		ItemStack i = new ItemStack(material, 1, (short) dataValue);
