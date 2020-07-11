@@ -11,5 +11,4 @@ import lombok.Data;
 public class StormLootConfiguration {
 	private List<LootPrefix> prefixes;
 	private List<LootSuffix> suffixes;
-
 }

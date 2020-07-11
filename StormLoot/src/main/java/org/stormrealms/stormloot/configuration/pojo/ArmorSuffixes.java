@@ -6,5 +6,5 @@ import lombok.Data;
 
 @Data
 public class ArmorSuffixes {
-	private List<ArmorSuffix> suffixes;
+	private List<LootSuffix> suffixes;
 }

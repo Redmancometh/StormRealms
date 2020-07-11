@@ -23,32 +23,32 @@ public class MasterLootConfig {
 	@Autowired
 	private WeaponSuffixes weaponSuffixes;
 
-	public WeaponPrefix randomWeaponPrefix() {
-		Collections.shuffle(weaponPrefixes.getWeaponPrefixes());
-		return weaponPrefixes.getWeaponPrefixes().get(0);
+	public LootPrefix randomWeaponPrefix() {
+		Collections.shuffle(weaponPrefixes.getPrefixes());
+		return weaponPrefixes.getPrefixes().get(0);
 	}
 
-	public WeaponRoot randomWeaponRoot() {
+	public ItemRoot randomWeaponRoot() {
 		Collections.shuffle(weaponRoots.getRoots());
 		return weaponRoots.getRoots().get(0);
 	}
 
-	public WeaponSuffix randomWeaponSuffix() {
+	public LootSuffix randomWeaponSuffix() {
 		Collections.shuffle(weaponSuffixes.getSuffixes());
 		return weaponSuffixes.getSuffixes().get(0);
 	}
 
-	public ArmorPrefix randomArmorPrefix() {
+	public LootPrefix randomArmorPrefix() {
 		Collections.shuffle(armorPrefixes.getPrefixes());
 		return armorPrefixes.getPrefixes().get(0);
 	}
 
-	public ArmorRoot randomArmorRoot() {
+	public ItemRoot randomArmorRoot() {
 		Collections.shuffle(armorRoots.getRoots());
 		return armorRoots.getRoots().get(0);
 	}
 
-	public ArmorSuffix randomArmorSuffix() {
+	public LootSuffix randomArmorSuffix() {
 		Collections.shuffle(armorSuffixes.getSuffixes());
 		return armorSuffixes.getSuffixes().get(0);
 	}

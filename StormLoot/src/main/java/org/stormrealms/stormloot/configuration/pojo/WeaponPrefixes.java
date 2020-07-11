@@ -9,5 +9,5 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class WeaponPrefixes {
-	private List<WeaponPrefix> weaponPrefixes;
+	private List<LootPrefix> prefixes;
 }

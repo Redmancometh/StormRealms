@@ -12,6 +12,13 @@ import org.stormrealms.stormloot.configuration.pojo.WeaponPrefixes;
 import org.stormrealms.stormloot.configuration.pojo.WeaponRoots;
 import org.stormrealms.stormloot.configuration.pojo.WeaponSuffixes;
 
+/**
+ * TODO: I don't know why manually autowiringis required here this is supposed
+ * to happen automatically..
+ * 
+ * @author Redmancometh
+ *
+ */
 @Configuration
 @ComponentScan(basePackages = { "org.stormrealms.stormloot", "org.stormrealms.stormloot.controller",
 		"org.stormrealms.stormloot.listeners", "org.stormrealms.stormloot.configuration",

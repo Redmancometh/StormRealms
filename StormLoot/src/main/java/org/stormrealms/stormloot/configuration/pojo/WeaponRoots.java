@@ -16,5 +16,5 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class WeaponRoots {
-	private List<WeaponRoot> roots;
+	private List<ItemRoot> roots;
 }

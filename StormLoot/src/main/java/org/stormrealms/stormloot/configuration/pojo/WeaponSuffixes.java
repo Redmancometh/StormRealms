@@ -9,5 +9,5 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class WeaponSuffixes {
-	private List<WeaponSuffix> suffixes;
+	private List<LootSuffix> suffixes;
 }

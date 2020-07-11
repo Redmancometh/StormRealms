@@ -6,5 +6,5 @@ import lombok.Data;
 
 @Data
 public class ArmorRoots {
-	private List<ArmorRoot> roots;
+	private List<ItemRoot> roots;
 }

@@ -15,7 +15,6 @@ public class LootController {
 
 	@PostConstruct
 	public void registerListener() {
-		System.out.println("INITIALIZING BASIC LOOT CONTROLLER LISTENER!");
 		Bukkit.getPluginManager().registerEvents(listener, StormCore.getInstance());
 	}
 }
