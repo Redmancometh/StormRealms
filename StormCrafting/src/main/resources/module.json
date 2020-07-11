@@ -1,0 +1,5 @@
+{
+	"name": "StormCrafting",
+	"main": "org.stormrealms.stormcrafting.StormCrafting",
+	"load-order": 8
+}

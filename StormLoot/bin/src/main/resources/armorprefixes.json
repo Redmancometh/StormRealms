@@ -1,0 +1,10 @@
+{
+	"prefixes": [
+		{
+			"suffix": "Shining",
+			"mapping-function-map": {
+				"agi": "x*2"
+			}
+		}
+	]
+}

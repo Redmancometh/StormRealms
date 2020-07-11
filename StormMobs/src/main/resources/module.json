@@ -1,0 +1,5 @@
+{
+	"name": "StormMobs",
+	"main": "org.stormrealms.stormmobs.StormMobs",
+	"load-order": 2
+}

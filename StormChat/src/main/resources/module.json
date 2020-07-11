@@ -1,0 +1,5 @@
+{
+	"name": "StormChat",
+	"main": "org.stormrealms.stormchat.StormChat",
+	"load-order": 6
+}
