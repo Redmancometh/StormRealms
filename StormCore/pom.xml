@@ -58,12 +58,12 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.6</version>
 		</dependency>
-        <dependency>
-            <groupId>org.stormrealms</groupId>
-            <artifactId>StormSpigot</artifactId>
-            <version>1.0</version>
-            <scope>provided</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.stormrealms</groupId>
+			<artifactId>spigot</artifactId>
+			<version>1.15</version>
+			<classifier>b372</classifier>
+		</dependency>
 		<dependency>
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
