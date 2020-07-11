@@ -55,6 +55,8 @@ public class RPGCharacter {
 	@Column
 	private int str;
 	@Column
+	private int sta;
+	@Column
 	private int intel;
 	@Column
 	private int spi;
