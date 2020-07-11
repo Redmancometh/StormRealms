@@ -19,7 +19,6 @@ import org.stormrealms.stormcore.StormPlugin;
 import org.stormrealms.stormcore.StormSpringPlugin;
 import org.stormrealms.stormcore.config.pojo.PluginLoadTask;
 import org.stormrealms.stormcore.config.pojo.PluginLoadTaskContainer;
-import org.stormrealms.stormcore.config.pojo.SpringConfig;
 import org.stormrealms.stormcore.util.PluginConfig;
 import org.stormrealms.stormcore.util.SpringUtil;
 

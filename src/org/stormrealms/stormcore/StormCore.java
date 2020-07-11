@@ -23,6 +23,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.ComponentScan;
 import org.stormrealms.stormcore.command.StormCommandHandler;
 import org.stormrealms.stormcore.config.ConfigManager;
+import org.stormrealms.stormcore.config.StormCoreContextConfiguration;
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
 import org.stormrealms.stormcore.databasing.MasterDatabase;
 
@@ -60,7 +61,7 @@ public class StormCore extends JavaPlugin {
 		this.springCfg = cfgMon.getConfig();
 		this.masterLoader = masterLoader();
 		this.context.setClassLoader(masterLoader);
-		this.context.register(StormCoreConfiguration.class);
+		this.context.register(StormCoreContextConfiguration.class);
 		Map<String, Object> props = context.getEnvironment().getSystemProperties();
 		this.springCfg.getProperties().forEach((key, value) -> props.put(key, value));
 		context.getEnvironment().setActiveProfiles(
@@ -68,7 +69,7 @@ public class StormCore extends JavaPlugin {
 		this.context.close();
 		this.context.refresh();
 		Bukkit.getPluginManager().registerEvents(context.getBean(StormCommandHandler.class), this);
-		Logger.getLogger(StormCoreConfiguration.class.getName()).info("StormCore has started!");
+		Logger.getLogger(StormCoreContextConfiguration.class.getName()).info("StormCore has started!");
 	}
 
 	@Override
