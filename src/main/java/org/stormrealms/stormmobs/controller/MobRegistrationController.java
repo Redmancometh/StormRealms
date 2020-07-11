@@ -4,5 +4,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class MobRegistrationController {
-	
+	public void registerMobs(String customName) {
+
+	}
 }

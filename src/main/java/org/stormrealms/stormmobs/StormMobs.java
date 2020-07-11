@@ -7,13 +7,12 @@ import org.bukkit.event.Listener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.stormrealms.stormmobs.config.context.StormMobContext;
-import org.stormrealms.stormcore.StormPlugin;
-import org.stormrealms.stormcore.command.ModuleCommand;
+import org.stormrealms.stormcore.StormSpringPlugin;
 import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormcore.config.pojo.SpringConfig;
 
-public class StormMobs extends StormPlugin {
-
+public class StormMobs extends StormSpringPlugin {
+	
 	@Override
 	public Class<?> getConfigurationClass() {
 		return StormMobContext.class;
@@ -38,13 +37,12 @@ public class StormMobs extends StormPlugin {
 
 	@Override
 	public void setContext(AnnotationConfigApplicationContext context) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public Set<ModuleCommand> commands() {
-		return new HashSet();
+	public String[] getPackages() {
+		return new String[] { "org.stormrealms.stormmobs" };
 	}
 
 }

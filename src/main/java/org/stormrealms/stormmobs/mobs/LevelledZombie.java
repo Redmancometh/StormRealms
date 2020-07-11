@@ -1,7 +1,6 @@
 package org.stormrealms.stormmobs.mobs;
 
-import net.minecraft.server.v1_14_R1.EntityZombie;
-import net.minecraft.server.v1_14_R1.World;
+import net.minecraft.server.v1_15_R1.*;
 
 /**
  * Base class for MMO zombies that has a level. These will have caster, melee,
@@ -13,6 +12,10 @@ import net.minecraft.server.v1_14_R1.World;
 public class LevelledZombie extends EntityZombie {
 
 	private int level = 5;
+
+	public LevelledZombie(EntityTypes<? extends EntityMonster> entitytypes, World world) {
+		super(EntityTypes.ZOMBIE, world);
+	}
 
 	public LevelledZombie(World world) {
 		super(world);

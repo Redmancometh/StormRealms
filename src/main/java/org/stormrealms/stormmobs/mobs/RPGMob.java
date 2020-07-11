@@ -13,6 +13,5 @@ public interface RPGMob {
 
 	public int getArmor();
 
-	public List<MobAbility> getAbilities();
-
+	public abstract List<MobAbility> getAbilities();
 }

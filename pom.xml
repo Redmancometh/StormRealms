@@ -4,35 +4,59 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.stormrealms</groupId>
 	<artifactId>StormMobs</artifactId>
-	<version>1.0</version>
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
-				<configuration>
-					<release>10</release>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+	<version>2.0</version>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.6.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+	<properties>
+		<jackson.version>2.9.2</jackson.version>
+		<maven.compiler.source>1.10</maven.compiler.source>
+		<maven.compiler.target>1.10</maven.compiler.target>
+		<webapp.directory>src/main/webapp</webapp.directory>
+	</properties>
 	<repositories>
 		<repository>
 			<id>releases</id>
-			<url>http://dev.stormrealms.org:8081/nexus/content/repositories/releases</url>
+			<url>http://nexus.stormrealms.org:8081/nexus/content/repositories/releases</url>
 		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>org.stormrealms</groupId>
 			<artifactId>StormCore</artifactId>
-			<version>2.0.5</version>
+			<version>2.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.stormrealms</groupId>
+			<artifactId>StormMenus</artifactId>
+			<version>1.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.14.8</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
+	<build>
+		<finalName>StormMobs</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.10</source>
+					<target>1.10</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<outputDirectory>${user.home}/Desktop/stormrealms/testserver/plugins/StormCore/modules</outputDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
