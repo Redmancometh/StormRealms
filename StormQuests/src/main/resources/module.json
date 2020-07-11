@@ -1,0 +1,5 @@
+{
+	"name": "StormQuests",
+	"main": "org.stormrealms.stormquests.StormQuests",
+	"load-order": 2
+}
