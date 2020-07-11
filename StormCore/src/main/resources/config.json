@@ -1,0 +1,7 @@
+{
+  "DB": {
+    "user": "root",
+    "password": "x4kRDq27",
+    "url": "jdbc:mysql://localhost/stormrealms"
+  }
+}
