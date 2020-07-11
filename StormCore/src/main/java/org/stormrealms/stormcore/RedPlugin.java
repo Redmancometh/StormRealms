@@ -18,6 +18,7 @@ public interface RedPlugin {
 		try (FileReader scanner = new FileReader(hibernateConfig)) {
 			return (JSONObject) parser.parse(scanner);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new IllegalStateException(
 					"Configuration not initialized properly. Either config.json is missing, corrupted, or ill-formatted");
 		}

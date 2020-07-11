@@ -23,7 +23,7 @@ public class WeaponAttackEvent extends Event {
 	@NonNull
 	private final Player bukkitPlayer;
 	private int damage;
-	private boolean crushingBlow = false, glancingBlow = false, killingBlow = false;
+	private boolean crushingBlow = false, isMiss = false, isDodged = false, glancingBlow = false, killingBlow = false;
 
 	@Override
 	public HandlerList getHandlers() {

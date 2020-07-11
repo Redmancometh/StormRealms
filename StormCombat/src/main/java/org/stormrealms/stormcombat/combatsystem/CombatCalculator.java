@@ -11,14 +11,36 @@ import org.stormrealms.stormcombat.events.WeaponAttackEvent;
  *
  */
 public interface CombatCalculator {
+
 	public abstract int calculateMeleeDamage(WeaponAttackEvent e);
 
+	/**
+	 * 
+	 * @param e
+	 * @return
+	 */
 	public abstract boolean isCrushingBlow(WeaponAttackEvent e);
 
+	/**
+	 * 
+	 * @param e
+	 * @return
+	 */
 	public abstract boolean isDodged(WeaponAttackEvent e);
 
+	/**
+	 * 
+	 * @param e
+	 * @return
+	 */
 	public abstract boolean isGlancing(WeaponAttackEvent e);
 
+	/**
+	 * See if this is a miss
+	 * 
+	 * @param e
+	 * @return
+	 */
 	public abstract boolean isMiss(WeaponAttackEvent e);
 
 }

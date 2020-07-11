@@ -38,7 +38,7 @@ public class CombatListeners implements Listener {
 	public void checkPVM(PVMEvent e) {
 		Player bAttacker = e.getBukkitAttacker();
 		ItemStack mainHand = bAttacker.getInventory().getItemInMainHand();
-		if (mainHand != null && cProc.isRPGWeapon(mainHand))
+		if (mainHand != null && mainHand.hasItemMeta() && cProc.isRPGWeapon(mainHand))
 			Bukkit.getPluginManager()
 					.callEvent(new WeaponAttackEvent(cProc.getRPGWeapon(mainHand), e.getAttacker(), bAttacker));
 		if (e.isDamagedKilled())
@@ -51,6 +51,7 @@ public class CombatListeners implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void calculateAndProcess(WeaponAttackEvent e) {
+		System.out.println("CALCULATE AND PROCESS");
 		if (cCalc.isMiss(e)) {
 			cProc.missed(e);
 			return;
