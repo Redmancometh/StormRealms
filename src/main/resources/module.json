@@ -1,0 +1,5 @@
+{
+	"name": "StormShop",
+	"main": "org.stormrealms.stormshop.StormShop",
+	"load-order": 5
+}
