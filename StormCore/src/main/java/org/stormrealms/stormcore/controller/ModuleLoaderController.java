@@ -36,6 +36,8 @@ import java.util.jar.JarFile;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 
+import javax.annotation.PostConstruct;
+
 @Controller
 @Order(0)
 /**
@@ -58,7 +60,8 @@ public class ModuleLoaderController {
 	public ModuleLoaderController(@Autowired @Qualifier("modules-dir") File moduleDir) {
 		this.moduleDir = moduleDir;
 	}
-
+	
+	@PostConstruct
 	public void loadModules() {
 
 		if (!moduleDir.exists())

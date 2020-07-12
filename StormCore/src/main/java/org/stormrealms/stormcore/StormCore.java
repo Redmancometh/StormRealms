@@ -1,20 +1,17 @@
 package org.stormrealms.stormcore;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
+import java.nio.file.Paths;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -81,15 +78,16 @@ public class StormCore extends JavaPlugin {
 	}
 
 	private URLClassLoader masterLoader() {
-		try (Stream<Path> pathStream = Files.walk(new File("").toPath().toAbsolutePath())) {
-			List<URL> urls = pathStream.filter(path1 -> path1.toString().endsWith(".jar")).map(pathMapperFunc)
-					.collect(Collectors.toList());
-			urls.forEach((url) -> System.out.println(url.toString()));
-			return new URLClassLoader(urls.toArray(new URL[urls.size()]), this.getClassLoader());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+		Set<URL> urls = springCfg.getJarPaths().stream().map((path) -> {
+			try {
+				return Paths.get(path).toUri().toURL();
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}).collect(Collectors.toSet());
+		return new URLClassLoader(urls.toArray(new URL[urls.size()]), this.getClassLoader());
+
 	}
 
 	public RedPlugins getPluginManager() {
