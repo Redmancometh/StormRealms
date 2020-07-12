@@ -1,5 +1,8 @@
 package org.stormrealms.stormcore.outfacing;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,5 +16,15 @@ public enum RPGStat {
 
 	RPGStat(String name) {
 		this.name = name;
+	}
+
+	public static Set<RPGStat> characterStats() {
+		Set<RPGStat> statSet = new HashSet();
+		statSet.add(STR);
+		statSet.add(STA);
+		statSet.add(AGI);
+		statSet.add(INT);
+		statSet.add(SPI);
+		return statSet;
 	}
 }

@@ -14,6 +14,11 @@ import org.stormrealms.stormcombat.events.WeaponAttackEvent;
 @Component
 public interface CombatCalculator {
 
+	/**
+	 * 
+	 * @param e
+	 * @return
+	 */
 	public abstract int calculateMeleeDamage(WeaponAttackEvent e);
 
 	/**

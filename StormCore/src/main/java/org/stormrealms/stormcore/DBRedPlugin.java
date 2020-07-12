@@ -45,8 +45,8 @@ public interface DBRedPlugin extends RedPlugin {
 		settings.put(Environment.URL, dbConfig.get("url"));
 		settings.put(Environment.USER, dbConfig.get("user").toString());
 		settings.put(Environment.PASS, dbConfig.get("password").toString());
-		settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL5Dialect");
-		settings.put(Environment.SHOW_SQL, "false");
+		//settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL5Dialect");
+		settings.put(Environment.SHOW_SQL, "true");
 		settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
 		settings.put(Environment.AUTOCOMMIT, "true");
 		settings.put(Environment.CONNECTION_PROVIDER, "org.hibernate.hikaricp.internal.HikariCPConnectionProvider");

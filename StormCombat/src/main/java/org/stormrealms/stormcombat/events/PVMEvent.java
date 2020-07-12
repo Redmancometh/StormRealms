@@ -15,6 +15,14 @@ import lombok.RequiredArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class PVMEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
+	@NonNull
+	private final RPGPlayer attacker;
+	@NonNull
+	private final Player bukkitAttacker;
+	@NonNull
+	private final LivingEntity damaged;
+	private int damage = 0;
+	private boolean damagedKilled = false;
 
 	@Override
 	public HandlerList getHandlers() {
@@ -25,12 +33,4 @@ public class PVMEvent extends Event {
 		return handlers;
 	}
 
-	@NonNull
-	private final RPGPlayer attacker;
-	@NonNull
-	private final Player bukkitAttacker;
-	@NonNull
-	private final LivingEntity damaged;
-	private int damage = 0;
-	private boolean damagedKilled = false;
 }

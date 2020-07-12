@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class WeaponAttackEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	@NonNull
-	private final RPGGearData weapon;
+	private final RPGGearData mhWeapon;
 	@NonNull
 	private final RPGPlayer player;
 	@NonNull

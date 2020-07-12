@@ -1,11 +1,8 @@
 package org.stormrealms.stormstats.menus;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,7 +17,6 @@ import org.stormrealms.stormstats.configuration.pojo.ClassConfiguration;
 import org.stormrealms.stormstats.configuration.pojo.GUIConfig;
 import org.stormrealms.stormstats.configuration.pojo.Race;
 import org.stormrealms.stormstats.configuration.pojo.RaceConfig;
-import org.stormrealms.stormstats.model.ClassData;
 import org.stormrealms.stormstats.model.RPGCharacter;
 import org.stormrealms.stormstats.model.RPGPlayer;
 
@@ -79,16 +75,17 @@ public class CreateCharacterMenu extends TypedMenu<RPGPlayer> {
 	}
 
 	private Icon getClassIcon() {
-		ClassData data = getSelected().getChosenCharacter().getData();
+		/*ClassData data = getSelected().getChosenCharacter().getData();
 		if (data == null || data.getClassName() == null)
 			return cfg.getConfig().getSetClass();
 		String clazz = getSelected().getChosenCharacter().getData().getClassName();
 		if (clazz != null)
-			return confMan.getConfig().getClassMap().get(clazz.toLowerCase()).getClassItem();
+			return confMan.getConfig().getClassMap().get(clazz.toLowerCase()).getClassItem();*/
 		return cfg.getConfig().getSetClass();
 	}
 
 	private Icon getTestIcon() {
+		/*
 		Icon testIcon = new Icon();
 		testIcon.setMaterial(Material.ACACIA_BUTTON);
 		testIcon.setDisplayName("Confirm Character Creation");
@@ -98,7 +95,9 @@ public class CreateCharacterMenu extends TypedMenu<RPGPlayer> {
 		lore.add("Chosen Race: " + getElement().getChosenCharacter().getRace());
 		testIcon.setLore(lore);
 		testIcon.setDataValue((short) 0);
-		return testIcon;
+		return testIcon;*/
+		
+		return new Icon();
 	}
 
 	public void open(Player p, RPGPlayer e) {
