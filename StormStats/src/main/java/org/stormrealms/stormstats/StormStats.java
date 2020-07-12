@@ -23,7 +23,7 @@ import org.stormrealms.stormstats.model.RPGPlayer;
 public class StormStats extends StormSpringPlugin implements DBRedPlugin {
 	private ConfigManager<SpringConfig> cfgMon = new ConfigManager<SpringConfig>("spring.json", SpringConfig.class);
 	private SessionFactory factory;
-
+	
 	@Override
 	public void initialize() {
 		DBRedPlugin.super.initialize();

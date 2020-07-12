@@ -38,8 +38,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 
 @Configuration
-@ComponentScan(basePackages = { "org.stormrealms.stormcore", "org.stormrealms.stormmenus",
-		"org.stormrealms.stormcombat", "org.stormrealms.stormstats" })
+@ComponentScan(basePackages = { "org.stormrealms.*" })
 public class StormCoreContextConfiguration {
 
 	Function<Path, URL> pathMapperFunc = (p) -> {
@@ -72,13 +71,6 @@ public class StormCoreContextConfiguration {
 	@Bean(name = "enabled-plugins")
 	public Set<StormPlugin> enabledPlugins() {
 		return new HashSet();
-	}
-
-	@Bean
-	public URLClassLoader pluginLoader(@Qualifier("mod-paths") List<URL> modulePaths) {
-		URLClassLoader classLoader = new URLClassLoader(modulePaths.toArray(new URL[modulePaths.size()]),
-				StormCore.getInstance().getPLClassLoader().getParent());
-		return classLoader;
 	}
 
 	@Bean(name = "context-storage")

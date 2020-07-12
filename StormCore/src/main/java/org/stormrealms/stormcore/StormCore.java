@@ -84,6 +84,7 @@ public class StormCore extends JavaPlugin {
 		try (Stream<Path> pathStream = Files.walk(new File("").toPath().toAbsolutePath())) {
 			List<URL> urls = pathStream.filter(path1 -> path1.toString().endsWith(".jar")).map(pathMapperFunc)
 					.collect(Collectors.toList());
+			urls.forEach((url) -> System.out.println(url.toString()));
 			return new URLClassLoader(urls.toArray(new URL[urls.size()]), this.getClassLoader());
 		} catch (IOException e) {
 			e.printStackTrace();

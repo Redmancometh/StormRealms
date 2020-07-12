@@ -48,8 +48,8 @@ public class CombatListeners implements Listener {
 					.callEvent(new WeaponAttackEvent(cProc.getRPGWeapon(mainHand), e.getAttacker(), bAttacker));
 		if (e.isDamagedKilled())
 			return;
-		ItemStack offHand = bAttacker.getInventory().getItemInMainHand();
-		if (offHand != null && cProc.isRPGWeapon(offHand))
+		ItemStack offHand = bAttacker.getInventory().getItemInOffHand();
+		if (offHand != null && offHand.hasItemMeta() && cProc.isRPGWeapon(offHand))
 			Bukkit.getPluginManager()
 					.callEvent(new WeaponAttackEvent(cProc.getRPGWeapon(offHand), e.getAttacker(), bAttacker));
 	}

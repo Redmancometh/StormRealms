@@ -3,6 +3,8 @@ package org.stormrealms.stormloot;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
 import org.bukkit.event.Listener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -13,6 +15,12 @@ import org.stormrealms.stormloot.configuration.StormLootContext;
 
 @Component
 public class StormLoot extends StormSpringPlugin {
+
+	@PostConstruct
+	public void test() {
+		for (int x = 0; x < 15; x++)
+			System.out.println("TEST");
+	}
 
 	@Override
 	public Class<?> getConfigurationClass() {
@@ -42,7 +50,8 @@ public class StormLoot extends StormSpringPlugin {
 	@Override
 	public String[] getPackages() {
 		return new String[] { "org.stormrealms.stormloot", "org.stormrealms.stormloot.controller",
-				"org.stormrealms.stormloot.listeners", "org.stormrealms.stormloot.configuration", "org.stormrealms.stormloot.configuration.pojo" };
+				"org.stormrealms.stormloot.listeners", "org.stormrealms.stormloot.configuration",
+				"org.stormrealms.stormloot.configuration.pojo" };
 	}
 
 }

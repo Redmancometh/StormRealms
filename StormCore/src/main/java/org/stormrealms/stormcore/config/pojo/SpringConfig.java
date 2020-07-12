@@ -9,4 +9,5 @@ import lombok.Data;
 public class SpringConfig {
 	private List<String> profiles;
 	private Map<String, Object> properties;
+	private List<String> jarPaths;
 }

@@ -15,6 +15,8 @@ public class LootController {
 
 	@PostConstruct
 	public void registerListener() {
+		for (int x = 0; x < 10; x++)
+			System.out.println("REGISTER LISTENER");
 		Bukkit.getPluginManager().registerEvents(listener, StormCore.getInstance());
 	}
 }

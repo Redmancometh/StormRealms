@@ -36,7 +36,7 @@ public class RPGPlayer implements Defaultable<UUID> {
 	private UUID playerId;
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "player_id")
-	private Set<RPGCharacter> characters;
+	private Set<RPGCharacter> characters = new HashSet();
 
 	@Transient
 	private RPGCharacter chosenCharacter;
@@ -57,11 +57,7 @@ public class RPGPlayer implements Defaultable<UUID> {
 	@Override
 	public void setDefaults(UUID playerId) {
 		this.playerId = playerId;
-		RPGCharacter character = new RPGCharacter();
-		character.setDefaults();
-		if (this.characters == null)
-			this.characters = new HashSet();
-		this.characters.add(character);
+		this.characters = new HashSet();
 	}
 
 }

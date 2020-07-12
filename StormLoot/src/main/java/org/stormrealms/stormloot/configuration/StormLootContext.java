@@ -95,7 +95,7 @@ public class StormLootContext {
 		weaponRootCfg.init();
 		return weaponRootCfg;
 	}
-	
+
 	@Bean
 	@Scope("prototype")
 	public ArmorSuffixes armorSuffixes(ConfigManager<ArmorSuffixes> armorSuffixesCfg) {

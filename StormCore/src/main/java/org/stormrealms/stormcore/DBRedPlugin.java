@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.annotation.PostConstruct;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -12,7 +14,7 @@ import org.hibernate.service.ServiceRegistry;
 import org.json.simple.JSONObject;
 
 public interface DBRedPlugin extends RedPlugin {
-	@Override
+	@PostConstruct
 	default void initialize() {
 		System.out.println("NEW INITIALIZE");
 		SessionFactory factory = buildSessionFactory();

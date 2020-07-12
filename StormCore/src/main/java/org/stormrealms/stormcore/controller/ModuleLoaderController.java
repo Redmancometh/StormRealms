@@ -5,7 +5,6 @@ import com.google.common.io.CharStreams;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -37,10 +36,14 @@ import java.util.jar.JarFile;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 
-import javax.annotation.PostConstruct;
-
 @Controller
 @Order(0)
+/**
+ * Defunct.
+ * 
+ * @author Redmancometh
+ *
+ */
 public class ModuleLoaderController {
 	private File moduleDir;
 	@Autowired
@@ -56,8 +59,8 @@ public class ModuleLoaderController {
 		this.moduleDir = moduleDir;
 	}
 
-	@PostConstruct
 	public void loadModules() {
+
 		if (!moduleDir.exists())
 			moduleDir.mkdir();
 		try (Stream<Path> pathStream = Files.walk(moduleDir.toPath().toAbsolutePath())) {
@@ -82,16 +85,24 @@ public class ModuleLoaderController {
 				loadPlugin(task, x);
 			}
 		}
+
 	}
 
 	public void loadPlugin(PluginLoadTask task, int pluginIndex) {
+
 		try {
 			PluginConfig config = task.getConfig();
-			Class mainClass = StormCore.getInstance().getPLClassLoader().loadClass(config.getMain());
 			StormSpringPlugin module = null;
+			Path path = Paths.get("plugins/StormCore/modules/" + config.getName() + ".jar");
+			System.out.println(path.toUri().toURL());
+			URLClassLoader moduleLoader = new URLClassLoader(config.getName(), new URL[] { path.toUri().toURL() },
+					StormCore.getInstance().getPLClassLoader());
+			loaderMap.put(config.getName(), moduleLoader);
+			Class mainClass = StormCore.getInstance().getPLClassLoader().loadClass(config.getMain());
 			SpringUtil.addSpringBean(mainClass, config.getName(), BeanDefinition.SCOPE_SINGLETON);
 			module = (StormSpringPlugin) StormCore.getInstance().getContext().getAutowireCapableBeanFactory()
-					.getBean(config.getName());
+					.getBean(mainClass);
+			module.setModuleLoader(moduleLoader);
 			module.setName(config.getName());
 			System.out.println("Loading spring plugin with config " + config + " during pass #" + pluginIndex);
 			loadSpringPlugin((StormSpringPlugin) module, config);
@@ -105,15 +116,9 @@ public class ModuleLoaderController {
 
 	private StormSpringPlugin loadSpringPlugin(StormSpringPlugin module, PluginConfig config) throws IOException {
 		AnnotationConfigApplicationContext moduleContext = new AnnotationConfigApplicationContext();
-		Path path = Paths.get("plugins/StormCore/modules/" + module.getName() + ".jar");
-		URLClassLoader moduleLoader = new URLClassLoader(module.getName(), new URL[] { path.toUri().toURL() },
-				StormCore.getInstance().getPLClassLoader());
-		loaderMap.put(module.getName(), moduleLoader);
-		module.setModuleLoader(moduleLoader);
 		moduleContext.setParent(StormCore.getInstance().getContext());
 		moduleContext.setClassLoader(StormCore.getInstance().getPLClassLoader());
 		SpringPlugin spModule = (SpringPlugin) module;
-		module.setModuleLoader(moduleLoader);
 		moduleContext.setParent(StormCore.getInstance().getContext());
 		spModule.setContext(moduleContext);
 		module.enable();
@@ -121,7 +126,6 @@ public class ModuleLoaderController {
 		moduleContext.scan(spModule.getPackages());
 		moduleContext.register(spModule.getConfigurationClass());
 		moduleContext.refresh();
-
 		return module;
 	}
 
