@@ -7,24 +7,20 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+
+import lombok.Data;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name = "rpg_character")
 @Component
 @Scope("prototype")
-@ToString(exclude = { "rpgPlayer" })
 public class RPGCharacter {
 
 	@PrePersist
@@ -34,9 +30,6 @@ public class RPGCharacter {
 
 	@OneToOne(mappedBy = "character", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private ClassData data;
-	@ManyToOne
-	@JoinColumn(name = "player_id")
-	private RPGPlayer rpgPlayer;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "character_id")
@@ -59,8 +52,22 @@ public class RPGCharacter {
 	private double experience;
 	@Column
 	private int level;
+	@Column
+	private int str;
+	@Column
+	private int sta;
+	@Column
+	private int intel;
+	@Column
+	private int spi;
+	@Column
+	private int agi;
 
 	public boolean isCharacterComplete() {
+		// System.out.println("RACE IS NULL: " + (this.getRace() == null));
+		// System.out.println("NAME IS NULL: " + (this.getCharacterName() == null));
+		// System.out.println("CLASSDATA IS NULL: " + (this.getData() == null));
+		// System.out.println("IS CHAR COMPLETE?");
 		if (this.getRace() != null && this.getCharacterName() != null && this.getData() != null
 				&& this.getData().getClassName() != null) {
 			System.out.println("CHARACTER COMPLETE");
@@ -71,6 +78,12 @@ public class RPGCharacter {
 	}
 
 	public void setDefaults() {
-
+		this.level = 1;
+		this.str = 1;
+		this.intel = 1;
+		this.spi = 1;
+		this.agi = 1;
+		this.experience = 0;
+		this.health = 0;
 	}
 }

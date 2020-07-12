@@ -1,9 +1,5 @@
 package org.stormrealms.stormstats.configuration.pojo;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.stormrealms.stormcore.outfacing.RPGStat;
 import org.stormrealms.stormmenus.Icon;
 
 import lombok.Data;
@@ -12,5 +8,5 @@ import lombok.Data;
 public class ClassInformation {
 	private String className;
 	private Icon classItem;
-	private Map<RPGStat, Integer> startingStats = new HashMap();
+	private int startingAgi, startingStr, startingSpi, startingIntel;
 }

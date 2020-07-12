@@ -42,7 +42,7 @@ public class ClassMenu extends TypedMenu<RPGPlayer> {
 				data.setClassName(className);
 				RPGCharacter character = rpgPlayer.getChosenCharacter();
 				data.setCharacter(character);
-				//character.setData(data);
+				character.setData(data);
 				CreateCharacterMenu charMenu = factory.getBean(CreateCharacterMenu.class);
 				charMenu.open(player, rpgPlayer);
 			});

@@ -7,9 +7,6 @@ import org.stormrealms.stormstats.model.RPGPlayer;
 
 @Component
 public class StatRepo extends ObjectManager<UUID, RPGPlayer> {
-	
-	
-	
 	public StatRepo() {
 		super(RPGPlayer.class);
 	}

@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -33,7 +34,8 @@ public class RPGPlayer implements Defaultable<UUID> {
 	@Column(name = "player_id")
 	@Id
 	private UUID playerId;
-	@OneToMany(mappedBy = "rpgPlayer", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "player_id")
 	private Set<RPGCharacter> characters;
 
 	@Transient
@@ -55,7 +57,11 @@ public class RPGPlayer implements Defaultable<UUID> {
 	@Override
 	public void setDefaults(UUID playerId) {
 		this.playerId = playerId;
-		this.characters = new HashSet();
+		RPGCharacter character = new RPGCharacter();
+		character.setDefaults();
+		if (this.characters == null)
+			this.characters = new HashSet();
+		this.characters.add(character);
 	}
 
 }
