@@ -1,4 +1,4 @@
-package org.stormrealms.stormcombat.events;
+package org.stormrealms.stormcombat.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -10,9 +10,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.stormrealms.stormcombat.combatsystem.CombatCalculator;
 import org.stormrealms.stormcombat.combatsystem.CombatProcessor;
+import org.stormrealms.stormcombat.events.PVMEvent;
+import org.stormrealms.stormcombat.events.PVPEvent;
+import org.stormrealms.stormcombat.events.WeaponAttackEvent;
 
+@Component
 public class CombatListeners implements Listener {
 	@Autowired
 	private CombatProcessor cProc;

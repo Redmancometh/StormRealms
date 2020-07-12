@@ -34,7 +34,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 public class StormCore extends JavaPlugin {
 	private static ConfigManager<SpringConfig> cfgMon = new ConfigManager("spring.json", SpringConfig.class);
 	protected AnnotationConfigApplicationContext context;
-	private ClassLoader masterLoader;
+	private URLClassLoader masterLoader;
 	private static StormCore instance;
 	private SpringConfig springCfg;
 	private RedPlugins getPlugins;
@@ -127,7 +127,7 @@ public class StormCore extends JavaPlugin {
 		return context;
 	}
 
-	public ClassLoader getPLClassLoader() {
+	public URLClassLoader getPLClassLoader() {
 		return this.masterLoader;
 	}
 

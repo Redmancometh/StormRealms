@@ -81,10 +81,17 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
 	 * @return
 	 */
 	public V get(K key) {
-		SpecialFuture<V> future = cache.asMap().get(key);
-		if (future == null)
-			System.out.println("DAFUQ");
-		return future.get();
+		SpecialFuture<V> future;
+		try {
+			future = cache.get(key);
+			if (future == null)
+				System.out.println("DAFUQ");
+			return future.get();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public SpecialFuture<List<V>> topX(int x, String onProperty) {

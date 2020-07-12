@@ -1,5 +1,6 @@
 package org.stormrealms.stormcombat.combatsystem;
 
+import org.springframework.stereotype.Component;
 import org.stormrealms.stormcombat.events.WeaponAttackEvent;
 
 /**
@@ -10,6 +11,7 @@ import org.stormrealms.stormcombat.events.WeaponAttackEvent;
  * @author Redmancometh
  *
  */
+@Component
 public interface CombatCalculator {
 
 	public abstract int calculateMeleeDamage(WeaponAttackEvent e);

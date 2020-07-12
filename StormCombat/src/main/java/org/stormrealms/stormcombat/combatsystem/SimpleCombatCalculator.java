@@ -1,7 +1,9 @@
 package org.stormrealms.stormcombat.combatsystem;
 
+import org.springframework.stereotype.Component;
 import org.stormrealms.stormcombat.events.WeaponAttackEvent;
 
+@Component
 public class SimpleCombatCalculator implements CombatCalculator {
 
 	@Override

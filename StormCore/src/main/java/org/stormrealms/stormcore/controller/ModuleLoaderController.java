@@ -111,9 +111,9 @@ public class ModuleLoaderController {
 		loaderMap.put(module.getName(), moduleLoader);
 		module.setModuleLoader(moduleLoader);
 		moduleContext.setParent(StormCore.getInstance().getContext());
-		moduleContext.setClassLoader(module.getModuleLoader());
+		moduleContext.setClassLoader(StormCore.getInstance().getPLClassLoader());
 		SpringPlugin spModule = (SpringPlugin) module;
-		module.setModuleLoader(module.getModuleLoader());
+		module.setModuleLoader(moduleLoader);
 		moduleContext.setParent(StormCore.getInstance().getContext());
 		spModule.setContext(moduleContext);
 		module.enable();
@@ -129,7 +129,7 @@ public class ModuleLoaderController {
 		Path path = Paths.get("plugins/StormCore/modules/" + module.getName() + ".jar");
 		URLClassLoader moduleLoader = new URLClassLoader(module.getName(), new URL[] { path.toUri().toURL() },
 				StormCore.getInstance().getPLClassLoader());
-		loaderMap.put(module.getName(), moduleLoader);
+		loaderMap.put(module.getName(), StormCore.getInstance().getPLClassLoader());
 		module.setModuleLoader(moduleLoader);
 		module.enable();
 		module.setName(config.getName());
@@ -181,6 +181,7 @@ public class ModuleLoaderController {
 		this.enabledPlugins.remove(plugin);
 		this.loaderMap.get(plugin.getName()).close();
 		this.loaderMap.remove(plugin.getName());
+		plugin.getModuleLoader().close();
 	}
 
 	public File findModule(String name) {

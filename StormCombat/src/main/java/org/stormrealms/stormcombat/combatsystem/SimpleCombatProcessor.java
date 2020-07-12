@@ -8,6 +8,8 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.stormrealms.stormcombat.events.WeaponAttackEvent;
 import org.stormrealms.stormcore.StormCore;
 import org.stormrealms.stormcore.config.ConfigManager.LocationAdapter;
@@ -15,13 +17,19 @@ import org.stormrealms.stormcore.config.ConfigManager.MaterialAdapter;
 import org.stormrealms.stormcore.config.ConfigManager.RPGStatAdapter;
 import org.stormrealms.stormcore.outfacing.RPGGearData;
 import org.stormrealms.stormcore.outfacing.RPGStat;
+import org.stormrealms.stormstats.data.StatRepo;
 import org.stormrealms.stormstats.model.RPGPlayer;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+@Component
 public class SimpleCombatProcessor implements CombatProcessor {
+
+	@Autowired
+	private StatRepo rpgPlayerRepo;
+
 	NamespacedKey key = new NamespacedKey(StormCore.getInstance(), "rpggear");
 	protected Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED)
 			.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
@@ -69,7 +77,7 @@ public class SimpleCombatProcessor implements CombatProcessor {
 
 	@Override
 	public RPGPlayer getRPGPlayer(Player player) {
-		return null;
+		return rpgPlayerRepo.getBlocking(player.getUniqueId());
 	}
 
 }

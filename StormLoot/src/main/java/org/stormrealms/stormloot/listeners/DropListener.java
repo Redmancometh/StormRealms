@@ -5,7 +5,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.StormCore;
@@ -30,4 +32,10 @@ public class DropListener implements Listener {
 			.registerTypeAdapter(Location.class, new LocationAdapter())
 			.registerTypeAdapter(RPGStat.class, new RPGStatAdapter()).setLenient().setPrettyPrinting().create();
 
+	@EventHandler
+	public void onInteract(PlayerInteractEvent e) {
+		if (e.getPlayer().isSneaking()) {
+			e.getPlayer().getInventory().addItem(selector.itemDrop(10));
+		}
+	}
 }

@@ -38,7 +38,8 @@ public class StormCombat extends StormSpringPlugin {
 
 	@Override
 	public String[] getPackages() {
-		return new String[0];
+		return new String[] { "org.stormrealms.stormcombat.*", "org.stormrealms.stormcombat.configuration",
+				"org.stormrealms.stormcombat.controllers", "org.stormrealms.stormcombat.listeners" };
 	}
 
 }

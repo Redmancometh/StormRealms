@@ -21,6 +21,10 @@ public class PVMEvent extends Event {
 		return handlers;
 	}
 
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
+
 	@NonNull
 	private final RPGPlayer attacker;
 	@NonNull

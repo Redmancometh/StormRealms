@@ -27,7 +27,7 @@ public class ModuleCommand implements CommandExecutor {
 			sender.sendMessage(ChatColor.RED + "You do not have permission to do this!");
 			return true;
 		}
-		
+
 		if (args[0].equalsIgnoreCase("enable")) {
 
 			if (args.length != 2) {
@@ -59,7 +59,7 @@ public class ModuleCommand implements CommandExecutor {
 				}
 
 				sender.sendMessage(ChatColor.GREEN + "Attempting to reload: " + moduleName + "...");
-				this.moduleLoaderController.reloadModule(moduleLoaderController.byName(moduleName));
+				// this.moduleLoaderController.reloadModule(moduleLoaderController.byName(moduleName));
 				sender.sendMessage(ChatColor.GREEN + "Reloaded module: " + moduleName);
 			}
 		} else if (args[0].equalsIgnoreCase("disable")) {
@@ -77,10 +77,10 @@ public class ModuleCommand implements CommandExecutor {
 				sender.sendMessage(ChatColor.GREEN + "Attempting to disable: " + moduleName + "...");
 				try {
 					this.moduleLoaderController.disableModule(moduleLoaderController.byName(moduleName));
+					sender.sendMessage(ChatColor.GREEN + "Disabled module: " + moduleName);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				sender.sendMessage(ChatColor.GREEN + "Disabled module: " + moduleName);
 			}
 		} else if (args[0].equalsIgnoreCase("load")) {
 			// TODO make a loadModule by name and find jar with that name

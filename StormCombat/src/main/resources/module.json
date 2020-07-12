@@ -1,4 +1,5 @@
 {
-	"name": "StormStats",
-	"main": "org.stormrealms.stormstats.StormStats"
+	"name": "StormCombat",
+	"main": "org.stormrealms.stormcombat.StormCombat",
+	"load-order": 8
 }
