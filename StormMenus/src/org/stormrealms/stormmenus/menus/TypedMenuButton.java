@@ -7,7 +7,12 @@ import org.bukkit.inventory.ItemStack;
 import org.stormrealms.stormmenus.absraction.BaseMenu;
 import org.stormrealms.stormmenus.util.TriConsumer;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class TypedMenuButton<T> extends BaseTypedMenuButton {
+	@Getter
+	@Setter
 	private BiFunction<Player, T, ItemStack> buttonConstructor;
 	private TriConsumer<ClickType, T, Player> clickAction;
 

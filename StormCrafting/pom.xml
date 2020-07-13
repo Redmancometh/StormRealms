@@ -39,6 +39,11 @@
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.stormrealms</groupId>
+			<artifactId>StormStats</artifactId>
+			<version>2.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>StormCrafting</finalName>

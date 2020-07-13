@@ -29,6 +29,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Scope;
 import org.stormrealms.stormcore.StormCore;
 import org.stormrealms.stormcore.StormPlugin;
@@ -39,6 +40,7 @@ import com.google.common.collect.Multimaps;
 
 @Configuration
 @ComponentScan(basePackages = { "org.stormrealms.*" })
+@EnableAspectJAutoProxy
 public class StormCoreContextConfiguration {
 
 	Function<Path, URL> pathMapperFunc = (p) -> {
