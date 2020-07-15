@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -36,7 +38,7 @@ public class CraftingConfigManager<T> extends ConfigManager<T> {
 
 	protected void initConfig() {
 		for (int x = 0; x < 2; x++)
-			System.out.println("INIT CONFIG FOR " + fileName);
+			Logger.getLogger("Test").log(Level.SEVERE, "Loading file: " + fileName);
 		try (FileReader reader = new FileReader("config" + File.separator + fileName)) {
 			T conf = (T) this.gson.fromJson(reader, clazz);
 			this.config = conf;

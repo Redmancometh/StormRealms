@@ -12,18 +12,17 @@ import lombok.Data;
 @Data
 public class RecipeIngredient {
 	private CraftingIngredient ingredient;
-	private int quantity;
+	private int qty;
 
 	/**
 	 * How many of the ingredient does the player have
 	 * 
 	 * @return
 	 */
-	public int hasX(Inventory i) {
+	public int hasX(Inventory inv) {
 		int amount = 0;
-		for (ItemStack item : i) {
-
-			if (i == null || item.getType() != ingredient.getMaterial() || !item.hasItemMeta())
+		for (ItemStack item : inv) {
+			if (item == null || item.getType() != ingredient.getMaterial() || !item.hasItemMeta())
 				continue;
 			ItemMeta meta = item.getItemMeta();
 			if (meta.getDisplayName().equals(ingredient.getDisplayName()) && listsMatch(meta.getLore())) {

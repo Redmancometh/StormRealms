@@ -30,7 +30,6 @@ public class SmithingMenu extends TypedMenu<Integer> {
 
 	@PostConstruct
 	public void setup() {
-		/*
 		this.setConstructInventory((p, page) -> {
 			decorateMenu();
 			List<Integer> recipeLocs = cfg.getConfig().getRecipeLocs();
@@ -49,9 +48,9 @@ public class SmithingMenu extends TypedMenu<Integer> {
 					List<String> lore = meta.getLore();
 					for (RecipeIngredient ingredient : recipe.getIngredients()) {
 						int amt = ingredient.hasX(p.getInventory());
-						ChatColor color = amt >= ingredient.getQuantity() ? ChatColor.GREEN : ChatColor.DARK_RED;
-						//lore.add(color + ingredient.getIngredient().getDisplayName() + " " + amt + "/"
-						//		+ ingredient.getQty());
+						ChatColor color = amt >= ingredient.getQty() ? ChatColor.GREEN : ChatColor.DARK_RED;
+						lore.add(color + ingredient.getIngredient().getDisplayName() + " " + amt + "/"
+								+ ingredient.getQty());
 					}
 					itemBase.setLore(lore);
 					return itemBase;
@@ -61,11 +60,12 @@ public class SmithingMenu extends TypedMenu<Integer> {
 					p.getInventory().addItem(recipe.getCreatedItem().build());
 					p.sendMessage("MADE ITEM");
 				});
+				this.setButton(recipeLocs.get(x), button);
 			}
 			this.actionMap.forEach((number, actionButton) -> menuInv.setItem(number,
 					actionButton.constructButton(getElement(), this, p)));
 			return menuInv;
-		});*/
+		});
 	}
 
 	@Override

@@ -25,18 +25,20 @@ public class CraftingAdapter {
 		brewingIngredients = brewMan.getConfig();
 		ConfigManager<GrindingIngredients> grindMan = new ConfigManager("grindingingredients.json",
 				GrindingIngredients.class);
-		brewMan.init();
+		grindMan.init();
 		grindingIngredients = grindMan.getConfig();
 		brewingIngredients = brewMan.getConfig();
 
 		ConfigManager<SmithingIngredients> smithMan = new ConfigManager("smithingingredients.json",
 				SmithingIngredients.class);
-		brewMan.init();
+		smithMan.init();
 		smithingIngredients = smithMan.getConfig();
 		ingredientMap.putAll(brewingIngredients.getIngredients());
+		System.out.println("GRINDING IS NULL: " + (grindingIngredients == null));
 		ingredientMap.putAll(grindingIngredients.getIngredients());
 		ingredientMap.putAll(smithingIngredients.getIngredients());
-		System.out.println("Ingredient map size: " + ingredientMap.size());
+		for (int x = 0; x < 10; x++)
+			System.out.println("Ingredient map size: " + ingredientMap.size());
 	}
 
 	public static class IngredientAdapter extends TypeAdapter<CraftingIngredient> {
@@ -50,17 +52,7 @@ public class CraftingAdapter {
 		public CraftingIngredient read(JsonReader reader) throws IOException {
 			System.out.println("READING");
 			JsonToken token = reader.peek();
-			String ingredientName = null;
-			while (reader.hasNext()) {
-				if (token.equals(JsonToken.NAME)) {
-					String fieldName = reader.nextName();
-					if (fieldName.equalsIgnoreCase("ingredients")) {
-						ingredientName = reader.nextString();
-					}
-				}
-			}
-			System.out.println("PEEKED");
-			System.out.println("INGREDIENT NAME: " + ingredientName);
+			String ingredientName = reader.nextString();
 			return ingredientMap.get(ingredientName);
 		}
 	}
