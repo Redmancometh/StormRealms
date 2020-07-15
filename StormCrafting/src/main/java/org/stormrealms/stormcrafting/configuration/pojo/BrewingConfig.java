@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 public class BrewingConfig {
-	private List<CraftingRecipe> brewingRecipes;
+	private List<CraftingRecipe> recipes;
 	private String menuName;
 	private MenuTemplate template;
 	private List<Integer> recipeLocs;

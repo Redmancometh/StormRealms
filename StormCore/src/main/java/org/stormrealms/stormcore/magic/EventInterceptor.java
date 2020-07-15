@@ -6,9 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EventInterceptor {
-	
-	
-	
+
 	@BeginEvent(eventClass = BlockBreakEvent.class)
 	public void onEvent(Event e) {
 		System.out.println("ON BREAK");

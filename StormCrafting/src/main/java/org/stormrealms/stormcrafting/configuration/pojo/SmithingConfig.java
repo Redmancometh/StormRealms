@@ -12,5 +12,4 @@ public class SmithingConfig {
 	private String menuName;
 	private MenuTemplate template;
 	private List<Integer> recipeLocs;
-
 }

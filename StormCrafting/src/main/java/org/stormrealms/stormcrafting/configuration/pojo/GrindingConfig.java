@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 public class GrindingConfig {
-	private List<CraftingRecipe> grindingRecipes;
+	private List<CraftingRecipe> recipes;
 	private String menuName;
 	private MenuTemplate template;
 	private List<Integer> recipeLocs;

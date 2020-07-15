@@ -2,6 +2,7 @@ package org.stormrealms.stormcore.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -22,6 +23,8 @@ import java.util.stream.Stream;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.event.Listener;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,10 +36,19 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Scope;
 import org.stormrealms.stormcore.StormCore;
 import org.stormrealms.stormcore.StormPlugin;
+import org.stormrealms.stormcore.config.ConfigManager.ClassAdapter;
+import org.stormrealms.stormcore.config.ConfigManager.LocationAdapter;
+import org.stormrealms.stormcore.config.ConfigManager.MaterialAdapter;
+import org.stormrealms.stormcore.config.ConfigManager.PathAdapter;
+import org.stormrealms.stormcore.config.ConfigManager.RPGStatAdapter;
+import org.stormrealms.stormcore.outfacing.RPGStat;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Configuration
 @ComponentScan(basePackages = { "org.stormrealms.*" })
@@ -55,6 +67,18 @@ public class StormCoreContextConfiguration {
 	@Bean
 	public ScriptEngine basicScriptEngine() {
 		return new ScriptEngineManager().getEngineByName("ecmascript");
+	}
+
+	@Bean("confman-gson")
+	public Gson gson() {
+		return new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED)
+				.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
+				.registerTypeHierarchyAdapter(String.class, new PathAdapter())
+				.registerTypeHierarchyAdapter(Material.class, new MaterialAdapter())
+				.registerTypeAdapter(Location.class, new LocationAdapter())
+				.registerTypeAdapter(RPGStat.class, new RPGStatAdapter())
+				.registerTypeHierarchyAdapter(Class.class, new ClassAdapter()).setLenient().setPrettyPrinting()
+				.create();
 	}
 
 	@Bean("mod-paths")

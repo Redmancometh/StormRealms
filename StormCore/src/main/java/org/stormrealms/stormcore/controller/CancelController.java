@@ -15,8 +15,6 @@ public class CancelController {
 
 	@PostConstruct
 	public void registerListener() {
-		for (int x = 0; x < 15; x++)
-			System.out.println("REGISTER CANCEL LISTENER");
 		Bukkit.getPluginManager().registerEvents(cancels, StormCore.getInstance());
 	}
 }

@@ -39,9 +39,9 @@ public class ConfigManager<T> {
 			.registerTypeAdapter(Location.class, new LocationAdapter())
 			.registerTypeAdapter(RPGStat.class, new RPGStatAdapter())
 			.registerTypeHierarchyAdapter(Class.class, new ClassAdapter()).setLenient().setPrettyPrinting().create();
-	private String fileName;
-	private Class clazz;
-	private T config;
+	protected String fileName;
+	protected Class clazz;
+	protected T config;
 	private FileWatcher watcher;
 	@Getter
 	@Setter
@@ -61,6 +61,7 @@ public class ConfigManager<T> {
 	}
 
 	public void init() {
+
 		initConfig();
 		registerMonitor();
 	}
@@ -214,7 +215,6 @@ public class ConfigManager<T> {
 	}
 
 	public static class PathAdapter extends TypeAdapter<String> {
-
 		@Override
 		public String read(JsonReader arg0) throws IOException {
 			String string = arg0.nextString();
