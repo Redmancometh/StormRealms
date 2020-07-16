@@ -60,301 +60,301 @@ public class PlayerConnectionOverride extends PlayerConnection {
     public void a(PacketPlayInSteerVehicle packetPlayInSteerVehicle) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInSteerVehicle, (PacketPlayInSteerVehicle packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInSteerVehicle, this, (PacketPlayInSteerVehicle packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInVehicleMove packetPlayInVehicleMove) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInVehicleMove, (PacketPlayInVehicleMove packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInVehicleMove, this, (PacketPlayInVehicleMove packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInTeleportAccept packetPlayInTeleportAccept) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInTeleportAccept, (PacketPlayInTeleportAccept packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInTeleportAccept, this, (PacketPlayInTeleportAccept packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInRecipeDisplayed packetPlayInRecipeDisplayed) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInRecipeDisplayed, (PacketPlayInRecipeDisplayed packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInRecipeDisplayed, this, (PacketPlayInRecipeDisplayed packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInAdvancements packetPlayInAdvancements) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInAdvancements, (PacketPlayInAdvancements packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInAdvancements, this, (PacketPlayInAdvancements packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInTabComplete packetPlayInTabComplete) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInTabComplete, (PacketPlayInTabComplete packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInTabComplete, this, (PacketPlayInTabComplete packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInSetCommandBlock packetPlayInSetCommandBlock) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInSetCommandBlock, (PacketPlayInSetCommandBlock packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInSetCommandBlock, this, (PacketPlayInSetCommandBlock packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInSetCommandMinecart packetPlayInSetCommandMinecart) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInSetCommandMinecart, (PacketPlayInSetCommandMinecart packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInSetCommandMinecart, this, (PacketPlayInSetCommandMinecart packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInPickItem packetPlayInPickItem) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInPickItem, (PacketPlayInPickItem packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInPickItem, this, (PacketPlayInPickItem packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInItemName packetPlayInItemName) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInItemName, (PacketPlayInItemName packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInItemName, this, (PacketPlayInItemName packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInBeacon packetPlayInBeacon) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInBeacon, (PacketPlayInBeacon packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInBeacon, this, (PacketPlayInBeacon packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInStruct packetPlayInStruct) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInStruct, (PacketPlayInStruct packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInStruct, this, (PacketPlayInStruct packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInSetJigsaw packetPlayInSetJigsaw) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInSetJigsaw, (PacketPlayInSetJigsaw packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInSetJigsaw, this, (PacketPlayInSetJigsaw packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInTrSel packetPlayInTrSel) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInTrSel, (PacketPlayInTrSel packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInTrSel, this, (PacketPlayInTrSel packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInBEdit packetPlayInBEdit) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInBEdit, (PacketPlayInBEdit packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInBEdit, this, (PacketPlayInBEdit packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInEntityNBTQuery packetPlayInEntityNBTQuery) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInEntityNBTQuery, (PacketPlayInEntityNBTQuery packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInEntityNBTQuery, this, (PacketPlayInEntityNBTQuery packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInTileNBTQuery packetPlayInTileNBTQuery) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInTileNBTQuery, (PacketPlayInTileNBTQuery packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInTileNBTQuery, this, (PacketPlayInTileNBTQuery packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInFlying packetPlayInFlying) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInFlying, (PacketPlayInFlying packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInFlying, this, (PacketPlayInFlying packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInBlockDig packetPlayInBlockDig) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInBlockDig, (PacketPlayInBlockDig packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInBlockDig, this, (PacketPlayInBlockDig packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInUseItem packetPlayInUseItem) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInUseItem, (PacketPlayInUseItem packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInUseItem, this, (PacketPlayInUseItem packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInBlockPlace packetPlayInBlockPlace) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInBlockPlace, (PacketPlayInBlockPlace packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInBlockPlace, this, (PacketPlayInBlockPlace packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInSpectate packetPlayInSpectate) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInSpectate, (PacketPlayInSpectate packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInSpectate, this, (PacketPlayInSpectate packet) -> super.a(packet));
     }
 
     // CraftBukkit start
     public void a(PacketPlayInResourcePackStatus packetPlayInResourcePackStatus) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInResourcePackStatus, (PacketPlayInResourcePackStatus packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInResourcePackStatus, this, (PacketPlayInResourcePackStatus packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInBoatMove packetPlayInBoatMove) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInBoatMove, (PacketPlayInBoatMove packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInBoatMove, this, (PacketPlayInBoatMove packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInHeldItemSlot packetPlayInHeldItemSlot) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInHeldItemSlot, (PacketPlayInHeldItemSlot packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInHeldItemSlot, this, (PacketPlayInHeldItemSlot packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInChat packetPlayInChat) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInChat, (PacketPlayInChat packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInChat, this, (PacketPlayInChat packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInArmAnimation packetPlayInArmAnimation) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInArmAnimation, (PacketPlayInArmAnimation packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInArmAnimation, this, (PacketPlayInArmAnimation packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInEntityAction packetPlayInEntityAction) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInEntityAction, (PacketPlayInEntityAction packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInEntityAction, this, (PacketPlayInEntityAction packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInUseEntity packetPlayInUseEntity) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInUseEntity, (PacketPlayInUseEntity packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInUseEntity, this, (PacketPlayInUseEntity packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInClientCommand packetPlayInClientCommand) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInClientCommand, (PacketPlayInClientCommand packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInClientCommand, this, (PacketPlayInClientCommand packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInCloseWindow packetPlayInCloseWindow) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInCloseWindow, (PacketPlayInCloseWindow packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInCloseWindow, this, (PacketPlayInCloseWindow packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInWindowClick packetPlayInWindowClick) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInWindowClick, (PacketPlayInWindowClick packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInWindowClick, this, (PacketPlayInWindowClick packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInAutoRecipe packetPlayInAutoRecipe) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInAutoRecipe, (PacketPlayInAutoRecipe packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInAutoRecipe, this, (PacketPlayInAutoRecipe packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInEnchantItem packetPlayInEnchantItem) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInEnchantItem, (PacketPlayInEnchantItem packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInEnchantItem, this, (PacketPlayInEnchantItem packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInSetCreativeSlot packetPlayInSetCreativeSlot) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInSetCreativeSlot, (PacketPlayInSetCreativeSlot packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInSetCreativeSlot, this, (PacketPlayInSetCreativeSlot packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInTransaction packetPlayInTransaction) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInTransaction, (PacketPlayInTransaction packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInTransaction, this, (PacketPlayInTransaction packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInUpdateSign packetPlayInUpdateSign) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInUpdateSign, (PacketPlayInUpdateSign packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInUpdateSign, this, (PacketPlayInUpdateSign packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInKeepAlive packetPlayInKeepAlive) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInKeepAlive, (PacketPlayInKeepAlive packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInKeepAlive, this, (PacketPlayInKeepAlive packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInAbilities packetPlayInAbilities) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInAbilities, (PacketPlayInAbilities packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInAbilities, this, (PacketPlayInAbilities packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInSettings packetPlayInSettings) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInSettings, (PacketPlayInSettings packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInSettings, this, (PacketPlayInSettings packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInCustomPayload packetPlayInCustomPayload) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInCustomPayload, (PacketPlayInCustomPayload packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInCustomPayload, this, (PacketPlayInCustomPayload packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInDifficultyChange packetPlayInDifficultyChange) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInDifficultyChange, (PacketPlayInDifficultyChange packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInDifficultyChange, this, (PacketPlayInDifficultyChange packet) -> super.a(packet));
     }
 
     @Override
     public void a(PacketPlayInDifficultyLock packetPlayInDifficultyLock) {
         PacketSubscriptionManager
             .getInstance()
-            .dispatchPacket(packetPlayInDifficultyLock, (PacketPlayInDifficultyLock packet) -> super.a(packet));
+            .dispatchPacket(packetPlayInDifficultyLock, this, (PacketPlayInDifficultyLock packet) -> super.a(packet));
     }
 
 }
