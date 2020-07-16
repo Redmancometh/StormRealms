@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
-import org.stormrealms.nms.PlayerConnectionOverride;
+import org.stormrealms.stormspigot.PlayerConnectionOverride;
 
 import java.io.File;
 import java.net.SocketAddress;

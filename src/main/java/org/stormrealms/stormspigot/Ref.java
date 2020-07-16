@@ -1,4 +1,4 @@
-package org.stormrealms.nms;
+package org.stormrealms.stormspigot;
 
 public class Ref<T> {
     protected T value;

@@ -1,4 +1,4 @@
-package org.stormrealms.nms;
+package org.stormrealms.stormspigot;
 
 import java.util.concurrent.locks.ReentrantLock;
 

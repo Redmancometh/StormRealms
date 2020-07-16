@@ -1,4 +1,4 @@
-package org.stormrealms.nms;
+package org.stormrealms.stormspigot;
 
 import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
