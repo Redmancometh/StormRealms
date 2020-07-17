@@ -57,13 +57,17 @@ public class PacketSubscriptionManager {
 
         List<PacketSubscription<PacketHook<?>>> packetSubList = subscriptions.get(packetClass);
 
-        if(packetSubList == null) dispatchInternal.accept(packet);
+        if(packetSubList == null) {
+            dispatchInternal.accept(packet);
+            return;
+        }
 
         Ref<T> packetRef = Ref.to(packet);
         packetSubList.removeIf(PacketSubscription::isCancelled);
 
         for(PacketSubscription<PacketHook<?>> sub : packetSubList) {
             sub.fulfill(new PacketHook<>(packetRef.deref(), playerConnection, packetRef::assign));
+            if(packetRef.deref() == null) return;
         }
 
         dispatchInternal.accept(packetRef.deref());

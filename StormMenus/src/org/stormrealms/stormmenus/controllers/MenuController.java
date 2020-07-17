@@ -14,11 +14,11 @@ public class MenuController {
 	@Autowired
 	private TypedMenuListeners typedListeners;
 	@Autowired
-	private MenuListeners menuListeners;
+    private MenuListeners menuListeners;
 
 	@PostConstruct
 	public void registerMenus() {
 		Bukkit.getPluginManager().registerEvents(typedListeners, StormCore.getInstance());
-		Bukkit.getPluginManager().registerEvents(menuListeners, StormCore.getInstance());
-	}
+        Bukkit.getPluginManager().registerEvents(menuListeners, StormCore.getInstance());
+    }
 }

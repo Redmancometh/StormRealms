@@ -122,6 +122,7 @@ public abstract class PlayerList {
 
         this.a(entityplayer, (EntityPlayer) null, worldserver);
         PlayerConnection playerconnection = new PlayerConnectionOverride(this.server, networkmanager, entityplayer);
+        //PlayerConnection playerconnection = new PlayerConnection(this.server, networkmanager, entityplayer);
         GameRules gamerules = worldserver.getGameRules();
         boolean flag = gamerules.getBoolean(GameRules.DO_IMMEDIATE_RESPAWN);
         boolean flag1 = gamerules.getBoolean(GameRules.REDUCED_DEBUG_INFO);
