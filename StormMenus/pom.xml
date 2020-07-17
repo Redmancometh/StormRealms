@@ -54,15 +54,14 @@
 		</dependency>
 		<dependency>
 			<groupId>org.stormrealms</groupId>
-			<artifactId>spigot</artifactId>
-			<version>1.15</version>
-			<classifier>b372</classifier>
+			<artifactId>StormSpigot</artifactId>
+			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.6</version>
 			<scope>provided</scope>
-		</dependency>
+        </dependency>
 	</dependencies>
 </project>

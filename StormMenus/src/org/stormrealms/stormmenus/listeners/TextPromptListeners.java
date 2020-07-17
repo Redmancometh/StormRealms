@@ -27,7 +27,6 @@ public class TextPromptListeners {
                 System.out.println("Intercepting close packet.");
                 var playerConnection = hook.getPlayerConnection();
                 var uuid = playerConnection.player.getUniqueID();
-                hook.getInternalDispatchFunction().accept(null);
                 
                 if(menuManager.playerHasPromptOpen(uuid)) {
                     var textPrompt = menuManager.getPlayerTextPrompt(uuid);

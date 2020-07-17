@@ -7,6 +7,7 @@
   <groupId>org.stormrealms</groupId>
   <artifactId>StormSpigot</artifactId>
   <version>1.0</version>
+  <packaging>jar</packaging>
 
   <name>StormSpigot</name>
 
@@ -50,13 +51,45 @@
         </plugin>
 
         <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <source>1.10</source>
+                <target>1.10</target>
+            </configuration>
+        </plugin>
+
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>3.2.0</version>
+            <configuration>
+                <archive>
+                    <addMavenDescriptor>false</addMavenDescriptor>
+                    <manifestEntries>
+                        <Trusted-Library>true</Trusted-Library>
+                        <Main-Class>org.bukkit.craftbukkit.Main</Main-Class>
+                    </manifestEntries>
+                </archive>
+            </configuration>
+        </plugin>
+
+        <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
             <version>3.2.3</version>
             <configuration>
                 <includes>
                     <include>*:*</include>
+                    <exclude>org.stormrealms:spigot:</exclude>
                 </includes>
+                <archive>
+                    <outputFile>${user.home}/Desktop/Stormrealms/testserver/StormSpigot.jar</outputFile>
+                    <addMavenDescriptor>false</addMavenDescriptor>
+                    <manifestEntries>
+                        <Trusted-Library>true</Trusted-Library>
+                        <Main-Class>org.bukkit.craftbukkit.Main</Main-Class>
+                    </manifestEntries>
+                </archive>
             </configuration>
             <executions>
                 <execution>
@@ -64,6 +97,30 @@
                     <goals>
                         <goal>shade</goal>
                     </goals>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>truezip-maven-plugin</artifactId>
+            <version>1.1</version>
+            <executions>
+                <execution>
+                    <id>remove-a-file-in-sub-archive</id>
+                    <goals>
+                        <goal>remove</goal>
+                    </goals>
+                    <phase>package</phase>
+                    <configuration>
+                        <fileset>
+                            <directory>vendor/spigot-1.15.2.jar</directory>
+                            <includes>
+                                <include>net/minecraft/server/PlayerList.class</include>
+                                <include>net/minecraft/server/PlayerList$1.class</include>
+                                <include>net/minecraft/server/PlayerList$2.class</include>
+                            </includes>
+                        </fileset>
+                    </configuration>
                 </execution>
             </executions>
         </plugin>

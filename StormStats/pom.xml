@@ -62,10 +62,9 @@
 							<exclude>javax:*</exclude>
 							<exclude>org.hibernate:*</exclude>
 							<exclude>org.stormrealms:StormMenu:*</exclude>
-							<!-- exclude>org.stormrealms:spigot:*</exclude -->
 							<exclude>org.yaml:snakeyaml:*</exclude>
 							<exclude>javax.annotation:*</exclude>
-							<exclude>org.stormrealms:spigot:*</exclude>
+							<exclude>org.stormrealms:StormSpigot:*</exclude>
 							<exclude>org.stormrealms:StormMenus:*</exclude>
 						</excludes>
 					</artifactSet>
