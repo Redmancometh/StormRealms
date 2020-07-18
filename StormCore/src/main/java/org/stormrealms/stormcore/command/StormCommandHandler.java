@@ -20,7 +20,9 @@ public class StormCommandHandler implements Listener {
 		String fullCommand = event.getMessage();
 		String[] allArgs = fullCommand.split(" ");
 		String command = allArgs[0].replace("/", "");
-		String[] args = Arrays.copyOfRange(allArgs, 1, allArgs.length);
+        String[] args = Arrays.copyOfRange(allArgs, 1, allArgs.length);
+        
+        if(!commandMap.containsKey(command)) return;
 		commandMap.get(command).accept(args, player);
 	}
 

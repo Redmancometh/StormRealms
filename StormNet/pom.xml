@@ -7,6 +7,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     <groupId>org.stormrealms</groupId>
     <artifactId>StormNet</artifactId>
     <version>1.0</version>
+    <packaging>jar</packaging>
 
     <name>StormNet</name>
 
@@ -49,6 +50,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
             <groupId>org.stormrealms</groupId>
             <artifactId>StormSpigot</artifactId>
             <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
