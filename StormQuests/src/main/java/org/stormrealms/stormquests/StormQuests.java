@@ -1,9 +1,5 @@
 package org.stormrealms.stormquests;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.bukkit.event.Listener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
@@ -30,11 +26,6 @@ public class StormQuests extends StormSpringPlugin {
 		ConfigManager<SpringConfig> config = new ConfigManager("spring.json", SpringConfig.class);
 		config.init();
 		return config.getConfig();
-	}
-
-	@Override
-	public Set<Listener> listeners() {
-		return new HashSet();
 	}
 
 	@Override
