@@ -22,19 +22,12 @@ public class StormCommandHandler implements Listener {
 		String fullCommand = event.getMessage();
 		String[] allArgs = fullCommand.split(" ");
 		String command = allArgs[0].replace("/", "");
-<<<<<<< HEAD
-        String[] args = Arrays.copyOfRange(allArgs, 1, allArgs.length);
-        
-        if(!commandMap.containsKey(command)) return;
-		commandMap.get(command).accept(args, player);
-=======
 		String[] args = Arrays.copyOfRange(allArgs, 1, allArgs.length);
 		if (commandMap.containsKey(command)) {
 			commandMap.get(command).call(this, args, player);
 			event.setCancelled(true);
 		}
->>>>>>> 63dcc2ba2f6d45ebc6845551495bffe71bf8a049
-	}
+    }
 
 	public void registerCommand(String cmd, ScriptObjectMirror consumer) {
 		this.commandMap.put(cmd, consumer);

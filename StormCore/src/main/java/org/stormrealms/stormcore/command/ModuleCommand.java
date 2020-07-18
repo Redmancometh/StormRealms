@@ -15,7 +15,8 @@ import org.stormrealms.stormcore.StormCore;
 
 @Component
 public class ModuleCommand {
-    @Autowired private StormCommandHandler handler;
+    // TODO(Yevano)
+    // @Autowired private StormCommandHandler handler;
 
     private void reload(String[] args, Player sender) {
         if (args.length != 1) {
@@ -76,8 +77,9 @@ public class ModuleCommand {
         }
     }
 
+    // TODO(Yevano)
     @PostConstruct
     public void register() {
-        handler.registerCommand("sc", this::moduleCommand);
+        //handler.registerCommand("sc", this::moduleCommand);
     }
 }
