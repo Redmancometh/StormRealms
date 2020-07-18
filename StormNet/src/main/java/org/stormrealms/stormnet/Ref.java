@@ -1,4 +1,4 @@
-package org.stormrealms.stormspigot;
+package org.stormrealms.stormnet;
 
 public class Ref<T> {
     protected T value;

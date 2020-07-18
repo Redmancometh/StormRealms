@@ -1,4 +1,4 @@
-package org.stormrealms.stormspigot;
+package org.stormrealms.stormnet;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,14 +9,11 @@ import net.minecraft.server.Packet;
 import net.minecraft.server.PacketListenerPlayIn;
 import net.minecraft.server.PlayerConnection;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class PacketSubscriptionManager {
     //private static Mutex mapMutex = new Mutex();
-
-    private static final PacketSubscriptionManager instance = new PacketSubscriptionManager();
-
-    public static PacketSubscriptionManager getInstance() {
-        return instance;
-    }
 
     private Map<
         Class<? extends Packet<PacketListenerPlayIn>>,
