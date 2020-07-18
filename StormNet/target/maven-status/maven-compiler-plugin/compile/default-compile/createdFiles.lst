@@ -1,8 +1,0 @@
-org\stormrealms\stormnet\Mutex.class
-org\stormrealms\stormnet\PacketHook.class
-org\stormrealms\stormnet\StormNet.class
-org\stormrealms\stormnet\Promise.class
-org\stormrealms\stormnet\PacketSubscriptionManager.class
-org\stormrealms\stormnet\PacketSubscription.class
-org\stormrealms\stormnet\Ref.class
-org\stormrealms\stormnet\Promise$Ref.class
