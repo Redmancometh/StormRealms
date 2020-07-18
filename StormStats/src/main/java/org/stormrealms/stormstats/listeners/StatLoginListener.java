@@ -43,9 +43,9 @@ public class StatLoginListener implements Listener {
         });
         
         // TODO: JUST TESTING DOESN'T WORK YET
-        menuManager.prompt("Character Name", "Dildo Shaggins", e.getPlayer())
-            .then(chosenName -> {
-                System.out.printf("Player chose the name %s", chosenName);
-            });
+        // menuManager.prompt("Character Name", "Dildo Shaggins", e.getPlayer())
+        //     .then(chosenName -> {
+        //         System.out.printf("Player chose the name %s", chosenName);
+        //     });
 	}
 }

@@ -24,18 +24,19 @@ public class TextPromptListeners {
 
     @PostConstruct
     public void subscribeToPackets() {
-        PacketSubscriptionManager.getInstance()
-            .subscribe(PacketPlayInCloseWindow.class)
-            
-            .then(hook -> {
-                System.out.println("Intercepting close packet.");
-                var playerConnection = hook.getPlayerConnection();
-                var uuid = playerConnection.player.getUniqueID();
-                
-                if(menuManager.playerHasPromptOpen(uuid)) {
-                    var textPrompt = menuManager.getPlayerTextPrompt(uuid);
-                    playerConnection.sendPacket(new PacketPlayOutOpenWindow(1, Containers.ANVIL, new ChatMessage(textPrompt.getTitle())));
-                }
-            });
+        // TODO(Yevano)
+        // PacketSubscriptionManager.getInstance()
+        //     .subscribe(PacketPlayInCloseWindow.class)
+        //     
+        //     .then(hook -> {
+        //         System.out.println("Intercepting close packet.");
+        //         var playerConnection = hook.getPlayerConnection();
+        //         var uuid = playerConnection.player.getUniqueID();
+        //         
+        //         if(menuManager.playerHasPromptOpen(uuid)) {
+        //             var textPrompt = menuManager.getPlayerTextPrompt(uuid);
+        //             playerConnection.sendPacket(new PacketPlayOutOpenWindow(1, Containers.ANVIL, new ChatMessage(textPrompt.getTitle())));
+        //         }
+        //     });
     }
 }
