@@ -5,7 +5,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.StormSpringPlugin;
-import org.stormrealms.stormcore.config.pojo.SpringConfig;
 import org.stormrealms.stormloot.configuration.StormLootContext;
 
 @Component
@@ -25,11 +24,6 @@ public class StormLoot extends StormSpringPlugin {
 	@Override
 	public ConfigurableApplicationContext getContext() {
 		return super.context;
-	}
-
-	@Override
-	public SpringConfig getSpringConfig() {
-		return null;
 	}
 
 	@Override

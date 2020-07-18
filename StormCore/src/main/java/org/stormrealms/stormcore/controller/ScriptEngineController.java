@@ -31,14 +31,17 @@ import javax.script.ScriptException;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Controller;
 import org.stormrealms.stormcore.StormCore;
+import org.stormrealms.stormcore.command.StormCommandHandler;
 import org.stormrealms.stormcore.config.DirectoryWatcher;
 import org.stormrealms.stormcore.util.ExportSystem;
 import org.stormrealms.stormcore.util.QuadFunction;
 import org.stormrealms.stormcore.util.TriFunction;
+
+import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 @Controller
 /**
@@ -49,14 +52,15 @@ import org.stormrealms.stormcore.util.TriFunction;
  *
  */
 @Order(1)
+@SuppressWarnings("removal")
 public class ScriptEngineController {
 	private ScheduledExecutorService scriptScheduler = Executors.newScheduledThreadPool(4);
 	private ScheduledExecutorService asyncPool = Executors.newScheduledThreadPool(8);
-	ScriptEngine graal = new ScriptEngineManager().getEngineByName("ecmascript");
-	@Autowired
-	protected ApplicationContext context;
+	ScriptEngine graal;
 	@Autowired
 	private AutowireCapableBeanFactory factory;
+	@Autowired
+	private StormCommandHandler cmdHandler;
 	private Consumer<File> onChange = (file) -> {
 		try {
 			System.out.println("FILE CHANGED: " + file);
@@ -72,8 +76,8 @@ public class ScriptEngineController {
 
 	private QuadFunction<Runnable, Integer, Integer, TimeUnit, ScheduledFuture> timer = (runnable, initialDelay,
 			repeatDelay, units) -> {
-		return scriptScheduler.scheduleAtFixedRate(runnable, initialDelay, repeatDelay, units);
-	};
+				return scriptScheduler.scheduleAtFixedRate(runnable, initialDelay, repeatDelay, units);
+			};
 
 	private Function<String, Class> type = (name) -> {
 		try {
@@ -82,6 +86,10 @@ public class ScriptEngineController {
 			e.printStackTrace();
 		}
 		return null;
+	};
+
+	private BiConsumer<String, ScriptObjectMirror> registerCmd = (label, consumer) -> {
+		cmdHandler.registerCommand(label, consumer);
 	};
 
 	private DirectoryWatcher dirWatcher = new DirectoryWatcher(onChange, "scripts", "js");
@@ -93,8 +101,10 @@ public class ScriptEngineController {
 
 	@PostConstruct
 	public void addGlobals() {
-		Thread.currentThread().setContextClassLoader(StormCore.getInstance().getPLClassLoader());
-		graal.put("StormCore", StormCore.getInstance());
+		Thread.currentThread()
+				.setContextClassLoader(StormCore.getInstance().getPLClassLoader().getParent().getParent());
+		graal = new NashornScriptEngineFactory().getScriptEngine("--language=es6");
+		graal.put("StormCore", (Supplier<StormCore>) () -> StormCore.getInstance());
 		System.out.println("GRAAL NULL? " + (graal == null));
 		graal.put("type", type);
 		graal.put("HashMap", HashMap.class);
@@ -110,8 +120,8 @@ public class ScriptEngineController {
 		graal.put("dateFormat", new SimpleDateFormat("MM/dd/yy"));
 		graal.put("beans", factory);
 		graal.put("TimeUnit", TimeUnit.class);
-		graal.put("wireByClass", (Function<Class, Object>) context::getBean);
-		graal.put("wireByName", (Function<String, Object>) context::getBean);
+		graal.put("wireByClass", (Function<Class, Object>) factory::getBean);
+		graal.put("wireByName", (Function<String, Object>) factory::getBean);
 		graal.put("log", (Consumer<Object>) this::logInfo);
 		graal.put("error", (Consumer<Object>) this::logError);
 		graal.put("error", (BiConsumer<Object, Throwable>) this::logError);
@@ -119,10 +129,14 @@ public class ScriptEngineController {
 		graal.put("map", (Supplier<Map>) this::map);
 		graal.put("runTimer", timer);
 		graal.put("schedule", schedule);
-		graal.put("context", context);
 		graal.put("exports", exports);
+		graal.put("registerCommand", registerCmd);
 		addListenerPoints();
 		dirWatcher.start();
+	}
+
+	public void registerCommand(String command, ScriptObjectMirror action) {
+		cmdHandler.registerCommand(command, action);
 	}
 
 	public void addListenerPoints() {
@@ -156,8 +170,8 @@ public class ScriptEngineController {
 	 * @param scriptName
 	 * @return
 	 */
-	@SuppressWarnings("deprecation")
 	public String runScript(String scriptName, Map args) {
+		Thread.currentThread().setContextClassLoader(StormCore.getInstance().getPLClassLoader());
 		// Don't use absolute paths so we prevent any kind of RFI attacks
 		File scriptDir = new File("scripts" + File.separator + scriptName);
 		System.out.println("Script dir: " + scriptDir + " exists: " + scriptDir.exists());
