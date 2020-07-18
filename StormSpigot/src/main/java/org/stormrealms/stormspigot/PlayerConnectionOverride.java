@@ -3,8 +3,6 @@ package org.stormrealms.stormspigot;
 import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.NetworkManager;
-import net.minecraft.server.Packet;
-import net.minecraft.server.PacketListenerPlayIn;
 import net.minecraft.server.PlayerConnection;
 
 import net.minecraft.server.PacketPlayInSteerVehicle;
