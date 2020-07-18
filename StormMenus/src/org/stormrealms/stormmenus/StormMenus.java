@@ -1,8 +1,5 @@
 package org.stormrealms.stormmenus;
 
-import java.util.HashSet;
-import java.util.Set;
-import org.bukkit.event.Listener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
@@ -15,12 +12,6 @@ public class StormMenus extends StormSpringPlugin {
 	@Override
 	public void enable() {
 		super.enable();
-	}
-
-	@Override
-	public Set<Listener> listeners() {
-		Set<Listener> listeners = new HashSet();
-		return listeners;
 	}
 
 	@Override
