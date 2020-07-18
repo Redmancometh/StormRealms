@@ -1,8 +1,8 @@
-/target/
-/bin/
-/target/
-/bin/
-/.settings/
+target/
+bin/
+target/
+bin/
+.settings/
 dependency-reduced-pom.xml
 .classpath
 .project
