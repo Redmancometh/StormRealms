@@ -21,12 +21,12 @@ public class ModuleCommand {
         if (args.length != 1) {
             sender.sendMessage(ChatColor.RED + "/sc reload <module>");
         } else {
-            String moduleName = args[1];
+            String moduleName = args[0];
 
             var plugins = StormCore.getInstance().getPluginManager();
 
             Stream.<RedPlugin>generate(plugins.iterator()::next)
-                .filter(elem -> elem.getName().equalsIgnoreCase(elem.getClass().getName()))
+                .filter(elem -> moduleName.equalsIgnoreCase(elem.getClass().getName()))
                 .findFirst()
 
                 .ifPresentOrElse(module -> {

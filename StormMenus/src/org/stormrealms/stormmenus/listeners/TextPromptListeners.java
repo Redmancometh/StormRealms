@@ -1,13 +1,10 @@
 package org.stormrealms.stormmenus.listeners;
 
-import java.util.UUID;
-
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormmenus.MenuManager;
-import org.stormrealms.stormmenus.menus.TextPrompt;
 import org.stormrealms.stormnet.PacketSubscriptionManager;
 
 import lombok.var;
