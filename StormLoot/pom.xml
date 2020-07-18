@@ -10,10 +10,10 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
+				<version>3.8.1</version>
 				<configuration>
-					<maven.compiler.source>1.10</maven.compiler.source>
-					<maven.compiler.target>1.10</maven.compiler.target>
+					<source>1.10</source>
+					<target>1.10</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.14.8</version>
+			<version>1.18.12</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
