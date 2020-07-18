@@ -25,10 +25,14 @@ import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.apache.commons.io.FileUtils;
+import org.bukkit.event.Event;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.core.annotation.Order;
@@ -61,9 +65,11 @@ public class ScriptEngineController {
 	private AutowireCapableBeanFactory factory;
 	@Autowired
 	private StormCommandHandler cmdHandler;
+	@Autowired
+	private ListenerController listeners;
 	private Consumer<File> onChange = (file) -> {
 		try {
-			System.out.println("FILE CHANGED: " + file);
+			System.out.println("FILE CHANGED: " + file + " TEST TEST ");
 			runScript(file.getName(), new HashMap());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -92,6 +98,10 @@ public class ScriptEngineController {
 		cmdHandler.registerCommand(label, consumer);
 	};
 
+	private BiConsumer<Class, Consumer<Event>> registerListener = (clazz, callback) -> {
+		listeners.registerEvent(clazz, callback);
+	};
+
 	private DirectoryWatcher dirWatcher = new DirectoryWatcher(onChange, "scripts", "js");
 	private ExportSystem exports = new ExportSystem();
 
@@ -101,11 +111,15 @@ public class ScriptEngineController {
 
 	@PostConstruct
 	public void addGlobals() {
-		Thread.currentThread()
-				.setContextClassLoader(StormCore.getInstance().getPLClassLoader().getParent().getParent());
+		Thread.currentThread().setContextClassLoader(StormCore.getInstance().getPLClassLoader());
 		graal = new NashornScriptEngineFactory().getScriptEngine("--language=es6");
 		graal.put("StormCore", (Supplier<StormCore>) () -> StormCore.getInstance());
-		System.out.println("GRAAL NULL? " + (graal == null));
+		graal.put("InventoryCloseEvent", InventoryCloseEvent.class);
+		graal.put("InventoryOpenEvent", InventoryOpenEvent.class);
+		graal.put("InventoryInteractEvent", InventoryCloseEvent.class);
+		graal.put("InventoryCloseEvent", PlayerMoveEvent.class);
+		graal.put("PlayerCommandPreProcessEvent", PlayerCommandPreprocessEvent.class);
+		
 		graal.put("type", type);
 		graal.put("HashMap", HashMap.class);
 		graal.put("HashSet", HashSet.class);
@@ -131,12 +145,17 @@ public class ScriptEngineController {
 		graal.put("schedule", schedule);
 		graal.put("exports", exports);
 		graal.put("registerCommand", registerCmd);
+		graal.put("registerEvent", registerListener);
 		addListenerPoints();
 		dirWatcher.start();
 	}
 
 	public void registerCommand(String command, ScriptObjectMirror action) {
 		cmdHandler.registerCommand(command, action);
+	}
+
+	public void registerEvent(Class<? extends Event> eventClass, Consumer<Event> action) {
+		listeners.registerEvent(eventClass, action);
 	}
 
 	public void addListenerPoints() {

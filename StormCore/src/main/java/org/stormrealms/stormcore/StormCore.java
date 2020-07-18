@@ -70,6 +70,7 @@ public class StormCore extends JavaPlugin {
 		this.context.refresh();
 		Bukkit.getPluginManager().registerEvents(context.getBean(StormCommandHandler.class), this);
 		Logger.getLogger(StormCoreContextConfiguration.class.getName()).info("StormCore has started!");
+
 	}
 
 	@Override
