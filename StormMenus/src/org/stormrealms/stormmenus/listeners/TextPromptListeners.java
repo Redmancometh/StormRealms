@@ -30,7 +30,7 @@ public class TextPromptListeners {
                 
                 if(menuManager.playerHasPromptOpen(uuid)) {
                     var textPrompt = menuManager.getPlayerTextPrompt(uuid);
-                    playerConnection.sendPacket(new PacketPlayOutOpenWindow(12, Containers.ANVIL, new ChatMessage(textPrompt.getTitle())));
+                    playerConnection.sendPacket(new PacketPlayOutOpenWindow(1, Containers.ANVIL, new ChatMessage(textPrompt.getTitle())));
                 }
             });
     }

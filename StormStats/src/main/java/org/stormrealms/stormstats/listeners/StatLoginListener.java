@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.stormrealms.stormmenus.MenuManager;
 import org.stormrealms.stormmenus.menus.TextPrompt;
 import org.stormrealms.stormstats.data.StatRepo;
 import org.stormrealms.stormstats.model.RPGCharacter;
@@ -24,7 +25,9 @@ public class StatLoginListener implements Listener {
 	@Qualifier("needs-character")
 	private List<UUID> characterless;
 	@Autowired
-	private StatRepo repo;
+    private StatRepo repo;
+    
+    @Autowired private MenuManager menuManager;
 
 	@EventHandler
 	public void onChat(PlayerJoinEvent e) {
@@ -40,7 +43,7 @@ public class StatLoginListener implements Listener {
         });
         
         // TODO: JUST TESTING DOESN'T WORK YET
-        TextPrompt.show("Character Name", "Dildo Shaggins", e.getPlayer())
+        menuManager.prompt("Character Name", "Dildo Shaggins", e.getPlayer())
             .then(chosenName -> {
                 System.out.printf("Player chose the name %s", chosenName);
             });
