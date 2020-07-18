@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import redis.clients.jedis.Jedis;
 
-public class JedisObjectManager<K extends Serializable, T extends Syncable> extends XComManager<K, T> {
+public class JedisObjectManager<K extends Serializable, T extends Syncable<K>> extends XComManager<K, T> {
 
 	/**
 	 * Renamed to this long as shit, so I don't have to keep confusing jedis. and

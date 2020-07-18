@@ -29,9 +29,12 @@ import javax.script.ScriptException;
 
 import org.apache.commons.io.FileUtils;
 import org.bukkit.event.Event;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -98,7 +101,7 @@ public class ScriptEngineController {
 		cmdHandler.registerCommand(label, consumer);
 	};
 
-	private BiConsumer<Class, Consumer<Event>> registerListener = (clazz, callback) -> {
+	private BiConsumer<Class, ScriptObjectMirror> registerListener = (clazz, callback) -> {
 		listeners.registerEvent(clazz, callback);
 	};
 
@@ -119,7 +122,10 @@ public class ScriptEngineController {
 		graal.put("InventoryInteractEvent", InventoryCloseEvent.class);
 		graal.put("InventoryCloseEvent", PlayerMoveEvent.class);
 		graal.put("PlayerCommandPreProcessEvent", PlayerCommandPreprocessEvent.class);
-		
+		graal.put("PlayerInteractEvent", PlayerInteractEvent.class);
+		graal.put("PlayerInteractEntityEvent", PlayerInteractEntityEvent.class);
+		graal.put("BlockBreakEvent", BlockBreakEvent.class);
+
 		graal.put("type", type);
 		graal.put("HashMap", HashMap.class);
 		graal.put("HashSet", HashSet.class);
@@ -154,7 +160,7 @@ public class ScriptEngineController {
 		cmdHandler.registerCommand(command, action);
 	}
 
-	public void registerEvent(Class<? extends Event> eventClass, Consumer<Event> action) {
+	public void registerEvent(Class<? extends Event> eventClass, ScriptObjectMirror action) {
 		listeners.registerEvent(eventClass, action);
 	}
 
