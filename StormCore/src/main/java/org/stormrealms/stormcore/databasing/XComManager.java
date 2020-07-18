@@ -8,8 +8,8 @@ import java.lang.reflect.Modifier;
 
 import org.stormrealms.stormcore.util.SpecialFuture;
 
-public abstract class XComManager<K extends Serializable, T extends Syncable<T>> extends ObjectManager<K, T> {
-    
+public abstract class XComManager<K extends Serializable, T extends Syncable<K>> extends ObjectManager<K, T> {
+
 	protected String key;
 	public Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED)
 			.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES).create();

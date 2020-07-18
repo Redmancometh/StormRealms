@@ -8,7 +8,7 @@ import org.stormrealms.stormcore.StormCore;
 import org.stormrealms.stormcore.exceptions.ObjectNotPresentException;
 import org.stormrealms.stormcore.util.SpecialFuture;
 
-public class ObjectManager<K extends Serializable, T extends Defaultable<?>> implements BaseObjectManager<K, T> {
+public class ObjectManager<K extends Serializable, T extends Defaultable<K>> implements BaseObjectManager<K, T> {
 	private final Class<T> type;
 
 	public ObjectManager(Class<T> type) {
