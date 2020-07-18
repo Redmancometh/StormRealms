@@ -1,29 +1,20 @@
 package org.stormrealms.stormmenus.menus;
 
-import javax.annotation.Nullable;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormmenus.MenuManager;
-import org.stormrealms.stormmenus.StormMenus;
 import org.stormrealms.stormspigot.Promise;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.var;
 import net.minecraft.server.ChatMessage;
 import net.minecraft.server.Containers;
-import net.minecraft.server.PacketPlayOutCloseWindow;
 import net.minecraft.server.PacketPlayOutOpenWindow;
 
 @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
