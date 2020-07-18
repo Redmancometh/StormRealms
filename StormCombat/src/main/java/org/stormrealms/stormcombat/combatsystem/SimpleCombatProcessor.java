@@ -46,6 +46,7 @@ public class SimpleCombatProcessor implements CombatProcessor {
 
 	@Override
 	public void dodged(WeaponAttackEvent e) {
+
 		System.out.println("DODGED");
 	}
 
