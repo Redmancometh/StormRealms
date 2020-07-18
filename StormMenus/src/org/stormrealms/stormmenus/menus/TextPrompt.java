@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormmenus.MenuManager;
-import org.stormrealms.stormspigot.Promise;
+import org.stormrealms.stormnet.Promise;
 
 import com.sun.istack.NotNull;
 
