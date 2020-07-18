@@ -1,4 +1,0 @@
-name: StormMenus
-main: org.stormrealms.stormmenus.Menus
-version: 1.0
-depend: [RedCore, StormCore]
