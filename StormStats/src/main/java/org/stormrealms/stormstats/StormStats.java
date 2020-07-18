@@ -30,12 +30,6 @@ public class StormStats extends StormSpringPlugin implements DBRedPlugin {
 	}
 
 	@Override
-	public void disable() {
-		super.disable();
-
-	}
-
-	@Override
 	public Class<?> getConfigurationClass() {
 		return StormStatConfiguration.class;
 
@@ -57,12 +51,6 @@ public class StormStats extends StormSpringPlugin implements DBRedPlugin {
 	public SpringConfig getSpringConfig() {
 		cfgMon.init();
 		return cfgMon.getConfig();
-	}
-
-	@Override
-	public Set<Listener> listeners() {
-		Set<Listener> listeners = new HashSet();
-		return listeners;
 	}
 
 	@Override
