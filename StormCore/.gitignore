@@ -1,8 +1,8 @@
 /target/
-.settings
-/src/main/resources/config.json
-dependency-reduced-pom.xml
 /bin/
-\bin\
-bin/
-bin/*
+/target/
+/bin/
+/.settings/
+dependency-reduced-pom.xml
+.classpath
+.project
