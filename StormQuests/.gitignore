@@ -1,6 +1,3 @@
-target/
-bin/
-target/
 bin/
 .settings/
 dependency-reduced-pom.xml
