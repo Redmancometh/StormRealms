@@ -10,9 +10,10 @@ import net.minecraft.server.PacketListenerPlayIn;
 import net.minecraft.server.PlayerConnection;
 
 import org.springframework.stereotype.Component;
+import org.stormrealms.stormspigot.PacketDispatcher;
 
 @Component
-public class PacketSubscriptionManager {
+public class PacketSubscriptionManager implements PacketDispatcher {
     //private static Mutex mapMutex = new Mutex();
 
     private Map<
@@ -46,6 +47,7 @@ public class PacketSubscriptionManager {
      * @param dispatchInternal  A function that calls to the internal packet listener.
      * @param player            The player that sent the packet.
      */
+    @Override
     public <T extends Packet<PacketListenerPlayIn>> void dispatchPacket(T packet, PlayerConnection playerConnection, Consumer<T> dispatchInternal) {
         @SuppressWarnings("unchecked")
         Class<T> packetClass = (Class<T>) packet.getClass();

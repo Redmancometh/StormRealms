@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import org.stormrealms.stormmenus.absraction.Menu;
 import org.stormrealms.stormmenus.absraction.TypedMenu;
 import org.stormrealms.stormmenus.menus.TextPrompt;
-import org.stormrealms.stormspigot.Promise;
+import org.stormrealms.stormnet.Promise;
 
 import lombok.var;
 

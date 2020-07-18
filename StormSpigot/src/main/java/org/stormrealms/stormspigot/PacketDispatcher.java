@@ -7,8 +7,5 @@ import net.minecraft.server.PacketListenerPlayIn;
 import net.minecraft.server.PlayerConnection;
 
 public interface PacketDispatcher {
-    public void dispatchPacket(
-        Packet<PacketListenerPlayIn> packet,
-        PlayerConnection playerConnection,
-        Consumer<? extends Packet<PacketListenerPlayIn>> internalDispatchFunction);
+    public <T extends Packet<PacketListenerPlayIn>> void dispatchPacket(T packet, PlayerConnection playerConnection, Consumer<T> dispatchInternal);
 }
