@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import org.stormrealms.stormmenus.MenuManager;
 import org.stormrealms.stormnet.PacketSubscriptionManager;
 
-import lombok.var;
 import net.minecraft.server.Containers;
 import net.minecraft.server.PacketPlayInCloseWindow;
 import net.minecraft.server.PacketPlayOutOpenWindow;
