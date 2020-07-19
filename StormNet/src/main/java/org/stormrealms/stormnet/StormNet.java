@@ -1,5 +1,7 @@
 package org.stormrealms.stormnet;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -12,7 +14,7 @@ import org.stormrealms.stormspigot.PlayerConnectionOverride;
 public class StormNet extends StormSpringPlugin {
     @Autowired private PacketSubscriptionManager packetSubscriptionManager;
 
-    @Override
+    @PostConstruct
     public void enable() {
         System.out.println("Enabling StormNet");
         super.enable();

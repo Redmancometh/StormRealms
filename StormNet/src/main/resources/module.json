@@ -1,5 +1,5 @@
 {
 	"name": "StormNet",
 	"main": "org.stormrealms.stormnet.StormNet",
-	"load-order": 0
+	"load-order": 1
 }
