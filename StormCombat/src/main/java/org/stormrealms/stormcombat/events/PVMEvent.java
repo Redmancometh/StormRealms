@@ -4,7 +4,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.stormrealms.stormstats.model.RPGPlayer;
+import org.stormrealms.stormstats.model.RPGCharacter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -26,7 +26,7 @@ public class PVMEvent extends Event {
 	}
 
 	@NonNull
-	private final RPGPlayer attacker;
+	private final RPGCharacter attacker;
 	@NonNull
 	private final Player bukkitAttacker;
 	@NonNull

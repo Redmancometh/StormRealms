@@ -1,10 +1,12 @@
 package org.stormrealms.stormcombat.combatsystem;
 
+import org.bukkit.entity.Player;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormcombat.events.WeaponAttackEvent;
+import org.stormrealms.stormstats.model.RPGCharacter;
 
 @Component
-public class SimpleCombatCalculator implements CombatCalculator {
+public class SimpleCombatCalculator extends CombatCalculator {
 
 	@Override
 	public int calculateMeleeDamage(WeaponAttackEvent e) {
@@ -29,6 +31,11 @@ public class SimpleCombatCalculator implements CombatCalculator {
 	@Override
 	public boolean isMiss(WeaponAttackEvent e) {
 		return false;
+	}
+
+	@Override
+	public double getMeleeAttackPower(RPGCharacter player, Player p) {
+		return 0;
 	}
 
 }

@@ -16,9 +16,12 @@ import org.stormrealms.stormcombat.combatsystem.CombatProcessor;
 import org.stormrealms.stormcombat.events.PVMEvent;
 import org.stormrealms.stormcombat.events.PVPEvent;
 import org.stormrealms.stormcombat.events.WeaponAttackEvent;
+import org.stormrealms.stormcombat.util.CombatUtil;
 
 @Component
 public class CombatListeners implements Listener {
+	@Autowired
+	private CombatUtil util;
 	@Autowired
 	private CombatProcessor cProc;
 	@Autowired
@@ -35,7 +38,7 @@ public class CombatListeners implements Listener {
 			}
 			Player dPlayer = (Player) damager;
 			Bukkit.getPluginManager()
-					.callEvent(new PVMEvent(cProc.getRPGPlayer(dPlayer), dPlayer, (LivingEntity) damager));
+					.callEvent(new PVMEvent(util.getRPGCharacter(dPlayer), dPlayer, (LivingEntity) damager));
 		}
 	}
 
@@ -43,15 +46,15 @@ public class CombatListeners implements Listener {
 	public void checkPVM(PVMEvent e) {
 		Player bAttacker = e.getBukkitAttacker();
 		ItemStack mainHand = bAttacker.getInventory().getItemInMainHand();
-		if (mainHand != null && mainHand.hasItemMeta() && cProc.isRPGWeapon(mainHand))
-			Bukkit.getPluginManager()
-					.callEvent(new WeaponAttackEvent(cProc.getRPGWeapon(mainHand), e.getAttacker(), bAttacker));
+		if (mainHand != null && mainHand.hasItemMeta() && util.isRPGGear(mainHand))
+			Bukkit.getPluginManager().callEvent(new WeaponAttackEvent(util.getRPGGearData(mainHand), e.getAttacker(),
+					bAttacker, cCalc.getOverallBonuses(bAttacker)));
 		if (e.isDamagedKilled())
 			return;
 		ItemStack offHand = bAttacker.getInventory().getItemInOffHand();
-		if (offHand != null && offHand.hasItemMeta() && cProc.isRPGWeapon(offHand))
-			Bukkit.getPluginManager()
-					.callEvent(new WeaponAttackEvent(cProc.getRPGWeapon(offHand), e.getAttacker(), bAttacker));
+		if (offHand != null && offHand.hasItemMeta() && util.isRPGGear(offHand))
+			Bukkit.getPluginManager().callEvent(new WeaponAttackEvent(util.getRPGGearData(offHand), e.getAttacker(),
+					bAttacker, cCalc.getOverallBonuses(bAttacker)));
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)

@@ -1,8 +1,5 @@
 package org.stormrealms.stormcombat;
 
-import java.util.HashSet;
-import java.util.Set;
-import org.bukkit.event.Listener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.stormrealms.stormcombat.configuration.StormCombatConfiguration;
@@ -24,11 +21,6 @@ public class StormCombat extends StormSpringPlugin {
 	@Override
 	public SpringConfig getSpringConfig() {
 		return null;
-	}
-
-	@Override
-	public Set<Listener> listeners() {
-		return new HashSet();
 	}
 
 	@Override

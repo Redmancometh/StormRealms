@@ -1,7 +1,10 @@
 package org.stormrealms.stormstats.model;
 
+import java.util.Map;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,6 +16,7 @@ import javax.persistence.Table;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.stormrealms.stormcore.outfacing.RPGStat;
 
 import lombok.Data;
 
@@ -53,15 +57,8 @@ public class RPGCharacter {
 	@Column
 	private int level;
 	@Column
-	private int str;
-	@Column
-	private int sta;
-	@Column
-	private int intel;
-	@Column
-	private int spi;
-	@Column
-	private int agi;
+	@ElementCollection
+	private Map<RPGStat, Integer> stats;
 
 	public boolean isCharacterComplete() {
 		// System.out.println("RACE IS NULL: " + (this.getRace() == null));
@@ -79,10 +76,6 @@ public class RPGCharacter {
 
 	public void setDefaults() {
 		this.level = 1;
-		this.str = 1;
-		this.intel = 1;
-		this.spi = 1;
-		this.agi = 1;
 		this.experience = 0;
 		this.health = 0;
 	}

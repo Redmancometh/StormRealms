@@ -1,10 +1,13 @@
 package org.stormrealms.stormcombat.events;
 
+import java.util.Map;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.stormrealms.stormcore.outfacing.RPGGearData;
-import org.stormrealms.stormstats.model.RPGPlayer;
+import org.stormrealms.stormcore.outfacing.RPGStat;
+import org.stormrealms.stormstats.model.RPGCharacter;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,9 +22,11 @@ public class WeaponAttackEvent extends Event {
 	@NonNull
 	private final RPGGearData weapon;
 	@NonNull
-	private final RPGPlayer player;
+	private final RPGCharacter player;
 	@NonNull
 	private final Player bukkitPlayer;
+	@NonNull
+	private Map<RPGStat, Integer> totalBonuses;
 	private int damage;
 	private boolean crushingBlow = false, isMiss = false, isDodged = false, glancingBlow = false, killingBlow = false;
 

@@ -2,10 +2,7 @@ package org.stormrealms.stormstats;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import org.bukkit.event.Listener;
 import org.hibernate.SessionFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -23,7 +20,7 @@ import org.stormrealms.stormstats.model.RPGPlayer;
 public class StormStats extends StormSpringPlugin implements DBRedPlugin {
 	private ConfigManager<SpringConfig> cfgMon = new ConfigManager<SpringConfig>("spring.json", SpringConfig.class);
 	private SessionFactory factory;
-	
+
 	@Override
 	public void initialize() {
 		DBRedPlugin.super.initialize();
