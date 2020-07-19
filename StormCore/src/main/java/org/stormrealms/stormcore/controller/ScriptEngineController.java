@@ -36,6 +36,8 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.HostAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.core.annotation.Order;
@@ -47,7 +49,8 @@ import org.stormrealms.stormcore.util.ExportSystem;
 import org.stormrealms.stormcore.util.QuadFunction;
 import org.stormrealms.stormcore.util.TriFunction;
 
-import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
+import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
+
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 @Controller
@@ -100,7 +103,7 @@ public class ScriptEngineController {
 		cmdHandler.registerCommand(label, consumer);
 	};
 
-	private BiConsumer<Class, ScriptObjectMirror> registerListener = (clazz, callback) -> {
+	private BiConsumer<Class, Consumer<Event>> registerListener = (clazz, callback) -> {
 		listeners.registerEvent(clazz, callback);
 	};
 
@@ -114,7 +117,10 @@ public class ScriptEngineController {
 	@PostConstruct
 	public void addGlobals() {
 		Thread.currentThread().setContextClassLoader(StormCore.getInstance().getPLClassLoader());
-		graal = new NashornScriptEngineFactory().getScriptEngine("--language=es6");
+		this.graal = GraalJSScriptEngine.create(null,
+				Context.newBuilder("js").allowHostAccess(HostAccess.ALL).allowHostClassLookup(s -> true)
+						.allowAllAccess(true).allowNativeAccess(true).option("js.ecmascript-version", "2020"));
+		System.out.println("NULL GRAAL: " + (graal == null));
 		graal.put("StormCore", (Supplier<StormCore>) () -> StormCore.getInstance());
 		graal.put("InventoryCloseEvent", InventoryCloseEvent.class);
 		graal.put("InventoryOpenEvent", InventoryOpenEvent.class);
@@ -124,7 +130,6 @@ public class ScriptEngineController {
 		graal.put("PlayerInteractEvent", PlayerInteractEvent.class);
 		graal.put("PlayerInteractEntityEvent", PlayerInteractEntityEvent.class);
 		graal.put("BlockBreakEvent", BlockBreakEvent.class);
-
 		graal.put("type", type);
 		graal.put("HashMap", HashMap.class);
 		graal.put("HashSet", HashSet.class);
@@ -159,7 +164,7 @@ public class ScriptEngineController {
 		cmdHandler.registerCommand(command, action);
 	}
 
-	public void registerEvent(Class<? extends Event> eventClass, Consumer action) {
+	public void registerEvent(Class<? extends Event> eventClass, Consumer<Event> action) {
 		listeners.registerEvent(eventClass, action);
 	}
 

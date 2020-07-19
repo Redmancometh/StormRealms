@@ -16,6 +16,9 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptEngineManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.SessionFactory;
@@ -53,6 +56,17 @@ public class StormCore extends JavaPlugin {
 	};
 
 	public void onEnable() {
+		ScriptEngineManager manager = new ScriptEngineManager();
+		List<ScriptEngineFactory> factories = manager.getEngineFactories();
+		for (ScriptEngineFactory factory : factories) {
+			System.out.println(factory.getEngineName());
+			System.out.println(factory.getEngineVersion());
+			System.out.println(factory.getLanguageName());
+			System.out.println(factory.getLanguageVersion());
+			System.out.println(factory.getExtensions());
+			System.out.println(factory.getMimeTypes());
+			System.out.println(factory.getNames());
+		}
 		setPluginManager(new RedPlugins());
 		setMasterDB(new MasterDatabase());
 		instance = this;

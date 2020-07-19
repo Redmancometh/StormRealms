@@ -38,14 +38,14 @@ import com.google.common.collect.Multimap;
 @Controller
 public class ListenerController implements Listener {
 
-	private Multimap<Class, Consumer> events = HashMultimap.create();
+	private Multimap<Class, Consumer<Event>> events = HashMultimap.create();
 
 	@PostConstruct
 	public void register() {
 		Bukkit.getPluginManager().registerEvents(this, StormCore.getInstance());
 	}
 
-	public void registerEvent(Class<? extends Event> eventClass, Consumer action) {
+	public void registerEvent(Class<? extends Event> eventClass, Consumer<Event> action) {
 		events.put(eventClass, action);
 	}
 

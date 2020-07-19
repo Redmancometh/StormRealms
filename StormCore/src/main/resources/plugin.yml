@@ -3,6 +3,7 @@ main: org.stormrealms.stormcore.StormCore
 version: 1.0
 description: "Core plugin"
 api-version: 1.13
+depends: [HolographicDisplays, ProtocolLib]
 commands:
   sc:
     description: sc.
