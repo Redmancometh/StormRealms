@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 @Component
-@SuppressWarnings("removal")
 public class StormCommandHandler implements Listener {
 	private HashMap<String, ScriptObjectMirror> commandMap = new HashMap<>();
 
@@ -27,7 +26,7 @@ public class StormCommandHandler implements Listener {
 			commandMap.get(command).call(this, args, player);
 			event.setCancelled(true);
 		}
-    }
+	}
 
 	public void registerCommand(String cmd, ScriptObjectMirror consumer) {
 		this.commandMap.put(cmd, consumer);

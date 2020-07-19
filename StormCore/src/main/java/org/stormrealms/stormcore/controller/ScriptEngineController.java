@@ -59,7 +59,6 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror;
  *
  */
 @Order(1)
-@SuppressWarnings("removal")
 public class ScriptEngineController {
 	private ScheduledExecutorService scriptScheduler = Executors.newScheduledThreadPool(4);
 	private ScheduledExecutorService asyncPool = Executors.newScheduledThreadPool(8);
@@ -160,7 +159,7 @@ public class ScriptEngineController {
 		cmdHandler.registerCommand(command, action);
 	}
 
-	public void registerEvent(Class<? extends Event> eventClass, ScriptObjectMirror action) {
+	public void registerEvent(Class<? extends Event> eventClass, Consumer action) {
 		listeners.registerEvent(eventClass, action);
 	}
 
