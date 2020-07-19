@@ -22,11 +22,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
-
 import javax.annotation.PostConstruct;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
-
 import org.apache.commons.io.FileUtils;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -36,8 +34,6 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.graalvm.polyglot.Context;
-import org.graalvm.polyglot.HostAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.core.annotation.Order;
@@ -48,9 +44,7 @@ import org.stormrealms.stormcore.config.DirectoryWatcher;
 import org.stormrealms.stormcore.util.ExportSystem;
 import org.stormrealms.stormcore.util.QuadFunction;
 import org.stormrealms.stormcore.util.TriFunction;
-
-import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
-
+import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 @Controller
@@ -103,7 +97,7 @@ public class ScriptEngineController {
 		cmdHandler.registerCommand(label, consumer);
 	};
 
-	private BiConsumer<Class, Consumer<Event>> registerListener = (clazz, callback) -> {
+	private BiConsumer<Class, ScriptObjectMirror> registerListener = (clazz, callback) -> {
 		listeners.registerEvent(clazz, callback);
 	};
 
@@ -117,9 +111,7 @@ public class ScriptEngineController {
 	@PostConstruct
 	public void addGlobals() {
 		Thread.currentThread().setContextClassLoader(StormCore.getInstance().getPLClassLoader());
-		this.graal = GraalJSScriptEngine.create(null,
-				Context.newBuilder("js").allowHostAccess(HostAccess.ALL).allowHostClassLookup(s -> true)
-						.allowAllAccess(true).allowNativeAccess(true).option("js.ecmascript-version", "2020"));
+		this.graal = new NashornScriptEngineFactory().getScriptEngine("--language=es6");
 		System.out.println("NULL GRAAL: " + (graal == null));
 		graal.put("StormCore", (Supplier<StormCore>) () -> StormCore.getInstance());
 		graal.put("InventoryCloseEvent", InventoryCloseEvent.class);
@@ -164,7 +156,7 @@ public class ScriptEngineController {
 		cmdHandler.registerCommand(command, action);
 	}
 
-	public void registerEvent(Class<? extends Event> eventClass, Consumer<Event> action) {
+	public void registerEvent(Class<? extends Event> eventClass, ScriptObjectMirror action) {
 		listeners.registerEvent(eventClass, action);
 	}
 
@@ -201,7 +193,6 @@ public class ScriptEngineController {
 	 */
 	public String runScript(String scriptName, Map args) {
 		Thread.currentThread().setContextClassLoader(StormCore.getInstance().getPLClassLoader());
-		// Don't use absolute paths so we prevent any kind of RFI attacks
 		File scriptDir = new File("scripts" + File.separator + scriptName);
 		System.out.println("Script dir: " + scriptDir + " exists: " + scriptDir.exists());
 		if (!scriptDir.exists())

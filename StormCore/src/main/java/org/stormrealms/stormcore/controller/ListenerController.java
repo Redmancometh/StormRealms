@@ -1,7 +1,5 @@
 package org.stormrealms.stormcore.controller;
 
-import java.util.function.Consumer;
-
 import javax.annotation.PostConstruct;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
@@ -29,6 +27,8 @@ import org.stormrealms.stormcore.StormCore;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
+
 /**
  * We could probably gen this class at runtime but meh this is less thinking
  * 
@@ -38,99 +38,99 @@ import com.google.common.collect.Multimap;
 @Controller
 public class ListenerController implements Listener {
 
-	private Multimap<Class, Consumer<Event>> events = HashMultimap.create();
+	private Multimap<Class, ScriptObjectMirror> events = HashMultimap.create();
 
 	@PostConstruct
 	public void register() {
 		Bukkit.getPluginManager().registerEvents(this, StormCore.getInstance());
 	}
 
-	public void registerEvent(Class<? extends Event> eventClass, Consumer<Event> action) {
+	public void registerEvent(Class<? extends Event> eventClass, ScriptObjectMirror action) {
 		events.put(eventClass, action);
 	}
 
 	@EventHandler
 	public void craft(CraftItemEvent e) {
-		events.get(e.getClass()).forEach((exec) -> exec.accept(e));
+		events.get(e.getClass()).forEach((exec) -> exec.call(this, e));
 	}
 
 	@EventHandler
 	public void moveItem(InventoryMoveItemEvent e) {
-		events.get(e.getClass()).forEach((exec) -> exec.accept(e));
+		events.get(e.getClass()).forEach((exec) -> exec.call(this, e));
 	}
 
 	@EventHandler
 	public void onEntity(PlayerInteractEntityEvent e) {
-		events.get(e.getClass()).forEach((exec) -> exec.accept(e));
+		events.get(e.getClass()).forEach((exec) -> exec.call(this, e));
 	}
 
 	@EventHandler
 	public void heldEvent(PlayerItemHeldEvent e) {
-		events.get(e.getClass()).forEach((exec) -> exec.accept(e));
+		events.get(e.getClass()).forEach((exec) -> exec.call(this, e));
 	}
 
 	@EventHandler
 	public void onSneak(PlayerVelocityEvent e) {
-		events.get(e.getClass()).forEach((exec) -> exec.accept(e));
+		events.get(e.getClass()).forEach((exec) -> exec.call(this, e));
 	}
 
 	@EventHandler
 	public void onTele(PlayerTeleportEvent e) {
-		events.get(e.getClass()).forEach((exec) -> exec.accept(e));
+		events.get(e.getClass()).forEach((exec) -> exec.call(this, e));
 	}
 
 	@EventHandler
 	public void preLogin(PlayerPickupItemEvent e) {
-		events.get(e.getClass()).forEach((exec) -> exec.accept(e));
+		events.get(e.getClass()).forEach((exec) -> exec.call(this, e));
 	}
 
 	@EventHandler
 	public void preLogin(PlayerPreLoginEvent e) {
-		events.get(e.getClass()).forEach((exec) -> exec.accept(e));
+		events.get(e.getClass()).forEach((exec) -> exec.call(this, e));
 	}
 
 	@EventHandler
 	public void onDrop(PlayerDropItemEvent e) {
-		events.get(e.getClass()).forEach((exec) -> exec.accept(e));
+		events.get(e.getClass()).forEach((exec) -> exec.call(this, e));
 	}
 
 	@EventHandler
 	public void onLogin(PlayerLoginEvent e) {
-		events.get(e.getClass()).forEach((exec) -> exec.accept(e));
+		events.get(e.getClass()).forEach((exec) -> exec.call(this, e));
 	}
 
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {
-		events.get(e.getClass()).forEach((exec) -> exec.accept(e));
+		events.get(e.getClass()).forEach((exec) -> exec.call(this, e));
 	}
 
 	@EventHandler
 	public void onBreak(BlockBreakEvent e) {
-		events.get(e.getClass()).forEach((exec) -> exec.accept(e));
+		events.get(e.getClass()).forEach((exec) -> exec.call(this, e));
 	}
 
 	@EventHandler
 	public void onClick(InventoryClickEvent e) {
-		events.get(e.getClass()).forEach((exec) -> exec.accept(e));
+		events.get(e.getClass()).forEach((exec) -> exec.call(this, e));
 	}
 
 	@EventHandler
 	public void onClose(InventoryCloseEvent e) {
-		events.get(e.getClass()).forEach((exec) -> exec.accept(e));
+		events.get(e.getClass()).forEach((exec) -> exec.call(this, e));
 	}
 
 	@EventHandler
 	public void onOpen(InventoryOpenEvent e) {
-		events.get(e.getClass()).forEach((exec) -> exec.accept(e));
+		events.get(e.getClass()).forEach((exec) -> exec.call(this, e));
 	}
 
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
-		events.get(e.getClass()).forEach((exec) -> exec.accept(e));
+		events.get(e.getClass()).forEach((exec) -> exec.call(this, e));
 	}
 
 	@EventHandler
 	public void onMove(PlayerMoveEvent e) {
-		events.get(e.getClass()).forEach((exec) -> exec.accept(e));
+		events.get(e.getClass()).forEach((exec) -> exec.call(this, e));
 	}
 }
