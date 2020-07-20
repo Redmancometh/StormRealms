@@ -9,29 +9,19 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.stormrealms.stormcore.StormPlugin;
 import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormmenus.MenuTemplate;
 import org.stormrealms.stormstats.configuration.pojo.ClassConfiguration;
 import org.stormrealms.stormstats.configuration.pojo.GUIConfig;
 import org.stormrealms.stormstats.configuration.pojo.RaceConfig;
-import org.stormrealms.stormstats.data.OtherStatRepo;
+import org.stormrealms.stormstats.configuration.pojo.StatMiscConfig;
 import org.stormrealms.stormstats.model.RPGPlayer;
 
 @Configuration
-@EnableJpaRepositories(basePackageClasses = OtherStatRepo.class)
-@ComponentScan(basePackages = { "org.stormrealms.stormstats.listeners", "org.stormrealms.stormstats.data" })
-@EntityScan("org.stormrealms.stormstats.model")
-@EnableTransactionManagement
-@EnableAutoConfiguration
 public class StormStatConfiguration {
 
 	@Bean
@@ -42,7 +32,6 @@ public class StormStatConfiguration {
 
 	@Bean(name = "needs-character")
 	public List<UUID> characterless() {
-		System.out.println("CHARACTERLESS");
 		return new ArrayList();
 	}
 
@@ -60,7 +49,6 @@ public class StormStatConfiguration {
 	public ConfigManager<ClassConfiguration> config() {
 		ConfigManager<ClassConfiguration> man = new ConfigManager("classes.json", ClassConfiguration.class);
 		man.init();
-		System.out.print("CFG INITIAL " + man.getConfig());
 		return man;
 	}
 
@@ -68,7 +56,6 @@ public class StormStatConfiguration {
 	public ConfigManager<RaceConfig> raceConfig() {
 		ConfigManager<RaceConfig> man = new ConfigManager("races.json", RaceConfig.class);
 		man.init();
-		System.out.print("CFG INITIAL " + man.getConfig());
 		return man;
 	}
 
@@ -82,7 +69,13 @@ public class StormStatConfiguration {
 	public ConfigManager<GUIConfig> guiConfig() {
 		ConfigManager<GUIConfig> man = new ConfigManager("statgui.json", GUIConfig.class);
 		man.init();
-		System.out.print("CFG INITIAL " + man.getConfig());
+		return man;
+	}
+
+	@Bean(name = "stat-config")
+	public ConfigManager<StatMiscConfig> statConfig() {
+		ConfigManager<StatMiscConfig> man = new ConfigManager("statsmisc.json", StatMiscConfig.class);
+		man.init();
 		return man;
 	}
 

@@ -37,7 +37,8 @@ public class RPGPlayer implements Defaultable<UUID> {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "player_id")
 	private Set<RPGCharacter> characters = new HashSet();
-
+	@Transient
+	private RPGCharacter constructingChar;
 	@Transient
 	private RPGCharacter chosenCharacter;
 	@Transient

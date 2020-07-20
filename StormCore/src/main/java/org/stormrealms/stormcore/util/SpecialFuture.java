@@ -38,18 +38,13 @@ public class SpecialFuture<T> {
 
 	public static SpecialFuture<?> delayAsync(Runnable r, long ticks) {
 		SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
-		Bukkit.getScheduler().scheduleSyncDelayedTask(StormCore.getInstance(), () -> {
-			runAsync(r);
-			sf.supply(() -> void.class);
-		}, ticks);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(StormCore.getInstance(),
+				() -> { runAsync(r); sf.supply(() -> void.class); }, ticks);
 		return sf;
 	}
 
 	public static SpecialFuture<?> runAsync(Runnable r) {
-		return supplyAsync(() -> {
-			r.run();
-			return void.class;
-		});
+		return supplyAsync(() -> { r.run(); return void.class; });
 	}
 
 	private void supply(Supplier<T> s) {
@@ -61,14 +56,16 @@ public class SpecialFuture<T> {
 					pool.submit(() -> task.accept(t));
 				}
 				for (Consumer<T> task : tasks) {
+					System.out.println("TASK");
 					sync.scheduleSyncDelayedTask(plugin, () -> {
 						try {
+							System.out.println("SCHEDULE SYNC DELAYED TASK");
 							task.accept(t);
 						} catch (Exception e) {
 							Bukkit.getLogger().severe("SpecialFuture encountered an error while executing a task!");
 							e.printStackTrace();
 						}
-					});
+					}, 1);
 				}
 			} catch (Exception e) {
 				exception.set(e);
@@ -80,7 +77,7 @@ public class SpecialFuture<T> {
 					for (Consumer<Exception> ce : exHandlers) {
 						ce.accept(e);
 					}
-				});
+				}, 1);
 			}
 		});
 		pool.schedule(new Runnable() {
@@ -107,34 +104,25 @@ public class SpecialFuture<T> {
 
 	public static SpecialFuture<?> delaySync(Runnable r, long ticks) {
 		SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
-		Bukkit.getScheduler().scheduleSyncDelayedTask(StormCore.getInstance(), () -> {
-			r.run();
-			sf.supply(() -> void.class);
-		}, ticks);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(StormCore.getInstance(),
+				() -> { r.run(); sf.supply(() -> void.class); }, ticks);
 		return sf;
 	}
 
 	public static SpecialFuture<?> delaySync(Runnable r, long t, TimeUnit u) {
 		SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
-		delayAsync(() -> {
-			runSync(r);
-			sf.supply(() -> void.class);
-		}, t, u);
+		delayAsync(() -> { runSync(r); sf.supply(() -> void.class); }, t, u);
 		return sf;
 	}
 
 	public static SpecialFuture<?> delayAsync(Runnable r, long t, TimeUnit u) {
 		SpecialFuture<Class<Void>> sf = new SpecialFuture<>();
-		pool.schedule(() -> {
-			r.run();
-			sf.supply(() -> void.class);
-		}, t, u);
+		pool.schedule(() -> { r.run(); sf.supply(() -> void.class); }, t, u);
 		return sf;
 	}
 
 	public static SpecialFuture<?> runSync(Runnable r) {
-		return runAsync(() -> {
-		}).thenRun(r);
+		return runAsync(() -> {}).thenRun(r);
 	}
 
 	public SpecialFuture<T> thenRun(Runnable r) {
@@ -201,9 +189,7 @@ public class SpecialFuture<T> {
 	public <U> SpecialFuture<U> thenApply(Function<T, U> func) {
 		return SpecialFuture.supplyAsync(() -> {
 			BlockingQueue<U> queue = new ArrayBlockingQueue<>(1);
-			SpecialFuture.this.thenAccept((t) -> {
-				queue.add(func.apply(t));
-			});
+			SpecialFuture.this.thenAccept((t) -> { queue.add(func.apply(t)); });
 			U u = null;
 			try {
 				u = queue.poll(10, TimeUnit.SECONDS);
@@ -213,9 +199,7 @@ public class SpecialFuture<T> {
 			if (u == null) {
 				RuntimeException ex = new RuntimeException(
 						"Function could not apply because the previous future timed out! Check above for errors");
-				sync.scheduleSyncDelayedTask(plugin, () -> {
-					ex.printStackTrace();
-				});
+				sync.scheduleSyncDelayedTask(plugin, () -> { ex.printStackTrace(); }, 1);
 				throw ex;
 			}
 			return u;

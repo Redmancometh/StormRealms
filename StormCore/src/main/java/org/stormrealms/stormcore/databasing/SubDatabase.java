@@ -3,21 +3,22 @@ package org.stormrealms.stormcore.databasing;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.cache.RemovalListener;
+
 import org.bukkit.Bukkit;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.stormrealms.stormcore.Defaultable;
-import org.stormrealms.stormcore.StormCore;
 import org.stormrealms.stormcore.exceptions.ObjectNotPresentException;
 import org.stormrealms.stormcore.util.SpecialFuture;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -32,23 +33,34 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
 	private final Class<V> type;
 	private SessionFactory factory;
 	public Function<K, V> defaultObjectBuilder;
-	LoadingCache<K, SpecialFuture<V>> cache = CacheBuilder.newBuilder().build(new CacheLoader<K, SpecialFuture<V>>() {
-		@Override
-		public SpecialFuture<V> load(K key) {
-			return SpecialFuture.supplyAsync(() -> {
-				try (Session session = factory.openSession()) {
-					V result = session.get(type, key);
-					if (result == null)
-						return defaultObjectBuilder.apply(key);
-					return result;
-				} catch (SecurityException | IllegalArgumentException e) {
-					SpecialFuture
-							.runSync(() -> Bukkit.getLogger().log(Level.SEVERE, "Failed to get database object", e));
-					throw new RuntimeException(e);
+
+	RemovalListener<K, SpecialFuture<V>> expirCallback = (notification) -> {
+		System.out.println("EXPIR CALLBACK");
+		try {
+			saveAndPurge(notification.getValue().get(), notification.getKey());
+		} catch (ObjectNotPresentException e) {
+			e.printStackTrace();
+		}
+	};
+	
+	LoadingCache<K, SpecialFuture<V>> cache = CacheBuilder.newBuilder().removalListener(expirCallback)
+			.expireAfterAccess(15, TimeUnit.SECONDS).build(new CacheLoader<K, SpecialFuture<V>>() {
+				@Override
+				public SpecialFuture<V> load(K key) {
+					return SpecialFuture.supplyAsync(() -> {
+						try (Session session = factory.openSession()) {
+							V result = session.get(type, key);
+							if (result == null)
+								return defaultObjectBuilder.apply(key);
+							return result;
+						} catch (SecurityException | IllegalArgumentException e) {
+							SpecialFuture.runSync(
+									() -> Bukkit.getLogger().log(Level.SEVERE, "Failed to get database object", e));
+							throw new RuntimeException(e);
+						}
+					});
 				}
 			});
-		}
-	});
 
 	public SubDatabase(Class<V> type, SessionFactory factory) {
 		super();
@@ -176,33 +188,6 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
 	 */
 	public SpecialFuture<?> saveAndPurge(V e, K uuid) throws ObjectNotPresentException {
 		return saveObject(e).thenRun(() -> cache.asMap().remove(uuid));
-	}
-
-	/**
-	 * This is ONLY saved if the key is found in the cache!
-	 *
-	 * @param e
-	 * @return
-	 * @throws ObjectNotPresentException
-	 */
-	@Deprecated
-	public CompletableFuture<Void> saveFromKey(K e) throws ObjectNotPresentException {
-		if (!cache.asMap().containsKey(e))
-			throw new ObjectNotPresentException(e.toString(), type);
-		return CompletableFuture.runAsync(() -> {
-			try (Session session = factory.openSession()) {
-				try {
-					session.beginTransaction();
-					cache.get(e).thenAccept(session::saveOrUpdate);
-					session.getTransaction().commit();
-					session.flush();
-				} catch (Exception e2) {
-					e2.printStackTrace();
-				}
-
-			}
-		}, StormCore.getInstance().getPool());
-
 	}
 
 	/**

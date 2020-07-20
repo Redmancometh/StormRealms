@@ -3,16 +3,16 @@ package org.stormrealms.stormmobs.tasks;
 import org.bukkit.craftbukkit.entity.CraftLivingEntity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.stormrealms.stormmobs.entity.CustomEntity;
+import org.stormrealms.stormmobs.entity.RPGEntity;
 
 public class ShootingRunnable extends BukkitRunnable {
 	private int shots;
 	private int shotCounter;
-	private CustomEntity shooter;
+	private RPGEntity shooter;
 	private Class<? extends Projectile> projectileClass;
 	private double projectileSpeed;
 
-	public ShootingRunnable(int shots, double projectileSpeed, CustomEntity shooter,
+	public ShootingRunnable(int shots, double projectileSpeed, RPGEntity shooter,
 			Class<? extends Projectile> projectileClass) {
 		this.projectileClass = projectileClass;
 		this.shooter = shooter;

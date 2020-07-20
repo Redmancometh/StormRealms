@@ -28,6 +28,11 @@
 			<artifactId>spigot</artifactId>
 			<version>1.15.2-unmapped</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jetbrains</groupId>
+			<artifactId>annotations</artifactId>
+			<version>16.0.1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

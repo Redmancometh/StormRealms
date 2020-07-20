@@ -46,7 +46,7 @@ import net.minecraft.server.PlayerConnection;
  *            Supplier<String> field with @Setter on it
  * 
  */
-public interface CustomEntity<T extends Entity, U extends CustomEntity> {
+public interface RPGEntity<T extends Entity, U extends RPGEntity> {
 
 	public default String getName() {
 		return nameSupplier().get();
@@ -61,6 +61,10 @@ public interface CustomEntity<T extends Entity, U extends CustomEntity> {
 		onSpawn();
 		return (T) e;
 	}
+
+	public abstract int getDefense();
+
+	public abstract int getLevel();
 
 	public void onSpawn();
 
@@ -214,8 +218,7 @@ public interface CustomEntity<T extends Entity, U extends CustomEntity> {
 		if (notify) {
 			sendTitle(ChatColor.DARK_RED + "Targeted", ChatColor.GOLD + "The boss is targeting you!", p);
 		}
-		ShootingRunnable shoot = new ShootingRunnable(shots, speedMultiplier, (CustomEntity) getEntity(),
-				projectileClass);
+		ShootingRunnable shoot = new ShootingRunnable(shots, speedMultiplier, (RPGEntity) getEntity(), projectileClass);
 		shoot.runTaskTimer(StormCore.getInstance(), 0, delay);
 
 	}
@@ -230,7 +233,7 @@ public interface CustomEntity<T extends Entity, U extends CustomEntity> {
 				sendTitle(ChatColor.DARK_RED + "Targeted", ChatColor.GOLD + "The boss is targeting you!",
 						targetOption.getValue());
 			}
-			ShootingRunnable shoot = new ShootingRunnable(shots, speedMultiplier, (CustomEntity) getEntity(),
+			ShootingRunnable shoot = new ShootingRunnable(shots, speedMultiplier, (RPGEntity) getEntity(),
 					projectileClass);
 			shoot.runTaskTimer(StormCore.getInstance(), 0, delay);
 		}
@@ -255,8 +258,7 @@ public interface CustomEntity<T extends Entity, U extends CustomEntity> {
 			lookAt(target);
 		if (notify)
 			sendTitle(ChatColor.DARK_RED + "Targeted", ChatColor.GOLD + "The boss is targeting you!", target);
-		ShootingRunnable shoot = new ShootingRunnable(shots, speedMultiplier, (CustomEntity) getEntity(),
-				projectileClass);
+		ShootingRunnable shoot = new ShootingRunnable(shots, speedMultiplier, (RPGEntity) getEntity(), projectileClass);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(StormCore.getInstance(), shoot, 0, delay);
 	}
 
@@ -274,6 +276,7 @@ public interface CustomEntity<T extends Entity, U extends CustomEntity> {
 		// getEntity().world.playSound(getEntity().getBukkitEntity(), sound, 1F, 1F);
 	}
 
+	@SuppressWarnings("unused")
 	public default void lookAt(org.bukkit.entity.Entity target) {
 		Entity at = ((CraftEntity) target).getHandle();
 		Location loc = getEntity().getBukkitEntity().getLocation();
@@ -313,8 +316,7 @@ public interface CustomEntity<T extends Entity, U extends CustomEntity> {
 	}
 
 	public default void messageNearby(String message) {
-		String coloredMessage = ChatColor.translateAlternateColorCodes('&',
-				CustomEntity.this.getName() + " " + message);
+		String coloredMessage = ChatColor.translateAlternateColorCodes('&', RPGEntity.this.getName() + " " + message);
 		getNearbyPlayers().forEach((p) -> p.sendMessage(coloredMessage));
 	}
 

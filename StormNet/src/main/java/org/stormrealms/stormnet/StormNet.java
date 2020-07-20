@@ -12,32 +12,33 @@ import org.stormrealms.stormspigot.PlayerConnectionOverride;
 
 @Component
 public class StormNet extends StormSpringPlugin {
-    @Autowired private PacketSubscriptionManager packetSubscriptionManager;
+	@Autowired
+	private PacketSubscriptionManager packetSubscriptionManager;
 
-    @PostConstruct
-    public void enable() {
-        System.out.println("Enabling StormNet");
-        super.enable();
-        PlayerConnectionOverride.setPacketDispatcher(packetSubscriptionManager);
-    }
+	@PostConstruct
+	public void enable() {
+		System.out.println("Enabling StormNet");
+		super.enable();
+		PlayerConnectionOverride.setPacketDispatcher(packetSubscriptionManager);
+	}
 
-    @Override
-    public Class<?> getConfigurationClass() {
-        return StormNetConfiguration.class;
-    }
+	@Override
+	public Class<?> getConfigurationClass() {
+		return StormNetConfiguration.class;
+	}
 
-    @Override
-    public ConfigurableApplicationContext getContext() {
-        return super.context;
-    }
+	@Override
+	public ConfigurableApplicationContext getContext() {
+		return super.context;
+	}
 
-    @Override
-    public void setContext(AnnotationConfigApplicationContext context) {
-        this.context = context;
-    }
+	@Override
+	public void setContext(AnnotationConfigApplicationContext context) {
+		this.context = context;
+	}
 
-    @Override
-    public String[] getPackages() {
-        return new String[] { "org.stormrealms.stormnet", "org.stormrealms.stormnet.configuration" };
-    }
+	@Override
+	public String[] getPackages() {
+		return new String[] { "org.stormrealms.stormnet", "org.stormrealms.stormnet.configuration" };
+	}
 }

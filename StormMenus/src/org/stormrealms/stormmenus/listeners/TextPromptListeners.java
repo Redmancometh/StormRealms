@@ -15,26 +15,26 @@ import net.minecraft.server.ChatMessage;
 @Component
 public class TextPromptListeners {
 	@Autowired
-    private MenuManager menuManager;
-    
-    @Autowired
-    private PacketSubscriptionManager packetSubscriptionManager;
+	private MenuManager menuManager;
 
-    @PostConstruct
-    public void subscribeToPackets() {
-        // TODO(Yevano)
-        packetSubscriptionManager
-            .subscribe(PacketPlayInCloseWindow.class)
-            
-            .then(hook -> {
-                System.out.println("Intercepting close packet.");
-                var playerConnection = hook.getPlayerConnection();
-                var uuid = playerConnection.player.getUniqueID();
-                
-                if(menuManager.playerHasPromptOpen(uuid)) {
-                    var textPrompt = menuManager.getPlayerTextPrompt(uuid);
-                    playerConnection.sendPacket(new PacketPlayOutOpenWindow(1, Containers.ANVIL, new ChatMessage(textPrompt.getTitle())));
-                }
-            });
-    }
+	@Autowired
+	private PacketSubscriptionManager packetSubscriptionManager;
+
+	@PostConstruct
+	public void subscribeToPackets() {
+		// TODO(Yevano)
+		packetSubscriptionManager.subscribe(PacketPlayInCloseWindow.class)
+
+				.then(hook -> {
+					System.out.println("Intercepting close packet.");
+					var playerConnection = hook.getPlayerConnection();
+					var uuid = playerConnection.player.getUniqueID();
+
+					if (menuManager.playerHasPromptOpen(uuid)) {
+						var textPrompt = menuManager.getPlayerTextPrompt(uuid);
+						playerConnection.sendPacket(new PacketPlayOutOpenWindow(1, Containers.ANVIL,
+								new ChatMessage(textPrompt.getTitle())));
+					}
+				});
+	}
 }

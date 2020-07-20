@@ -1,6 +1,7 @@
 package org.stormrealms.stormcombat.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.entity.CraftLivingEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -17,6 +18,7 @@ import org.stormrealms.stormcombat.events.PVMEvent;
 import org.stormrealms.stormcombat.events.PVPEvent;
 import org.stormrealms.stormcombat.events.WeaponAttackEvent;
 import org.stormrealms.stormcombat.util.CombatUtil;
+import org.stormrealms.stormmobs.entity.RPGEntity;
 
 @Component
 public class CombatListeners implements Listener {
@@ -32,13 +34,14 @@ public class CombatListeners implements Listener {
 		Entity damager = e.getDamager();
 		Entity damaged = e.getEntity();
 		if (damager instanceof Player && (damaged instanceof LivingEntity)) {
+			Player dPlayer = (Player) damager;
 			if (damaged instanceof Player) {
 				Bukkit.getPluginManager().callEvent(new PVPEvent());
 				return;
+			} else if (((CraftLivingEntity) damaged).getHandle() instanceof RPGEntity) {
+				Bukkit.getPluginManager().callEvent(new PVMEvent(util.getRPGCharacter(dPlayer), dPlayer,
+						(RPGEntity) ((CraftLivingEntity) damaged).getHandle()));
 			}
-			Player dPlayer = (Player) damager;
-			Bukkit.getPluginManager()
-					.callEvent(new PVMEvent(util.getRPGCharacter(dPlayer), dPlayer, (LivingEntity) damager));
 		}
 	}
 
@@ -48,13 +51,13 @@ public class CombatListeners implements Listener {
 		ItemStack mainHand = bAttacker.getInventory().getItemInMainHand();
 		if (mainHand != null && mainHand.hasItemMeta() && util.isRPGGear(mainHand))
 			Bukkit.getPluginManager().callEvent(new WeaponAttackEvent(util.getRPGGearData(mainHand), e.getAttacker(),
-					bAttacker, cCalc.getOverallBonuses(bAttacker)));
+					bAttacker, cCalc.getOverallBonuses(bAttacker), e.getDamaged()));
 		if (e.isDamagedKilled())
 			return;
 		ItemStack offHand = bAttacker.getInventory().getItemInOffHand();
 		if (offHand != null && offHand.hasItemMeta() && util.isRPGGear(offHand))
 			Bukkit.getPluginManager().callEvent(new WeaponAttackEvent(util.getRPGGearData(offHand), e.getAttacker(),
-					bAttacker, cCalc.getOverallBonuses(bAttacker)));
+					bAttacker, cCalc.getOverallBonuses(bAttacker), e.getDamaged()));
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)

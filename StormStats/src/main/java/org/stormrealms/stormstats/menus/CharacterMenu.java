@@ -1,8 +1,11 @@
 package org.stormrealms.stormstats.menus;
 
+import java.util.Iterator;
+
 import javax.annotation.PostConstruct;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,33 +36,38 @@ public class CharacterMenu extends TypedMenu<RPGPlayer> {
 			System.out.println("Config: " + config);
 			System.out.println("Config Char " + config.getCreateChar());
 			TypedMenuButton<RPGPlayer> newChar = new TypedMenuButton<RPGPlayer>(
-					(p2, rp2) -> config.getCreateChar().build(), (clickType, rPlayer, player) -> {
+					(p2, rp2) -> config.getCreateChar().build(),
+					(clickType, rPlayer, player) -> {
 						CreateCharacterMenu createMenu = factory.getBean(CreateCharacterMenu.class);
 						createMenu.open(p, rp);
 					});
 			setButton(config.getCreateChar().getIndex(), newChar);
 			if (rp != null && rp.getCharacters() != null && rp.getCharacters().size() > 0) {
+				Iterator<RPGCharacter> charIter = rp.getCharacters().iterator();
 				for (int x = 0; x < rp.getCharacters().size(); x++) {
-					setButton(x + config.getCharsStartAt(), new TypedMenuButton((p2, rp2) -> {
-						ItemStack icon = config.getCharIcon().build();
-						return icon;
-					}));
+					RPGCharacter chosen = charIter.next();
+					TypedMenuButton<RPGPlayer> button = new TypedMenuButton(
+							(p2, rp2) -> { ItemStack icon = config.getCharIcon().build(); return icon; });
+					button.setAction((type, rPlayer, player) -> {
+						player.closeInventory();
+						if (rp.getChosenCharacter() != null && rp.getChosenCharacter() == chosen)
+							return;
+						rPlayer.setChosenCharacter(chosen);
+						player.sendMessage("Chose character named: " + chosen.getCharacterName());
+						player.teleport(new Location(Bukkit.getWorld(chosen.getWorld()), chosen.getX(), chosen.getY(),
+								chosen.getZ()));
+					});
+					setButton(x + config.getCharsStartAt(), button);
 				}
 			}
-			actionMap.forEach((number, button) -> {
-				i.setItem(number, button.constructButton(rp, this, p));
-			});
+			actionMap.forEach((number, button) -> { i.setItem(number, button.constructButton(rp, this, p)); });
 			return i;
 		});
 	}
 
-	public void chooseCharacter(RPGPlayer rp, RPGCharacter rpgChar) {
-
-	}
-
 	@Override
 	public boolean shouldReopen() {
-		if (getElement().getChosenCharacter() != null && getElement().getChosenCharacter().isCharacterComplete())
+		if (getElement().getChosenCharacter() != null)
 			return false;
 		return true;
 	}

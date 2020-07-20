@@ -4,15 +4,15 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.bukkit.craftbukkit.CraftWorld;
-import org.stormrealms.stormmobs.entity.CustomEntity;
-import org.stormrealms.stormmobs.entity.CustomLootable;
+import org.stormrealms.stormmobs.entity.RPGEntity;
+import org.stormrealms.stormmobs.entity.LootableEntity;
 
 import lombok.Setter;
 import net.minecraft.server.EntityZombie;
 import net.minecraft.server.World;
 
 public class CustomZombie<T extends CustomZombie> extends EntityZombie
-		implements CustomEntity<EntityZombie, T>, CustomLootable {
+		implements RPGEntity<EntityZombie, T>, LootableEntity {
 	@Setter
 	public static Supplier<String> nameSupplier;
 	private static Function<org.bukkit.World, CustomZombie> spawnSupplier = (w) -> new CustomZombie(
@@ -46,5 +46,14 @@ public class CustomZombie<T extends CustomZombie> extends EntityZombie
 		return this;
 	}
 
+	@Override
+	public int getLevel() {
+		return 5;
+	}
+
+	@Override
+	public int getDefense() {
+		return 5;
+	}
 
 }

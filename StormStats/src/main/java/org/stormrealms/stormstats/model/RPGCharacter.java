@@ -1,19 +1,19 @@
 package org.stormrealms.stormstats.model;
 
 import java.util.Map;
+import java.util.UUID;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.outfacing.RPGStat;
@@ -27,17 +27,12 @@ import lombok.Data;
 @Scope("prototype")
 public class RPGCharacter {
 
-	@PrePersist
-	public void prePersist() {
-		this.level = 10;
-	}
-
 	@OneToOne(mappedBy = "character", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private ClassData data;
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "character_id")
-	private long id;
+	@Type(type = "uuid-char")
+	private UUID id;
 	@Column
 	private String characterName;
 	@Column
@@ -51,13 +46,15 @@ public class RPGCharacter {
 	@Column
 	private String world;
 	@Column
-	private int health;
+	private double health;
+	@Column
+	private double maxHealth;
 	@Column
 	private double experience;
 	@Column
 	private int level;
 	@Column
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER, targetClass = Integer.class)
 	private Map<RPGStat, Integer> stats;
 
 	public boolean isCharacterComplete() {
@@ -72,6 +69,11 @@ public class RPGCharacter {
 		}
 		System.out.println("CHARACTER IS NOT COMPLETE");
 		return false;
+	}
+
+	@PostConstruct
+	public void assignID() {
+		this.id = UUID.randomUUID();
 	}
 
 	public void setDefaults() {

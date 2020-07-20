@@ -7,6 +7,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.stormrealms.stormcore.outfacing.RPGGearData;
 import org.stormrealms.stormcore.outfacing.RPGStat;
+import org.stormrealms.stormmobs.entity.RPGEntity;
 import org.stormrealms.stormstats.model.RPGCharacter;
 
 import lombok.Data;
@@ -27,6 +28,8 @@ public class WeaponAttackEvent extends Event {
 	private final Player bukkitPlayer;
 	@NonNull
 	private Map<RPGStat, Integer> totalBonuses;
+	@NonNull
+	private RPGEntity entity;
 	private int damage;
 	private boolean crushingBlow = false, isMiss = false, isDodged = false, glancingBlow = false, killingBlow = false;
 

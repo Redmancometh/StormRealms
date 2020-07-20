@@ -11,7 +11,10 @@ import org.stormrealms.stormcombat.events.WeaponAttackEvent;
 import org.stormrealms.stormcombat.util.CombatUtil;
 import org.stormrealms.stormcore.outfacing.RPGGearData;
 import org.stormrealms.stormcore.outfacing.RPGStat;
+import org.stormrealms.stormmobs.entity.RPGEntity;
 import org.stormrealms.stormstats.model.RPGCharacter;
+
+import io.netty.util.internal.ThreadLocalRandom;
 
 /**
  * This is a combat calculator base interface which will define how specific
@@ -77,7 +80,12 @@ public abstract class CombatCalculator {
 	 * @param e
 	 * @return
 	 */
-	public abstract boolean isGlancing(WeaponAttackEvent e);
+	public boolean isGlancing(WeaponAttackEvent e) {
+		double glancingChance = .015 * Math.max(1, (e.getEntity().getLevel() - e.getPlayer().getLevel()));
+		if (ThreadLocalRandom.current().nextInt(0, 100) < glancingChance)
+			return true;
+		return false;
+	}
 
 	/**
 	 * See if this is a miss
@@ -86,9 +94,15 @@ public abstract class CombatCalculator {
 	 * @return
 	 */
 	public boolean isMiss(WeaponAttackEvent e) {
+		RPGEntity entity = e.getEntity();
 		int wScal = util.hasRPGOffhand(e.getBukkitPlayer()) ? 17 : 7;
+		int pWep = e.getPlayer().getLevel() * 10;
+		double missChance = wScal
+				+ ((pWep - entity.getDefense()) * (.001 * Math.max(1, (entity.getLevel() - e.getPlayer().getLevel()))));
+		if (ThreadLocalRandom.current().nextInt(0, 100) < missChance)
+			return true;
 		return false;
-		
+
 	}
 
 }

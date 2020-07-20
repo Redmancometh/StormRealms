@@ -30,6 +30,12 @@
 			<version>2.0</version>
 		</dependency>
 		<dependency>
+			<groupId>org.stormrealms</groupId>
+			<artifactId>StormMobs</artifactId>
+			<scope>provided</scope>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>

@@ -1,5 +1,7 @@
 package org.stormrealms.stormstats.model;
 
+import java.util.UUID;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.Type;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +30,8 @@ public class ClassData {
 	@Id
 	@Column(name = "character_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long characterId;
+	@Type(type = "uuid-char")
+	private UUID characterId;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@MapsId

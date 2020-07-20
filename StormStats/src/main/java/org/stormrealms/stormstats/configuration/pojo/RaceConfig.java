@@ -1,10 +1,14 @@
 package org.stormrealms.stormstats.configuration.pojo;
 
-import java.util.List;
+import java.util.Map;
 
 import lombok.Data;
 
 @Data
 public class RaceConfig {
-	private List<Race> races;
+	private Map<String, Race> races;
+
+	public Race getRace(String race) {
+		return races.get(race);
+	}
 }
