@@ -1,17 +1,12 @@
 package org.stormrealms.stormscript.test;
 
-import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.StreamSupport;
 
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Engine;
-import org.graalvm.polyglot.Value;
-import org.graalvm.polyglot.proxy.ProxyExecutable;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.stormrealms.stormscript.engine.ScriptManager;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
