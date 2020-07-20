@@ -66,7 +66,8 @@ public class ScriptLoader {
 			}
 
 			scriptWalker = Files.walk(scriptsConfig.getScriptsBasePath());
-			var scriptList = scriptWalker.<Script>map(path -> new FileSystemScript(path, defaultContextBuilder))
+			var scriptList = scriptWalker.filter(path -> !Files.isDirectory(path))
+					.<Script>map(path -> new FileSystemScript(path, defaultContextBuilder))
 					.collect(Collectors.toList());
 			scriptWalker.close();
 			return scriptList;
