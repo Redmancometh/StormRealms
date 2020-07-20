@@ -38,7 +38,7 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror;
 @Controller
 public class ListenerController implements Listener {
 
-	private Multimap<Class, ScriptObjectMirror> events = HashMultimap.create();
+	private Multimap<Class<? extends Event>, ScriptObjectMirror> events = HashMultimap.create();
 
 	@PostConstruct
 	public void register() {
