@@ -4,9 +4,11 @@ import java.util.Optional;
 
 import org.graalvm.polyglot.Value;
 
+import lombok.Getter;
+
 public class ScriptExecutionResult {
 	private Optional<Value> returnValue;
-	private Throwable executionError;
+	@Getter private Throwable executionError;
 
 	public ScriptExecutionResult(Throwable executionError) {
 		this.returnValue = Optional.empty();

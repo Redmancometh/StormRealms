@@ -17,12 +17,12 @@ public class StormScript extends StormSpringPlugin {
 
 	@PostConstruct
 	public void enable() {
-		scriptManager.loadScriptsFromConfig();
+		scriptManager.loadAllAndExecute();
 	}
 
 	@PreDestroy
 	public void disable() {
-		scriptManager.unloadAllScripts();
+		scriptManager.stopAndUnloadAll();
 	}
 
 	@Override

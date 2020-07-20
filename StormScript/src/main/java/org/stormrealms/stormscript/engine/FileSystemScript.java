@@ -35,6 +35,11 @@ public class FileSystemScript implements Script {
 	}
 
 	@Override
+	public String getName() {
+		return source.getName();
+	}
+
+	@Override
 	public void close() {
 		context.close(true);
 	}
