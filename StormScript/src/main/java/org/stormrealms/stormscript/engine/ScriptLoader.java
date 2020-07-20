@@ -60,13 +60,18 @@ public class ScriptLoader {
 		Stream<Path> scriptWalker;
 
 		try {
+			if (scriptsConfig == null) {
+				System.out.printf("Cannot load scripts because of an invalid scripts configuration.");
+				return List.of();
+			}
+
 			scriptWalker = Files.walk(scriptsConfig.getScriptsBasePath());
 			var scriptList = scriptWalker.<Script>map(path -> new FileSystemScript(path, defaultContextBuilder))
 					.collect(Collectors.toList());
 			scriptWalker.close();
 			return scriptList;
 		} catch (IOException e) {
-			System.err.printf("Could not access scripts base path at %s.", scriptsConfig.getScriptsBasePath());
+			System.out.printf("Could not access scripts base path at %s.", scriptsConfig.getScriptsBasePath());
 		}
 
 		return List.of();
