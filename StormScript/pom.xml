@@ -46,7 +46,19 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
             <version>20.1.0</version>
-        </dependency>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.graalvm.js</groupId>
+			<artifactId>js-scriptengine</artifactId>
+			<version>20.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.graalvm.truffle</groupId>
+			<artifactId>truffle-api</artifactId>
+			<version>20.1.0</version>
+		</dependency>		
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -67,7 +79,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
                 <version>3.8.1</version>
             </plugin>
 
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.0.2</version>
@@ -75,7 +87,34 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
                 <configuration>
                     <outputDirectory>${user.home}/Desktop/stormrealms/testserver/plugins/StormCore/modules</outputDirectory>
                 </configuration>
-            </plugin>
+			</plugin>-->
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<configuration>
+					<outputFile>${user.home}/Desktop/stormrealms/testserver/plugins/StormCore/modules/StormScript.jar</outputFile>
+					<artifactSet>
+						<includes>
+							<include>*:*</include>
+						</includes>
+						<excludes>
+							<exclude>javax:*</exclude>
+							<exclude>org.stormrealms:StormSpigot:*</exclude>
+							<exclude>org.stormrealms:StormCore:*</exclude>
+							<exclude>org.junit.jupiter:junit-jupiter-api:*</exclude>
+						</excludes>
+					</artifactSet>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
         </plugins>
     </build>
 </project>
