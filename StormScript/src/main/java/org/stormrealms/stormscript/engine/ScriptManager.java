@@ -15,28 +15,32 @@ import lombok.Getter;
 
 @Component
 public class ScriptManager {
-    @Getter private Engine scriptEngine;
-    private List<Script> loadedScripts = new ArrayList<>();
+	@Getter private Engine scriptEngine;
+	private List<Script> loadedScripts = new ArrayList<>();
 
-    @PostConstruct
-    public void init() {
-        scriptEngine = Engine.create();
-    }
+	@PostConstruct
+	public void init() {
+		scriptEngine = Engine.create();
+	}
 
-    public FileSystemScript createScriptFromFile(Path path) {
-        // TODO(Yevano): Configurable script IO
-        var script = new FileSystemScript(path, Context.newBuilder("js")
-            .allowHostAccess(HostAccess.ALL)
-            .allowIO(true)
-            .in(System.in)
-            .out(System.out)
-            .engine(scriptEngine));
+	public FileSystemScript createScriptFromFile(Path path) {
+		// TODO(Yevano): Configurable script IO
+		var script = new FileSystemScript(path, Context.newBuilder("js")
+			.allowHostAccess(HostAccess.ALL)
+			.allowIO(true)
+			.in(System.in)
+			.out(System.out)
+			.engine(scriptEngine));
 
-        loadedScripts.add(script);
-        return script;
-    }
+		loadedScripts.add(script);
+		return script;
+	}
 
-    public void unloadAllScripts() {
-        loadedScripts.stream().forEach(Script::close);
-    }
+	public void loadScriptsFromConfig() {
+
+	}
+
+	public void unloadAllScripts() {
+		loadedScripts.stream().forEach(Script::close);
+	}
 }

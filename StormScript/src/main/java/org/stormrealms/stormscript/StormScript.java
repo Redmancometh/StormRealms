@@ -13,36 +13,36 @@ import org.stormrealms.stormscript.engine.ScriptManager;
 
 @Component
 public class StormScript extends StormSpringPlugin {
-    @Autowired private ScriptManager scriptManager;
+	@Autowired private ScriptManager scriptManager;
 
-    @PostConstruct
-    public void enable() {
-        scriptManager.loadAllScripts();
-    }
+	@PostConstruct
+	public void enable() {
+		scriptManager.loadScriptsFromConfig();
+	}
 
-    @PreDestroy
-    public void disable() {
-        scriptManager.unloadAllScripts();
-    }
+	@PreDestroy
+	public void disable() {
+		scriptManager.unloadAllScripts();
+	}
 
-    @Override
-    public Class<?> getConfigurationClass() {
-        return StormScriptConfiguration.class;
-    }
+	@Override
+	public Class<?> getConfigurationClass() {
+		return StormScriptConfiguration.class;
+	}
 
-    @Override
-    public String[] getPackages() {
-        return new String[] { "org.stormrealms.stormscript", "org.stormrealms.stormscript.configuration" };
-    }
+	@Override
+	public String[] getPackages() {
+		return new String[] { "org.stormrealms.stormscript", "org.stormrealms.stormscript.configuration" };
+	}
 
-    @Override
-    public void setContext(AnnotationConfigApplicationContext context) {
-        super.context = context;
-    }
+	@Override
+	public void setContext(AnnotationConfigApplicationContext context) {
+		super.context = context;
+	}
 
-    @Override
-    public ConfigurableApplicationContext getContext() {
-        return super.context;
-    }
-    
+	@Override
+	public ConfigurableApplicationContext getContext() {
+		return super.context;
+	}
+	
 }

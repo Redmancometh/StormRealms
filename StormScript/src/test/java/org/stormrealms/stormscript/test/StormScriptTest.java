@@ -20,59 +20,62 @@ import lombok.Data;
  * Unit test for simple App.
  */
 public class StormScriptTest {
-    @Data
-    @AllArgsConstructor
-    class HostObject {
-        private int x;
-        private int y;
-    }
+	@Data
+	@AllArgsConstructor
+	class HostObject {
+		private int x;
+		private int y;
+	}
 
-    @Test
-    public void graalJS() {
-        var context = Context.create("js");
-        // .engine(Engine.create().newBuilder().option(key, value));
-        var bindings = context.getBindings("js");
-        bindings.putMember("foo", 1000);
-        assert context.eval("js", "foo").asInt() == 1000;
+	@Test
+	public void graalJS() {
+		var context = Context.create("js");
+		// .engine(Engine.create().newBuilder().option(key, value));
+		var bindings = context.getBindings("js");
+		bindings.putMember("foo", 1000);
+		assert context.eval("js", "foo").asInt() == 1000;
 
-        bindings.putMember("hostObject", new HostObject(7, 77));
-        assert context.eval("js", "hostObject").asHostObject().equals(new HostObject(7, 77));
-    }
+		bindings.putMember("hostObject", new HostObject(7, 77));
+		assert context.eval("js", "hostObject").asHostObject().equals(new HostObject(7, 77));
+	}
 
-    @Test
-    public void scriptManagerTest() {
-        var context = Context.newBuilder("js").allowAllAccess(true).build();
-        var bindings = context.getBindings("js");
-        bindings.putMember("println", (Consumer<Object>) System.out::println);
-        bindings.putMember("echo", (BiConsumer<String, Consumer<String>>) (echo, callback) -> {
-            callback.accept(echo);
-        });
+	@Test
+	public void scriptManagerTest() {
+		var context = Context.newBuilder("js").allowAllAccess(true).build();
+		var bindings = context.getBindings("js");
+		
+		bindings.putMember("println", (Consumer<Object>) System.out::println);
 
-        context.eval("js", "echo('hello!', println)");
-    }
+		bindings.putMember("echo", (BiConsumer<String, Consumer<String>>) (echo, callback) -> {
+			callback.accept(echo);
+		});
 
-    @Test
-    public void engineOptions() {
-        var engine = Engine.create();
+		context.eval("js", "echo('hello!', println)");
+		
+	}
 
-        System.out.printf(
-            "Engine implementation: %s\n" +
-            "Engine instruments:\n%s" +
-            "Engine options:\n%s",
-            
-            engine.getImplementationName(),
+	@Test
+	public void engineOptions() {
+		var engine = Engine.create();
 
-            engine.getInstruments().entrySet().stream().map(entry ->
-                String.format(" -  %s: %s\n", entry.getKey(), entry.getValue())
-            ).reduce(String::concat).get(),
-            
-            engine.getLanguages().entrySet().stream().map(entry ->
-                String.format(" -  %s: %s\n", entry.getKey(), entry.getValue().getId())
-            ).reduce(String::concat).get(),
+		System.out.printf(
+			"Engine implementation: %s\n" +
+			"Engine instruments:\n%s" +
+			"Engine options:\n%s",
+			
+			engine.getImplementationName(),
 
-            StreamSupport.stream(engine.getOptions().spliterator(), false).map(option ->
-                String.format("%s.%s: %s", option.getCategory(), option.getName(), option.getHelp())
-            ).reduce(String::concat).get()
-        );
-    }
+			engine.getInstruments().entrySet().stream().map(entry ->
+				String.format(" -  %s: %s\n", entry.getKey(), entry.getValue())
+			).reduce(String::concat).get(),
+			
+			engine.getLanguages().entrySet().stream().map(entry ->
+				String.format(" -  %s: %s\n", entry.getKey(), entry.getValue().getId())
+			).reduce(String::concat).get(),
+
+			StreamSupport.stream(engine.getOptions().spliterator(), false).map(option ->
+				String.format("%s.%s: %s", option.getCategory(), option.getName(), option.getHelp())
+			).reduce(String::concat).get()
+		);
+	}
 }
