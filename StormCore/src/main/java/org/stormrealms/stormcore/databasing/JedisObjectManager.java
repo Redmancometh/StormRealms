@@ -4,7 +4,6 @@ import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 import redis.clients.jedis.Jedis;
-import org.stormrealms.stormcore.databasing.Syncable;
 
 public class JedisObjectManager<K extends Serializable, T extends Syncable<K>> extends XComManager<K, T> {
 
