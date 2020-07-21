@@ -3,13 +3,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Avoid making changes to this file, it has to be deployed manually -->
-    <groupId>com.destroystokyo.paper</groupId>
-    <artifactId>paper-parent</artifactId>
-    <version>dev-SNAPSHOT</version>
+    <groupId>org.stormrealms</groupId>
+    <artifactId>StormSpigot</artifactId>
+    <version>1.0</version>
     <packaging>pom</packaging>
 
-    <name>Paper-Parent</name>
+    <name>StormSpigot</name>
     <description>Parent project for all Paper modules.</description>
     <url>https://github.com/PaperMC/Paper</url>
 
