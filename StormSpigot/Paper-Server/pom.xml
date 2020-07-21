@@ -139,7 +139,25 @@
             <artifactId>classgraph</artifactId>
             <version>4.8.47</version>
             <scope>test</scope>
-        </dependency>
+		</dependency>
+		
+		<dependency>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js</artifactId>
+            <version>20.1.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.graalvm.js</groupId>
+			<artifactId>js-scriptengine</artifactId>
+			<version>20.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.graalvm.truffle</groupId>
+			<artifactId>truffle-api</artifactId>
+			<version>20.1.0</version>
+		</dependency>
     </dependencies>
 
     <repositories>
@@ -239,7 +257,9 @@
                         </goals>
                         <configuration>
                             <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation> <!-- Paper -->
-                            <createSourcesJar>${shadeSourcesJar}</createSourcesJar>
+							<createSourcesJar>${shadeSourcesJar}</createSourcesJar>
+							<outputDirectory>${user.home}/Desktop/stormrealms/testserver</outputDirectory>
+							<finalName>StormSpigot</finalName>
                             <filters>
                                 <filter>
                                     <artifact>org.spigotmc:minecraft-server</artifact>
