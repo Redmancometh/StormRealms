@@ -51,13 +51,13 @@ public class CombatListeners implements Listener {
 		ItemStack mainHand = bAttacker.getInventory().getItemInMainHand();
 		if (mainHand != null && mainHand.hasItemMeta() && util.isRPGGear(mainHand))
 			Bukkit.getPluginManager().callEvent(new WeaponAttackEvent(util.getRPGGearData(mainHand), e.getAttacker(),
-					bAttacker, cCalc.getOverallBonuses(bAttacker), e.getDamaged()));
+					bAttacker, util.getOverallBonuses(bAttacker), e.getDamaged()));
 		if (e.isDamagedKilled())
 			return;
 		ItemStack offHand = bAttacker.getInventory().getItemInOffHand();
 		if (offHand != null && offHand.hasItemMeta() && util.isRPGGear(offHand))
 			Bukkit.getPluginManager().callEvent(new WeaponAttackEvent(util.getRPGGearData(offHand), e.getAttacker(),
-					bAttacker, cCalc.getOverallBonuses(bAttacker), e.getDamaged()));
+					bAttacker, util.getOverallBonuses(bAttacker), e.getDamaged()));
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)

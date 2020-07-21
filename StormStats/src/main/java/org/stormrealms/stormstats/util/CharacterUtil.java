@@ -18,4 +18,6 @@ public class CharacterUtil {
 		character.setY(loc.getY());
 		character.setZ(loc.getZ());
 	}
+	
+	
 }

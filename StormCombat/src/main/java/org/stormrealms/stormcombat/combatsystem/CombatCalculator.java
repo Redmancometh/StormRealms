@@ -1,15 +1,10 @@
 package org.stormrealms.stormcombat.combatsystem;
 
-import java.util.HashMap;
 import java.util.Map;
-
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormcombat.events.WeaponAttackEvent;
 import org.stormrealms.stormcombat.util.CombatUtil;
-import org.stormrealms.stormcore.outfacing.RPGGearData;
 import org.stormrealms.stormcore.outfacing.RPGStat;
 import org.stormrealms.stormmobs.entity.RPGEntity;
 import org.stormrealms.stormstats.model.RPGCharacter;
@@ -30,50 +25,61 @@ public abstract class CombatCalculator {
 	@Autowired
 	private CombatUtil util;
 
-	/**
-	 * Probably a good idea to periodically calculate this or write an equip event
-	 * listener to know when to update it.
-	 * 
-	 * @param stat
-	 * @param p
-	 * @return
-	 */
-	public Map<RPGStat, Integer> getOverallBonuses(Player p) {
-		Map<RPGStat, Integer> stats = new HashMap();
-		for (ItemStack i : p.getInventory().getArmorContents()) {
-			if (util.isRPGGear(i)) {
-				RPGGearData data = util.getRPGGearData(i);
-				stats.putAll(data.getBonuses());
-			}
-		}
-		RPGCharacter player = util.getRPGCharacter(p);
-		stats.putAll(player.getStats());
-		return stats;
-	}
-
-	public double getMeleeAttackPower(RPGCharacter player, Player p) {
-		Map<RPGStat, Integer> bonuses = getOverallBonuses(p);
+	public double getMeleeAttackPower(WeaponAttackEvent e) {
+		RPGCharacter player = e.getPlayer();
+		Map<RPGStat, Integer> bonuses = e.getTotalBonuses();
 		int str = bonuses.get(RPGStat.STR);
 		int agi = bonuses.get(RPGStat.AGI);
 		int level = player.getLevel();
 		return (level * 2) + (str - 10) + (agi - 20);
 	}
 
-	public abstract int calculateMeleeDamage(WeaponAttackEvent e);
+	public double calculateMeleeDamage(WeaponAttackEvent e) {
+		Map<RPGStat, Integer> bonuses = e.getTotalBonuses();
+		int baseMin = bonuses.get(RPGStat.DMG_MIN);
+		int baseMax = bonuses.get(RPGStat.DMG_MAX);
+		ThreadLocalRandom rand = ThreadLocalRandom.current();
+		int baseDamage = rand.nextInt(baseMin, baseMax);
+		double ap = getMeleeAttackPower(e);
+		int baseMultiplier = 1;
+		double weaponSpeed = 2.4;
+		double damage = baseDamage + (baseMultiplier * ap / (14 - (weaponSpeed * .1)));
+		return damage;
+	}
 
 	/**
 	 * 
 	 * @param e
 	 * @return
 	 */
-	public abstract boolean isCrushingBlow(WeaponAttackEvent e);
+	public boolean isCrushingBlow(WeaponAttackEvent e) {
+		int crushingChance = 2 + Math.max(1, e.getEntity().getLevel() - e.getPlayer().getLevel());
+		if (ThreadLocalRandom.current().nextInt(0, 100) < crushingChance)
+			return true;
+		return false;
+
+	}
 
 	/**
 	 * 
 	 * @param e
 	 * @return
 	 */
-	public abstract boolean isDodged(WeaponAttackEvent e);
+	public boolean isDodged(WeaponAttackEvent e) {
+		RPGCharacter character = e.getPlayer();
+		Map<RPGStat, Integer> bonuses = e.getTotalBonuses();
+		// We'll get the characters class here once the init logic for that is set up
+		int baseDodge = 5;
+		double classAgiRatio = 20;
+		int agi = bonuses.get(RPGStat.AGI);
+		int addnlDodge = bonuses.get(RPGStat.DODGE);
+		int mobDef = e.getEntity().getDefense();
+		double dodgeChance = baseDodge + ((agi / classAgiRatio) + addnlDodge)
+				+ ((mobDef - (character.getLevel() * 10) * .04));
+		if (ThreadLocalRandom.current().nextInt(0, 100) < dodgeChance)
+			return true;
+		return false;
+	}
 
 	/**
 	 * 
