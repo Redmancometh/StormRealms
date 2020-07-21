@@ -12,12 +12,12 @@ public class FileSystemScript implements Script {
 
 	public FileSystemScript(Path path, Context.Builder contextBuilder) {
 		try {
-			Source.newBuilder("js", path.toUri().toURL()).build();
+			source = Source.newBuilder("js", path.toUri().toURL()).build();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		this.context = contextBuilder.currentWorkingDirectory(path.getParent()).build();
+		this.context = contextBuilder.currentWorkingDirectory(path.getParent().toAbsolutePath()).build();
 	}
 
 	@Override
@@ -37,6 +37,11 @@ public class FileSystemScript implements Script {
 	@Override
 	public String getName() {
 		return source.getName();
+	}
+
+	@Override
+	public String toString() {
+		return source.getPath();
 	}
 
 	@Override

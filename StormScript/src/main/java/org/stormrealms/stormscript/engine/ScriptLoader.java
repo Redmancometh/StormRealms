@@ -36,8 +36,11 @@ public class ScriptLoader {
 	private final Path scriptsConfigPath = Path.of("config/scripts/scripts.json");
 	private ScriptsConfig scriptsConfig;
 	private final Engine scriptEngine = Engine.create();
-	private final Context.Builder defaultContextBuilder = Context.newBuilder("js").allowHostAccess(HostAccess.ALL)
-			.allowIO(true).engine(scriptEngine);
+	private final Context.Builder defaultContextBuilder = Context.newBuilder("js")
+			.allowHostAccess(HostAccess.ALL)
+			.allowIO(true)
+			.allowHostClassLookup(className -> true)
+			.engine(scriptEngine);
 
 	@PostConstruct
 	public void loadScriptsConfig() {

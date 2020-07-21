@@ -103,6 +103,9 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 							<exclude>org.stormrealms:StormSpigot:*</exclude>
 							<exclude>org.stormrealms:StormCore:*</exclude>
 							<exclude>org.junit.jupiter:junit-jupiter-api:*</exclude>
+							<exclude>org.graalvm.js:js</exclude>
+							<exclude>org.graalvm.js:js-scriptengine</exclude>
+							<exclude>org.graalvm.truffle:truffle-api</exclude>
 						</excludes>
 					</artifactSet>
 				</configuration>
