@@ -58,7 +58,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 			<groupId>org.graalvm.truffle</groupId>
 			<artifactId>truffle-api</artifactId>
 			<version>20.1.0</version>
-		</dependency>		
+		</dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
