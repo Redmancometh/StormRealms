@@ -20,10 +20,23 @@ public class ScriptManager {
 	private List<Script> loadedScripts = new ArrayList<>();
 
 	public void loadAllAndExecute() {
-		loadedScripts.addAll(scriptLoader.loadAllFromConfig());
+
+		loadedScripts.addAll(scriptLoader.loadAllFromConfig(script -> {
+			script.reload();
+			var result = script.execute();
+
+			result.get().ifPresentOrElse(returnValue -> {
+				System.out.printf("Script %s was reloaded successfully.", script);
+			}, () -> {
+				System.out.printf("Script %s failed to initialize properly. Error: ", script,
+						result.getExecutionError());
+				result.getExecutionError().printStackTrace();
+			});
+		}));
 
 		for(var script : loadedScripts) {
 			var globals = script.getGlobalObject();
+			
 			globals.putMember("println", (Consumer<Object>) System.out::println);
 		}
 

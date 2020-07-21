@@ -8,6 +8,7 @@ import org.graalvm.polyglot.Source;
 
 public class FileSystemScript implements Script {
 	private Source source;
+	private Context.Builder contextBuilder;
 	private Context context;
 
 	public FileSystemScript(Path path, Context.Builder contextBuilder) {
@@ -17,7 +18,17 @@ public class FileSystemScript implements Script {
 			e.printStackTrace();
 		}
 
-		this.context = contextBuilder.currentWorkingDirectory(path.getParent().toAbsolutePath()).build();
+		this.contextBuilder = contextBuilder.currentWorkingDirectory(path.getParent().toAbsolutePath());
+		context = contextBuilder.build();
+	}
+
+	/**
+	 * Gives this script a new context.
+	 */
+	@Override
+	public void reload() {
+		context.close();
+		context = contextBuilder.build();
 	}
 
 	@Override
