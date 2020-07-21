@@ -18,8 +18,8 @@
     </properties>
 
     <parent>
-        <groupId>com.destroystokyo.paper</groupId>
-        <artifactId>paper-parent</artifactId>
+        <groupId>org.stormrealms</groupId>
+        <artifactId>StormSpigot</artifactId>
         <version>dev-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
