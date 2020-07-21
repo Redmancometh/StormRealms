@@ -5,7 +5,7 @@ import lombok.Setter;
 
 public enum RPGStat {
 	DMG_MIN("Damage Minimum"), DMG_MAX("Damage Maximum"), ARMOR("Armor"), STR("Strength"), STA("Stamina"),
-	AGI("Agility"), INT("Intellect"), SPI("Spirit");
+	AGI("Agility"), INT("Intellect"), SPI("Spirit"), DODGE("Dodge"), DEFENSE("Defense");
 
 	private static RPGStat[] basicStats = { STR, STA, AGI, INT, SPI };
 	@Getter

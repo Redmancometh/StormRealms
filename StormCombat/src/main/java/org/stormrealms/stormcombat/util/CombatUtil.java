@@ -1,6 +1,8 @@
 package org.stormrealms.stormcombat.util;
 
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -32,6 +34,27 @@ public class CombatUtil {
 			.registerTypeHierarchyAdapter(Material.class, new MaterialAdapter())
 			.registerTypeAdapter(Location.class, new LocationAdapter())
 			.registerTypeAdapter(RPGStat.class, new RPGStatAdapter()).setLenient().setPrettyPrinting().create();
+
+	/**
+	 * Probably a good idea to periodically calculate this or write an equip event
+	 * listener to know when to update it.
+	 * 
+	 * @param stat
+	 * @param p
+	 * @return
+	 */
+	public Map<RPGStat, Integer> getOverallBonuses(Player p) {
+		Map<RPGStat, Integer> stats = new HashMap();
+		for (ItemStack i : p.getInventory().getArmorContents()) {
+			if (isRPGGear(i)) {
+				RPGGearData data = getRPGGearData(i);
+				stats.putAll(data.getBonuses());
+			}
+		}
+		RPGCharacter player = getRPGCharacter(p);
+		stats.putAll(player.getStats());
+		return stats;
+	}
 
 	public boolean isRPGGear(ItemStack weapon) {
 		if (weapon.getItemMeta().getPersistentDataContainer().has(key, PersistentDataType.STRING))

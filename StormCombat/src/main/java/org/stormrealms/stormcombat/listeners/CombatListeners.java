@@ -12,7 +12,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.stormrealms.stormcombat.combatsystem.CombatCalculator;
+import org.stormrealms.stormcombat.combatsystem.PVMCombatCalculator;
 import org.stormrealms.stormcombat.combatsystem.CombatProcessor;
 import org.stormrealms.stormcombat.events.PVMEvent;
 import org.stormrealms.stormcombat.events.PVPEvent;
@@ -27,7 +27,7 @@ public class CombatListeners implements Listener {
 	@Autowired
 	private CombatProcessor cProc;
 	@Autowired
-	private CombatCalculator cCalc;
+	private PVMCombatCalculator cCalc;
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void throwEvent(EntityDamageByEntityEvent e) {
@@ -51,13 +51,13 @@ public class CombatListeners implements Listener {
 		ItemStack mainHand = bAttacker.getInventory().getItemInMainHand();
 		if (mainHand != null && mainHand.hasItemMeta() && util.isRPGGear(mainHand))
 			Bukkit.getPluginManager().callEvent(new WeaponAttackEvent(util.getRPGGearData(mainHand), e.getAttacker(),
-					bAttacker, cCalc.getOverallBonuses(bAttacker), e.getDamaged()));
+					bAttacker, util.getOverallBonuses(bAttacker), e.getDamaged()));
 		if (e.isDamagedKilled())
 			return;
 		ItemStack offHand = bAttacker.getInventory().getItemInOffHand();
 		if (offHand != null && offHand.hasItemMeta() && util.isRPGGear(offHand))
 			Bukkit.getPluginManager().callEvent(new WeaponAttackEvent(util.getRPGGearData(offHand), e.getAttacker(),
-					bAttacker, cCalc.getOverallBonuses(bAttacker), e.getDamaged()));
+					bAttacker, util.getOverallBonuses(bAttacker), e.getDamaged()));
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
