@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.stormrealms</groupId>
         <artifactId>StormSpigot</artifactId>
-        <version>dev-SNAPSHOT</version>
+        <version>1.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

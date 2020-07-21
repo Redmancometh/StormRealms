@@ -5,10 +5,10 @@
 
     <groupId>org.stormrealms</groupId>
     <artifactId>StormSpigot</artifactId>
-    <version>dev-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>pom</packaging>
 
-    <name>Paper-Parent</name>
+    <name>StormSpigot</name>
     <description>Parent project for all Paper modules.</description>
     <url>https://github.com/PaperMC/Paper</url>
 

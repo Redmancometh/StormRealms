@@ -42,6 +42,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.util.Vector;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 // CraftBukkit end
+import org.stormrealms.stormspigot.PlayerConnectionOverride;
 
 public abstract class PlayerList {
 
@@ -144,7 +145,7 @@ public abstract class PlayerList {
         WorldData worlddata = worldserver.getWorldData();
 
         this.a(entityplayer, (EntityPlayer) null, worldserver);
-        PlayerConnection playerconnection = new PlayerConnection(this.server, networkmanager, entityplayer);
+        PlayerConnection playerconnection = new PlayerConnectionOverride(this.server, networkmanager, entityplayer);
         GameRules gamerules = worldserver.getGameRules();
         boolean flag = gamerules.getBoolean(GameRules.DO_IMMEDIATE_RESPAWN);
         boolean flag1 = gamerules.getBoolean(GameRules.REDUCED_DEBUG_INFO);
