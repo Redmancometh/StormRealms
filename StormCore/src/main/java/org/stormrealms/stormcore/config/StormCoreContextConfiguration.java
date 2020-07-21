@@ -20,9 +20,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.Listener;
@@ -63,11 +60,6 @@ public class StormCoreContextConfiguration {
 		}
 		return null;
 	};
-
-	@Bean
-	public ScriptEngine basicScriptEngine() {
-		return new ScriptEngineManager().getEngineByName("ecmascript");
-	}
 
 	@Bean("confman-gson")
 	public Gson gson() {

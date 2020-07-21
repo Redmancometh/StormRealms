@@ -1,48 +1,50 @@
-target/
-bin/
-target/
-bin/
-vendor/
+# Eclipse stuff
+.classpath
+.project
 .settings/
-dependency-reduced-pom.xml
-buildNumber.properties
-.mvn/timing.properties
-.mvn/wrapper/maven-wrapper.jar
+.factorypath
 
-##############################
-## IntelliJ
-##############################
-out/
-.idea/
-.idea_modules/
+# VSCode stuff
+.vscode/
+
+# netbeans
+nbproject/
+nbactions.xml
+
+# we use maven!
+build.xml
+
+# maven
+target/
+dependency-reduced-pom.xml
+
+# vim
+.*.sw[a-p]
+
+# various other potential build files
+build/
+bin/
+dist/
+manifest.mf
+
+# Mac filesystem dust
+.DS_Store/
+.DS_Store
+
+# intellij
 *.iml
 *.ipr
 *.iws
+.idea/
+out/
 
-##############################
-## NetBeans
-##############################
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-nbactions.xml
-nb-configuration.xml
+# Linux temp files
+*~
 
-##############################
-## Visual Studio Code
-##############################
-.vscode/
-.code-workspace
+# other stuff
+run/
 
-##############################
-## OS X
-##############################
-.DS_Store
-
-##############################
-## Exclude
-##############################
-.classpath
-.project
+Paperclip.jar
+paperclip.jar
+paperclip-*.jar
+paperclip.properties

@@ -1,0 +1,53 @@
+package org.bukkit.craftbukkit.command;
+
+import net.minecraft.server.ChatComponentText;
+import net.minecraft.server.RemoteControlCommandListener;
+import org.bukkit.command.RemoteConsoleCommandSender;
+
+public class CraftRemoteConsoleCommandSender extends ServerCommandSender implements RemoteConsoleCommandSender {
+
+    private final RemoteControlCommandListener listener;
+
+    public CraftRemoteConsoleCommandSender(RemoteControlCommandListener listener) {
+        this.listener = listener;
+    }
+
+    @Override
+    public void sendMessage(String message) {
+        listener.sendMessage(new ChatComponentText(message + "\n")); // Send a newline after each message, to preserve formatting.
+    }
+
+    @Override
+    public void sendMessage(String[] messages) {
+        for (String message : messages) {
+            sendMessage(message);
+        }
+    }
+
+    @Override
+    public String getName() {
+        return "Rcon";
+    }
+
+    @Override
+    public boolean isOp() {
+        return true;
+    }
+
+    @Override
+    public void setOp(boolean value) {
+        throw new UnsupportedOperationException("Cannot change operator status of remote controller.");
+    }
+
+    // Paper start
+    @Override
+    public boolean hasPermission(String name) {
+        return com.destroystokyo.paper.PaperConfig.consoleHasAllPermissions || super.hasPermission(name);
+    }
+
+    @Override
+    public boolean hasPermission(org.bukkit.permissions.Permission perm) {
+        return com.destroystokyo.paper.PaperConfig.consoleHasAllPermissions || super.hasPermission(perm);
+    }
+    // Paper end
+}
