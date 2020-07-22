@@ -1,0 +1,23 @@
+{
+	"suffixes": [
+		{
+			"suffix": "of the Bear",
+			"mapping-function-map": {
+				"agi": "x*2"
+			}
+		},
+		{
+			"suffix": "Of the Monkey",
+			"mapping-function-map": {
+				"agi": "x+3",
+				"str": "x+3"
+			}
+		},
+		{
+			"suffix": "Of Strength",
+			"mapping-function-map": {
+				"str": "(x*2)+3"
+			}
+		}
+	]
+}

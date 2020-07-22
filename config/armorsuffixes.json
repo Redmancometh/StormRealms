@@ -1,0 +1,10 @@
+{
+	"suffixes": [
+		{
+			"suffix": "of the Bear",
+			"mapping-function-map": {
+				"agi": "x*2"
+			}
+		}
+	]
+}

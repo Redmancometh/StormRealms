@@ -1,0 +1,43 @@
+{
+	"resources": {
+		"marigold": {
+			"name": "marigold",
+			"type": "HerbNode",
+			"num-spawns": 1,
+			"locations": [
+				{
+					"x": 0,
+					"y": 63,
+					"z": 0,
+					"world": "world"
+				}
+			],
+			"seconds-to-spawn": 5,
+			"item": {
+				"material": "SUNFLOWER",
+				"display-name": "&eA Sunflower",
+				"lore": ["&5Bright and sunny!"],
+				"data-value": 0
+			}
+		},
+		"ironore": {
+			"name": "ironore",
+			"type": "OreNode",
+			"locations": [
+				{
+					"x": 0, 
+					"y": 66,
+					"z": 0,
+					"world": "world"
+				}
+			],
+			"seconds-to-spawn": 5,
+			"item": {
+				"material": "IRON_ORE",
+				"display-name": "&4Some Iron Ore",
+				"lore": ["Ore"],
+				"data-value": 0
+			}
+		}
+	}
+}

@@ -1,0 +1,34 @@
+{
+	"roots": [
+		{
+			"item": {
+				"display-name": "Iron Long Sword",
+				"material": "iron_sword",
+				"mapping-function-map": {
+					"dmg_min": "5",
+					"dmg_max": "10"
+				}
+			}
+		},
+		{
+			"item": {
+				"display-name": "Iron Short Sword",
+				"material": "iron_sword",
+				"mapping-function-map": {
+					"dmg_min": "5",
+					"dmg_max": "10"
+				}
+			}
+		},
+		{
+			"item": {
+				"display-name": "Iron Scimitar",
+				"material": "iron_sword",
+				"mapping-function-map": {
+					"dmg_min": "5",
+					"dmg_max": "10"
+				}
+			}
+		}
+	]
+}

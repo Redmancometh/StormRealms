@@ -1,0 +1,16 @@
+{
+	"prefixes": [
+		{
+			"prefix": "Hardened",
+			"mapping-function-map": {
+				"armor": "x*4"
+			}
+		},
+		{
+			"prefix": "Rusty",
+			"mapping-function-map": {
+				"armor": "-10"
+			}
+		}
+	]
+}

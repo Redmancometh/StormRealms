@@ -1,0 +1,14 @@
+{
+	"ingredients": {
+		"iron_ore_basic": {
+			"material": "IRON_ORE",
+			"display-name": "&4Some Iron Ore",
+			"lore": ["Ore"]
+		},
+		"gold_ore_basic": {
+			"material": "GOLD_ORE",
+			"display-name": "&4Some Gold Ore",
+			"lore": ["Gold Ore"]
+		}
+	}
+}

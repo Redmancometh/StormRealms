@@ -1,0 +1,22 @@
+{
+	"prefixes": [
+		{
+			"prefix": "Sharpened",
+			"mapping-function-map": {
+				"agi": "x*2"
+			}
+		},
+		{
+			"prefix": "Gleaming",
+			"mapping-function-map": {
+				"dmg_max": "x"
+			}
+		},
+		{
+			"prefix": "Dull",
+			"mapping-function-map": {
+				"dmg_max": "-4"
+			}
+		}
+	]
+}

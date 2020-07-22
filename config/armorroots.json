@@ -1,0 +1,40 @@
+{
+	"roots": [
+		{
+			"item": {
+				"display-name": "Scale Mail",
+				"material": "iron_chestplate"
+			},
+			"mapping-function-map": {
+				"armor": "60"
+			}
+		},
+		{
+			"item": {
+				"display-name": "Breastplate",
+				"material": "iron_chestplate"
+			},
+			"mapping-function-map": {
+				"armor": "75"
+			}
+		},
+		{
+			"item": {
+				"display-name": "Gold Mail",
+				"material": "golden_chestplate"
+			},
+			"mapping-function-map": {
+				"armor": "120"
+			}
+		},
+		{
+			"item": {
+				"display-name": "Turquoise Plate",
+				"material": "diamond_chestplate"
+			},
+			"mapping-function-map": {
+				"armor": "150"
+			}
+		}
+	]
+}

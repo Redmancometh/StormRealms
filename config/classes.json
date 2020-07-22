@@ -1,0 +1,48 @@
+{
+	"class-map": {
+		"warrior": {
+			"class-name": "warrior",
+			"class-item": {
+				"material": "DIAMOND_SWORD",
+				"display-name": "&CWarrior",
+				"lore": [
+					"&3Beats things down"
+				],
+				"data-value": 0
+			},
+			"starting-stats": {
+				"STR": 5,
+				"STA": 5,
+				"AGI": 5,
+				"INT": 5,
+				"SPI": 5
+			}
+		},
+		"mage": {
+			"class-name": "mage",
+			"class-item": {
+				"material": "DIAMOND_HOE",
+				"display-name": "&CMage",
+				"lore": [
+					"&3Casts badass spells"
+				],
+				"data-value": 0
+			},
+			"starting-stats": {
+				"STR": 4,
+				"STA": 4,
+				"AGI": 4,
+				"INT": 4,
+				"SPI": 4
+			}
+		}
+	},
+	"class-menu-template": {
+		"panes": [
+			{
+				"color": 5,
+				"indexes": [6,7,8,9,10,11,12,13,14,15] 
+			}
+		]
+	}
+}

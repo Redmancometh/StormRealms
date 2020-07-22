@@ -1,0 +1,22 @@
+{
+	"jar-paths": ["spig.jar", "plugins/StormCore.jar"],
+  "profiles": [
+  ],
+  "properties": {
+  		"spring.jpa.hibernate.ddl-auto": "create",
+			"spring.jpa.hibernate.dialect": "org.hibernate.dialect.MySQL5",
+			"spring.datasource.driver-class-name": "com.mysql.jdbc.Driver",
+			"spring.datasource.platform": "mysql",
+			"spring.datasource.url":"jdbc:mysql://localhost:3306/stormrealms?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",
+			"spring.datasource.username": "root",
+			"spring.datasource.password": "enter11284",
+			"spring.datasource.pool.size": "20",
+			"log4j.logger.org.springframework.orm.jpa.JpaTransactionManager": "ERROR",
+			"logging.level.org.springframework": "ERROR",
+			"spring.jpa.properties.hibernate.use_sql_comments": false,
+			"spring.jpa.show-sql": false,
+			"spring.jpa.properties.hibernate.type": "trace",
+			"logging.level.org.hibernate": "ERROR",
+			"debug": "false"
+	}
+}

@@ -1,0 +1,51 @@
+{
+	"create-char": {
+		"display-name": "Create a character",
+		"material": "acacia_log",
+		"lore": [
+			"Set a Name"
+		],
+		"index": 0
+	},
+	"create-char-template": {
+		"panes": [
+			{
+				"color": 6,
+				"indexes": [0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,44,45,46,47,48,49,50,51,52,53]
+			}
+		]
+	},//
+	"set-name": {
+		"display-name": "Set Name",
+		"material": "acacia_log",
+		"lore": [
+			"Set a Name"
+		],
+		"index": 1
+	},
+	"set-class": {
+		"display-name": "Set Class",
+		"material": "acacia_log",
+		"lore": [
+			"Set a Name"
+		],
+		"index": 2
+	},
+	"set-race": {
+		"display-name": "Set Race",
+		"material": "acacia_log",
+		"lore": [
+			"Set a Name"
+		],
+		"index": 3
+	},
+	"char-icon": {
+		"display-name": "Character",
+		"material": "acacia_log",
+		"lore": [
+			"I'm a character"
+		],
+		"index": 4
+	},
+	"chars-start-at": 1
+}

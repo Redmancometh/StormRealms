@@ -1,0 +1,36 @@
+{
+	"races": {
+		"elf": {
+			"name": "Elf",
+			"bonus-stats": {
+				"STR": 4,
+				"STA": 4,
+				"AGI": 4,
+				"INT": 4,
+				"SPI": 4
+			},
+			"race-icon": {
+				"display-name": "&4Elf",
+				"lore": ["A mysterious folk who live in the woods"],
+				"material": "ARROW",
+				"data-value": 0
+			}
+		},
+		"orc": {
+			"name": "Orc",
+			"bonus-stats": {
+				"STR": 4,
+				"STA": 4,
+				"AGI": 4,
+				"INT": 4,
+				"SPI": 4
+			},
+			"race-icon": {
+				"display-name": "&8Orc",
+				"lore": ["A race of evil elves"],
+				"material": "ARROW",
+				"data-value": 0
+			}
+		}
+	}
+}

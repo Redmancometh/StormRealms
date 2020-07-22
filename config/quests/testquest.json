@@ -1,0 +1,38 @@
+{
+	"id": 0,
+	"start": {
+		"type": "TalkToStartType",
+		"start-dialogue": ["Please go do my thing for me"]
+	},
+	"steps": [
+		{
+			"type": "SingleObjectiveStep",
+			"prompt-dialogue": "Talk to my friend in that cool city over there.",
+			"objective": 
+			{
+				"type": "TalkToObjective",
+				"id": 0,
+				"complete-dialogue": "Thank god you've come %cn!"
+			},
+			"complete-dialogue": "I'm going to need you to get a stick, a gold nugget, and an iron shovel. Then come back to me."
+		},
+		{
+			"type": "MultiObjectiveStep",
+			"incomplete-dialogue": "You have not yet gotten me the goods I asked you to fetch. I need a stick, a gold nuget, and an iron shovel.",
+			"objectives": [
+				{
+					"type": "GatherObjective",
+					"id": 0
+				},
+				{
+					"type": "GatherObjective",
+					"id": 1
+				},
+				{
+					"type": "GatherObjective",
+					"id": 2
+				}
+			]
+		}
+	]
+}
