@@ -16,5 +16,7 @@ public interface Script extends AutoCloseable {
 		return "<unnamed>";
 	}
 
+	public void reload();
+
 	public void close();
 }

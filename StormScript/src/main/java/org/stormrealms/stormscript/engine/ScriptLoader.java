@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,6 +21,7 @@ import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.HostAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.stormrealms.stormcore.config.FileWatcher;
 import org.stormrealms.stormscript.configuration.PathTypeAdapter;
 import org.stormrealms.stormscript.configuration.ScriptsConfig;
 
@@ -36,11 +38,8 @@ public class ScriptLoader {
 	private final Path scriptsConfigPath = Path.of("config/scripts/scripts.json");
 	private ScriptsConfig scriptsConfig;
 	private final Engine scriptEngine = Engine.create();
-	private final Context.Builder defaultContextBuilder = Context.newBuilder("js")
-			.allowHostAccess(HostAccess.ALL)
-			.allowIO(true)
-			.allowHostClassLookup(className -> true)
-			.engine(scriptEngine);
+	private final Context.Builder defaultContextBuilder = Context.newBuilder("js").allowHostAccess(HostAccess.ALL)
+			.allowIO(true).allowHostClassLookup(className -> true).engine(scriptEngine);
 
 	@PostConstruct
 	public void loadScriptsConfig() {
@@ -59,18 +58,29 @@ public class ScriptLoader {
 		}
 	}
 
-	public List<Script> loadAllFromConfig() {
+	private Script loadScript(Path path, Consumer<Script> onChange) {
+		var script = new FileSystemScript(path, defaultContextBuilder);
+
+		var watcher = new FileWatcher(file -> {
+			onChange.accept(script);
+		}, path.toFile());
+
+		watcher.start();
+
+		return script;
+	}
+
+	public List<Script> loadAllFromConfig(Consumer<Script> onChange) {
+		if (scriptsConfig == null) {
+			System.out.printf("Cannot load scripts because of an invalid scripts configuration.");
+			return List.of();
+		}
+
 		Stream<Path> scriptWalker;
 
 		try {
-			if (scriptsConfig == null) {
-				System.out.printf("Cannot load scripts because of an invalid scripts configuration.");
-				return List.of();
-			}
-
 			scriptWalker = Files.walk(scriptsConfig.getScriptsBasePath());
-			var scriptList = scriptWalker.filter(path -> !Files.isDirectory(path))
-					.<Script>map(path -> new FileSystemScript(path, defaultContextBuilder))
+			var scriptList = scriptWalker.filter(path -> !Files.isDirectory(path)).map(path -> loadScript(path, onChange))
 					.collect(Collectors.toList());
 			scriptWalker.close();
 			return scriptList;
