@@ -25,6 +25,7 @@ import net.minecraft.server.PacketPlayOutOpenWindow;
 @Component
 @Scope("prototype")
 public class TextPrompt {
+	/*
 	@Autowired
 	private MenuManager menuManager;
 
@@ -53,5 +54,5 @@ public class TextPrompt {
 		nmsPlayer.playerConnection.sendPacket(new PacketPlayOutOpenWindow(1, Containers.ANVIL, new ChatMessage(title)));
 		menuManager.setPlayerTextPrompt(playerUUID, this);
 		return promise;
-	}
+	}*/
 }

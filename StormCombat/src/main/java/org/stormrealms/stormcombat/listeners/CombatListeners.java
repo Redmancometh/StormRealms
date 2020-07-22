@@ -1,6 +1,7 @@
 package org.stormrealms.stormcombat.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.entity.CraftLivingEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -19,6 +20,7 @@ import org.stormrealms.stormcombat.events.PVPEvent;
 import org.stormrealms.stormcombat.events.WeaponAttackEvent;
 import org.stormrealms.stormcombat.util.CombatUtil;
 import org.stormrealms.stormmobs.entity.RPGEntity;
+import org.stormrealms.stormspigot.event.ChangeArmorEvent;
 
 @Component
 public class CombatListeners implements Listener {
@@ -28,6 +30,11 @@ public class CombatListeners implements Listener {
 	private CombatProcessor cProc;
 	@Autowired
 	private PVMCombatCalculator cCalc;
+
+	@EventHandler
+	public void onEquip(ChangeArmorEvent e) {
+		System.out.println("EQUIP");
+	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void throwEvent(EntityDamageByEntityEvent e) {

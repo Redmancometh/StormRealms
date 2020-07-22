@@ -38,8 +38,8 @@
 
 		<dependency>
 			<groupId>org.stormrealms</groupId>
-			<artifactId>StormSpigot</artifactId>
-			<version>1.0</version>
+			<artifactId>paper</artifactId>
+			<version>1.15.2-R0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

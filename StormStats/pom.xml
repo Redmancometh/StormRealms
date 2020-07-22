@@ -41,6 +41,7 @@
 		</dependency>
 	</dependencies>
 	<build>
+		<finalName>StormStats</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -50,33 +51,10 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
+				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
-					<outputFile>${user.home}/Desktop/Stormrealms/testserver/plugins/StormCore/modules/StormStats.jar</outputFile>
-					<artifactSet>
-						<includes>
-							<include>*:*</include>
-						</includes>
-						<excludes>
-							<exclude>javax:*</exclude>
-							<exclude>org.hibernate:*</exclude>
-							<exclude>org.stormrealms:StormMenu:*</exclude>
-							<exclude>org.yaml:snakeyaml:*</exclude>
-							<exclude>javax.annotation:*</exclude>
-							<exclude>org.stormrealms:StormSpigot:*</exclude>
-							<exclude>org.stormrealms:StormMenus:*</exclude>
-						</excludes>
-					</artifactSet>
+					<outputDirectory>${user.home}/Desktop/stormrealms/testserver/plugins/StormCore/modules</outputDirectory>
 				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

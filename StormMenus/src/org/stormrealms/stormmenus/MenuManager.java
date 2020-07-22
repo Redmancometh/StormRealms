@@ -24,11 +24,11 @@ public class MenuManager {
 
 	@Autowired
 	private AutowireCapableBeanFactory factory;
-
+	/*
 	public Promise<String> prompt(String title, String defaultInput, Player player) {
-		var textPrompt = factory.getBean(TextPrompt.class, title, defaultInput, player);
+		TextPrompt textPrompt = factory.getBean(TextPrompt.class, title, defaultInput, player);
 		return textPrompt.show();
-	}
+	}*/
 
 	public Map<UUID, TypedMenu> map() {
 		return typedMap;
