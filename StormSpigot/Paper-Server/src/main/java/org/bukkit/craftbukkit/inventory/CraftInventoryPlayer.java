@@ -64,6 +64,10 @@ public class CraftInventoryPlayer extends CraftInventory
 
 	@Override
 	public void setItem(int index, ItemStack item) {
+		if (index <= 5) {
+			ChangeArmorEvent e = new ChangeArmorEvent(getItem(index), item, getHolder(), index);
+			Bukkit.getPluginManager().callEvent(e);
+		}
 		super.setItem(index, item);
 		if (this.getHolder() == null)
 			return;
@@ -223,21 +227,33 @@ public class CraftInventoryPlayer extends CraftInventory
 
 	@Override
 	public void setHelmet(ItemStack helmet) {
+		ChangeArmorEvent helmE = new ChangeArmorEvent(this.getItem(getSize() - 2), helmet, this.getHolder(),
+				getSize() - 2);
+		Bukkit.getPluginManager().callEvent(helmE);
 		setItem(getSize() - 2, helmet);
 	}
 
 	@Override
 	public void setChestplate(ItemStack chestplate) {
+		ChangeArmorEvent helmE = new ChangeArmorEvent(this.getItem(getSize() - 2), chestplate, this.getHolder(),
+				getSize() - 3);
+		Bukkit.getPluginManager().callEvent(helmE);
 		setItem(getSize() - 3, chestplate);
 	}
 
 	@Override
 	public void setLeggings(ItemStack leggings) {
+		ChangeArmorEvent helmE = new ChangeArmorEvent(this.getItem(getSize() - 2), leggings, this.getHolder(),
+				getSize() - 4);
+		Bukkit.getPluginManager().callEvent(helmE);
 		setItem(getSize() - 4, leggings);
 	}
 
 	@Override
 	public void setBoots(ItemStack boots) {
+		ChangeArmorEvent helmE = new ChangeArmorEvent(this.getItem(getSize() - 2), boots, this.getHolder(),
+				getSize() - 5);
+		Bukkit.getPluginManager().callEvent(helmE);
 		setItem(getSize() - 5, boots);
 	}
 
@@ -247,6 +263,7 @@ public class CraftInventoryPlayer extends CraftInventory
 	}
 
 	private void setSlots(ItemStack[] items, int baseSlot, int length) {
+		System.out.println("SET SEVERAL SLOTS");
 		// ChangeArmorEvent
 		if (items == null) {
 			items = new ItemStack[length];
@@ -269,6 +286,7 @@ public class CraftInventoryPlayer extends CraftInventory
 
 	@Override
 	public void setArmorContents(ItemStack[] items) {
+		System.out.println("SET ARMOR CONTENTS");
 		setSlots(items, getInventory().items.size(), getInventory().armor.size());
 	}
 
