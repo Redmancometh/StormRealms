@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import org.graalvm.polyglot.Value;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.util.StreamExtensions;
 
 import lombok.experimental.ExtensionMethod;
 
+/**
+ * Component for accessing and storing state about scripts.
+ */
 @Component
 @ExtensionMethod(StreamExtensions.class)
 public class ScriptManager {
@@ -19,39 +20,33 @@ public class ScriptManager {
 	private ScriptLoader scriptLoader;
 	private List<Script> loadedScripts = new ArrayList<>();
 
-	public void loadAllAndExecute() {
+	private void setupContext(Script script) {
+		var globals = script.getGlobalObject();
+		globals.putMember("println", (Consumer<Object>) System.out::println);
+	}
 
+	/**
+	 * Loads all scripts and enters them into reload-on-save mode.
+	 */
+	public void loadAllAndExecute() {
 		loadedScripts.addAll(scriptLoader.loadAllFromConfig(script -> {
-			script.reload();
+			script.open();
+			setupContext(script);
 			var result = script.execute();
 
 			result.get().ifPresentOrElse(returnValue -> {
-				System.out.printf("Script %s was reloaded successfully.", script);
+				System.out.printf("Script %s was loaded successfully.\n", script);
 			}, () -> {
-				System.out.printf("Script %s failed to initialize properly. Error: ", script,
+				System.out.printf("Script %s failed to initialize properly. Error: %s\n", script,
 						result.getExecutionError());
 				result.getExecutionError().printStackTrace();
 			});
 		}));
-
-		for(var script : loadedScripts) {
-			var globals = script.getGlobalObject();
-			
-			globals.putMember("println", (Consumer<Object>) System.out::println);
-		}
-
-		// TODO(Yevano): Do something useful with the script return value.
-		loadedScripts.stream()
-			.map(script -> Pair.of(script, script.execute()))
-				.zipForEach((script, result) -> result.get().ifPresentOrElse(scriptReturnValue -> {
-					System.out.printf("Script %s was initialized successfully.", script);
-				}, () -> {
-					System.out.printf("Script %s failed to initialize properly. Error: ", script,
-							result.getExecutionError());
-					result.getExecutionError().printStackTrace();
-				}));
 	}
 
+	/**
+	 * Closes all scripts, quitting execution of any concurrently running script code.
+	 */
 	public void stopAndUnloadAll() {
 		loadedScripts.stream().forEach(Script::close);
 	}
