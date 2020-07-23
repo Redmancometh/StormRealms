@@ -84,6 +84,7 @@ public abstract class TypedMenu<T> extends BaseTypedMenu<T> {
 			return;
 		}
 		System.out.println("NVM SHOULDNT OPEN");
+		manager.closeMenus(p.getUniqueId());
 		if (this.onClose != null)
 			this.onClose.accept(p, selected);
 	}

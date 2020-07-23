@@ -1,11 +1,8 @@
 package org.stormrealms.stormcombat.events;
 
-import java.util.Map;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.stormrealms.stormcore.outfacing.RPGStat;
 import org.stormrealms.stormmobs.entity.RPGEntity;
 import org.stormrealms.stormstats.model.RPGCharacter;
 
@@ -20,11 +17,9 @@ import lombok.RequiredArgsConstructor;
 public class MobAttackEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	@NonNull
-	private final RPGCharacter player;
+	private final RPGCharacter attackingCharacter;
 	@NonNull
-	private final Player bukkitPlayer;
-	@NonNull
-	private Map<RPGStat, Integer> totalBonuses;
+	private final Player attackingPlayer;
 	@NonNull
 	private RPGEntity entity;
 	private double damage;

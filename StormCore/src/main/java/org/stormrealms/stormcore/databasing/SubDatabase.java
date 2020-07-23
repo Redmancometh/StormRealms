@@ -42,9 +42,9 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
 			e.printStackTrace();
 		}
 	};
-	
+
 	LoadingCache<K, SpecialFuture<V>> cache = CacheBuilder.newBuilder().removalListener(expirCallback)
-			.expireAfterAccess(15, TimeUnit.SECONDS).build(new CacheLoader<K, SpecialFuture<V>>() {
+			.expireAfterAccess(15, TimeUnit.MINUTES).build(new CacheLoader<K, SpecialFuture<V>>() {
 				@Override
 				public SpecialFuture<V> load(K key) {
 					return SpecialFuture.supplyAsync(() -> {

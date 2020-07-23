@@ -12,10 +12,9 @@ import lombok.Setter;
 @Setter
 @Getter
 @AllArgsConstructor
-public class ChangeArmorsEvent extends Event {
+public class ChangeGearEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
-
-	private ItemStack initialItem, finalItem;
+	private ItemStack finalItem;
 	private HumanEntity player;
 	private int slot;
 
@@ -26,5 +25,9 @@ public class ChangeArmorsEvent extends Event {
 
 	public static HandlerList getHandlerList() {
 		return handlers;
+	}
+
+	public ItemStack getInitialItem() {
+		return player.getItemOnCursor();
 	}
 }

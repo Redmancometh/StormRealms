@@ -13,7 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.entity.CraftHumanEntity;
 import org.bukkit.entity.HumanEntity;
 // CraftBukkit end
-import org.stormrealms.stormspigot.event.ChangeArmorEvent;
+import org.stormrealms.stormspigot.event.ChangeGearEvent;
 
 public class PlayerInventory implements IInventory, INamableTileEntity {
 
@@ -446,11 +446,12 @@ public class PlayerInventory implements IInventory, INamableTileEntity {
 
 	@Override
 	public void setItem(int i, ItemStack itemstack) {
-		System.out.println("SET ITEM " + i);
 		if (player != null && i >= 36 && i <= 39) {
-			ChangeArmorEvent e = new ChangeArmorEvent(this.getItem(i).asBukkitMirror(), itemstack.asBukkitMirror(),
-					player.getBukkitEntity(), i);
+			System.out.println("INSIDE THE CALL");
+			org.bukkit.inventory.ItemStack original = player.getBukkitEntity().getItemOnCursor();
+			ChangeGearEvent e = new ChangeGearEvent(original, player.getBukkitEntity(), i);
 			Bukkit.getPluginManager().callEvent(e);
+			System.out.println("EVENT WAS THROWN " + e);
 		}
 		NonNullList<ItemStack> nonnulllist = null;
 
