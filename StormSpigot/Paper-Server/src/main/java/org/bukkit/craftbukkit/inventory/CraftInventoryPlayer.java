@@ -6,13 +6,11 @@ import net.minecraft.server.PacketPlayOutHeldItemSlot;
 import net.minecraft.server.PacketPlayOutSetSlot;
 import net.minecraft.server.PlayerInventory;
 import org.apache.commons.lang.Validate;
-import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.stormrealms.stormspigot.event.ChangeArmorEvent;
 
 public class CraftInventoryPlayer extends CraftInventory
 		implements org.bukkit.inventory.PlayerInventory, EntityEquipment {
@@ -64,10 +62,6 @@ public class CraftInventoryPlayer extends CraftInventory
 
 	@Override
 	public void setItem(int index, ItemStack item) {
-		if (index <= 5) {
-			ChangeArmorEvent e = new ChangeArmorEvent(getItem(index), item, getHolder(), index);
-			Bukkit.getPluginManager().callEvent(e);
-		}
 		super.setItem(index, item);
 		if (this.getHolder() == null)
 			return;
@@ -137,33 +131,21 @@ public class CraftInventoryPlayer extends CraftInventory
 
 		switch (slot) {
 		case HAND:
-			ChangeArmorEvent helmE = new ChangeArmorEvent(this.getItem(slot), item, this.getHolder(), slot.ordinal());
-			Bukkit.getPluginManager().callEvent(helmE);
-
 			this.setItemInMainHand(item);
 			break;
 		case OFF_HAND:
-			ChangeArmorEvent ohE = new ChangeArmorEvent(this.getItem(slot), item, this.getHolder(), slot.ordinal());
-			Bukkit.getPluginManager().callEvent(ohE);
 			this.setItemInOffHand(item);
 			break;
 		case FEET:
-			ChangeArmorEvent feetE = new ChangeArmorEvent(this.getItem(slot), item, this.getHolder(), slot.ordinal());
-			Bukkit.getPluginManager().callEvent(feetE);
 			this.setBoots(item);
 			break;
 		case LEGS:
-			ChangeArmorEvent legsE = new ChangeArmorEvent(this.getItem(slot), item, this.getHolder(), slot.ordinal());
-			Bukkit.getPluginManager().callEvent(legsE);
 			this.setLeggings(item);
 			break;
 		case CHEST:
-			ChangeArmorEvent chestE = new ChangeArmorEvent(this.getItem(slot), item, this.getHolder(), slot.ordinal());
-			Bukkit.getPluginManager().callEvent(chestE);
 			this.setChestplate(item);
 			break;
 		case HEAD:
-			ChangeArmorEvent e = new ChangeArmorEvent(this.getItem(slot), item, this.getHolder(), slot.ordinal());
 			this.setHelmet(item);
 			break;
 		default:
@@ -227,33 +209,21 @@ public class CraftInventoryPlayer extends CraftInventory
 
 	@Override
 	public void setHelmet(ItemStack helmet) {
-		ChangeArmorEvent helmE = new ChangeArmorEvent(this.getItem(getSize() - 2), helmet, this.getHolder(),
-				getSize() - 2);
-		Bukkit.getPluginManager().callEvent(helmE);
 		setItem(getSize() - 2, helmet);
 	}
 
 	@Override
 	public void setChestplate(ItemStack chestplate) {
-		ChangeArmorEvent helmE = new ChangeArmorEvent(this.getItem(getSize() - 2), chestplate, this.getHolder(),
-				getSize() - 3);
-		Bukkit.getPluginManager().callEvent(helmE);
 		setItem(getSize() - 3, chestplate);
 	}
 
 	@Override
 	public void setLeggings(ItemStack leggings) {
-		ChangeArmorEvent helmE = new ChangeArmorEvent(this.getItem(getSize() - 2), leggings, this.getHolder(),
-				getSize() - 4);
-		Bukkit.getPluginManager().callEvent(helmE);
 		setItem(getSize() - 4, leggings);
 	}
 
 	@Override
 	public void setBoots(ItemStack boots) {
-		ChangeArmorEvent helmE = new ChangeArmorEvent(this.getItem(getSize() - 2), boots, this.getHolder(),
-				getSize() - 5);
-		Bukkit.getPluginManager().callEvent(helmE);
 		setItem(getSize() - 5, boots);
 	}
 
@@ -286,7 +256,6 @@ public class CraftInventoryPlayer extends CraftInventory
 
 	@Override
 	public void setArmorContents(ItemStack[] items) {
-		System.out.println("SET ARMOR CONTENTS");
 		setSlots(items, getInventory().items.size(), getInventory().armor.size());
 	}
 

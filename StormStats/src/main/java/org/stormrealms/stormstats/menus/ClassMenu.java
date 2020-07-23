@@ -4,7 +4,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.PostConstruct;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -35,6 +37,11 @@ public class ClassMenu extends TypedMenu<RPGPlayer> {
 	@PostConstruct
 	public void addButtons() {
 		AtomicInteger x = new AtomicInteger(0);
+		setConstructInventory((p, rpgPlayer) -> {
+			Inventory inv = Bukkit.createInventory(p, this.getSize());
+			
+			return inv;
+		});
 		confMan.getConfig().getClassMap().forEach((className, classInfo) -> {
 			TypedMenuButton<RPGPlayer> button = new TypedMenuButton<>((p, t) -> classInfo.getClassItem().build());
 			button.setAction((clickType, rpgPlayer, player) -> {

@@ -20,6 +20,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.script.ScriptEngine;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.Listener;
@@ -46,6 +48,8 @@ import com.google.common.collect.Multimaps;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
 @Configuration
 @ComponentScan(basePackages = { "org.stormrealms.*" })
@@ -79,6 +83,11 @@ public class StormCoreContextConfiguration {
 			return pathStream.filter(path1 -> path1.toString().endsWith(".jar")).map(pathMapperFunc)
 					.collect(Collectors.toList());
 		}
+	}
+
+	@Bean
+	public ScriptEngine engine() {
+		return new NashornScriptEngineFactory().getScriptEngine("--language=es6");
 	}
 
 	@Bean("classloader-map")

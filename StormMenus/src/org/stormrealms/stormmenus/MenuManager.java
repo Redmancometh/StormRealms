@@ -25,10 +25,10 @@ public class MenuManager {
 	@Autowired
 	private AutowireCapableBeanFactory factory;
 	/*
-	public Promise<String> prompt(String title, String defaultInput, Player player) {
-		TextPrompt textPrompt = factory.getBean(TextPrompt.class, title, defaultInput, player);
-		return textPrompt.show();
-	}*/
+	 * public Promise<String> prompt(String title, String defaultInput, Player
+	 * player) { TextPrompt textPrompt = factory.getBean(TextPrompt.class, title,
+	 * defaultInput, player); return textPrompt.show(); }
+	 */
 
 	public Map<UUID, TypedMenu> map() {
 		return typedMap;
@@ -68,6 +68,11 @@ public class MenuManager {
 
 	public TextPrompt setPlayerTextPrompt(UUID uuid, TextPrompt textPrompt) {
 		return promptMap.put(uuid, textPrompt);
+	}
+
+	public void closeMenus(UUID uuid) {
+		menuMap.remove(uuid);
+		typedMap.remove(uuid);
 	}
 
 	public boolean playerHasPromptOpen(UUID uuid) {

@@ -57,7 +57,8 @@ public class CombatUtil {
 	}
 
 	public boolean isRPGGear(ItemStack weapon) {
-		if (weapon.getItemMeta().getPersistentDataContainer().has(key, PersistentDataType.STRING))
+		if (weapon != null && weapon.hasItemMeta()
+				&& weapon.getItemMeta().getPersistentDataContainer().has(key, PersistentDataType.STRING))
 			return true;
 		return false;
 	}

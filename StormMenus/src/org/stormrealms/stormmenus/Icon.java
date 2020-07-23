@@ -1,5 +1,6 @@
 package org.stormrealms.stormmenus;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -32,30 +33,31 @@ public class Icon {
 		return i;
 	}
 
-	
 	// TODO: Add placeholders
 	@SuppressWarnings("deprecation")
 	public ItemStack build(Function<String, String>... replacements) {
+		List<String> newList = new ArrayList();
+		newList.addAll(lore);
 		ItemStack i = new ItemStack(material, 1, (short) dataValue);
 		ItemMeta meta = i.getItemMeta();
 		String newDisplay = displayName;
 		for (int y = 0; y < replacements.length; y++)
 			newDisplay = replacements[y].apply(newDisplay);
 		meta.setDisplayName(newDisplay);
-		meta.setLore(replaceAllLore(lore, replacements));
+		meta.setLore(replaceAllLore(newList, replacements));
 		i.setItemMeta(meta);
 		return i;
 	}
 
-	private List<String> replaceAllLore(List<String> lore, Function<String, String>[] replacements) {
-		for (int x = 0; x < lore.size(); x++) {
-			String ogString = lore.get(x);
+	private List<String> replaceAllLore(List<String> initialLore, Function<String, String>[] replacements) {
+		for (int x = 0; x < initialLore.size(); x++) {
+			String ogString = initialLore.get(x);
 			for (int y = 0; y < replacements.length; y++) {
 				ogString = replacements[y].apply(ogString);
 			}
-			lore.set(x, ogString);
+			initialLore.set(x, ogString);
 		}
-		return lore;
+		return initialLore;
 	}
 
 }
