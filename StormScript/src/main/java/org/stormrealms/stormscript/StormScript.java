@@ -8,7 +8,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.StormSpringPlugin;
-import org.stormrealms.stormscript.configuration.StormScriptConfiguration;
 import org.stormrealms.stormscript.engine.ScriptManager;
 
 @Component
@@ -27,12 +26,12 @@ public class StormScript extends StormSpringPlugin {
 
 	@Override
 	public Class<?> getConfigurationClass() {
-		return StormScriptConfiguration.class;
+		return null;
 	}
 
 	@Override
 	public String[] getPackages() {
-		return new String[] { "org.stormrealms.stormscript", "org.stormrealms.stormscript.configuration" };
+		return new String[] { "org.stormrealms.stormscript", "org.stormrealms.stormscript.engine", "org.stormrealms.stormscript.configuration" };
 	}
 
 	@Override

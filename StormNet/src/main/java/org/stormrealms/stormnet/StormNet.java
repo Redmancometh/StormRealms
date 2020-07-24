@@ -7,7 +7,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.StormSpringPlugin;
-import org.stormrealms.stormnet.configuration.StormNetConfiguration;
 import org.stormrealms.stormspigot.PlayerConnectionOverride;
 
 @Component
@@ -24,7 +23,7 @@ public class StormNet extends StormSpringPlugin {
 
 	@Override
 	public Class<?> getConfigurationClass() {
-		return StormNetConfiguration.class;
+		return null;
 	}
 
 	@Override
@@ -39,6 +38,6 @@ public class StormNet extends StormSpringPlugin {
 
 	@Override
 	public String[] getPackages() {
-		return new String[] { "org.stormrealms.stormnet", "org.stormrealms.stormnet.configuration" };
+		return new String[] { "org.stormrealms.stormnet", "org.stormrealms.stormnet.protocol" };
 	}
 }

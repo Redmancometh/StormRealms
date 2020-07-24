@@ -38,8 +38,11 @@ public class ScriptLoader {
 	private final Path scriptsConfigPath = Path.of("config/scripts/scripts.json");
 	private ScriptsConfig scriptsConfig;
 	private final Engine scriptEngine = Engine.create();
-	private final Context.Builder defaultContextBuilder = Context.newBuilder("js").allowHostAccess(HostAccess.ALL)
-			.allowIO(true).allowHostClassLookup(className -> true).engine(scriptEngine);
+	private final Context.Builder defaultContextBuilder = Context.newBuilder("js")
+			.allowHostAccess(HostAccess.ALL)
+			.allowIO(true)
+			.allowHostClassLookup(className -> true)
+			.engine(scriptEngine);
 
 	@PostConstruct
 	public void loadScriptsConfig() {
@@ -61,6 +64,8 @@ public class ScriptLoader {
 	private Script loadScript(Path path, Consumer<Script> onChange) {
 		var script = new FileSystemScript(path, defaultContextBuilder);
 
+		onChange.accept(script);
+
 		var watcher = new FileWatcher(file -> {
 			onChange.accept(script);
 		}, path.toFile());
@@ -80,8 +85,12 @@ public class ScriptLoader {
 
 		try {
 			scriptWalker = Files.walk(scriptsConfig.getScriptsBasePath());
-			var scriptList = scriptWalker.filter(path -> !Files.isDirectory(path)).map(path -> loadScript(path, onChange))
+
+			var scriptList = scriptWalker
+					.filter(path -> !Files.isDirectory(path))
+					.map(path -> loadScript(path, onChange))
 					.collect(Collectors.toList());
+			
 			scriptWalker.close();
 			return scriptList;
 		} catch (IOException e) {

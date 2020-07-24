@@ -8,6 +8,12 @@ public interface Script extends AutoCloseable {
 
 	public Context getContext();
 
+	/**
+	 * Alias method for {@code script.getContext().getBindings("js")}.
+	 * 
+	 * @return the global object or "bindings" of this script. This object is
+	 *         equivalent to the global scope of this script.
+	 */
 	public default Value getGlobalObject() {
 		return getContext().getBindings("js");
 	}
@@ -16,7 +22,7 @@ public interface Script extends AutoCloseable {
 		return "<unnamed>";
 	}
 
-	public void reload();
+	public void open();
 
 	public void close();
 }

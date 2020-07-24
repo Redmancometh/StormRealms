@@ -65,7 +65,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.7.0-M1</version>
             <scope>test</scope>
-        </dependency>        
+		</dependency>
+		
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>29.0-jre</version>
+		</dependency>
     </dependencies>
 
     <build>

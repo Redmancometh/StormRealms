@@ -13,6 +13,9 @@ import com.google.gson.JsonSerializer;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * Implements GSON (de)serialization for {@link Path}.
+ */
 @Component
 public class PathTypeAdapter implements JsonSerializer<Path>, JsonDeserializer<Path> {
 	@Override
