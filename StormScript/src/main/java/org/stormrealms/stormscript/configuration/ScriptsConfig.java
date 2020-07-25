@@ -12,4 +12,6 @@ public class ScriptsConfig {
 	 * The base path for scripts to be automatically loaded from the file system.
 	 */
 	@Getter private Path scriptsBasePath;
+
+	@Getter private String[] autoImports;
 }

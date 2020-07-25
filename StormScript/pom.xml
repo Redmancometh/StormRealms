@@ -66,12 +66,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
             <version>5.7.0-M1</version>
             <scope>test</scope>
 		</dependency>
-		
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>29.0-jre</version>
-		</dependency>
     </dependencies>
 
     <build>
@@ -85,7 +79,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
                 <version>3.8.1</version>
             </plugin>
 
-            <!--<plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.0.2</version>
@@ -93,36 +87,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
                 <configuration>
                     <outputDirectory>${user.home}/Desktop/stormrealms/testserver/plugins/StormCore/modules</outputDirectory>
                 </configuration>
-			</plugin>-->
-			
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<configuration>
-					<outputFile>${user.home}/Desktop/stormrealms/testserver/plugins/StormCore/modules/StormScript.jar</outputFile>
-					<artifactSet>
-						<includes>
-							<include>*:*</include>
-						</includes>
-						<excludes>
-							<exclude>javax:*</exclude>
-							<exclude>org.stormrealms:StormSpigot:*</exclude>
-							<exclude>org.stormrealms:StormCore:*</exclude>
-							<exclude>org.junit.jupiter:junit-jupiter-api:*</exclude>
-							<exclude>org.graalvm.js:js</exclude>
-							<exclude>org.graalvm.js:js-scriptengine</exclude>
-							<exclude>org.graalvm.truffle:truffle-api</exclude>
-						</excludes>
-					</artifactSet>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
         </plugins>
     </build>
