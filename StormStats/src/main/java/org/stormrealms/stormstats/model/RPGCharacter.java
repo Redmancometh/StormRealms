@@ -15,6 +15,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.hibernate.annotations.Type;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -66,6 +68,8 @@ public class RPGCharacter {
 	@ElementCollection(fetch = FetchType.EAGER, targetClass = String.class)
 	private List<String> groupNames;
 	@Transient
+	private Location location;
+	@Transient
 	private List<String> finalPerms;
 	@Transient
 	private List<Group> groups;
@@ -87,7 +91,7 @@ public class RPGCharacter {
 	@PostConstruct
 	public void assignID() {
 		this.id = UUID.randomUUID();
-
+		this.location = new Location(Bukkit.getWorld(world), x, y, z);
 	}
 
 	public void setDefaults() {

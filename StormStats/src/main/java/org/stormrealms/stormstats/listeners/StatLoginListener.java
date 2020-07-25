@@ -3,6 +3,8 @@ package org.stormrealms.stormstats.listeners;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.PostConstruct;
+
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -10,16 +12,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.StormCore;
 import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormstats.configuration.pojo.StatMiscConfig;
 import org.stormrealms.stormstats.data.StatRepo;
-import org.stormrealms.stormstats.event.CharacterChosenInitializedEvent;
-import org.stormrealms.stormstats.menus.CharacterMenu;
-import org.stormrealms.stormstats.menus.CreateCharacterMenu;
-import org.stormrealms.stormstats.model.RPGCharacter;
+import org.stormrealms.stormstats.model.RPGPlayer;
 
 /**
  * 
@@ -36,8 +34,11 @@ public class StatLoginListener implements Listener {
 	private ConfigManager<StatMiscConfig> miscCfg;
 	@Autowired
 	private StatRepo repo;
-	@Autowired
-	private AutowireCapableBeanFactory factory;
+
+	@PostConstruct
+	public void register() {
+		Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("StormCore"));
+	}
 
 	/**
 	 * 
@@ -45,33 +46,18 @@ public class StatLoginListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onLogin(PlayerJoinEvent e) {
-		repo.getRecord(e.getPlayer().getUniqueId()).thenAccept((rpgPlayer) -> {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(StormCore.getInstance(), () -> {
-				System.out.println("MAIN THREAD: " + Bukkit.isPrimaryThread());
-				if (rpgPlayer.getChosenCharacter() != null) {
-					CharacterChosenInitializedEvent event = new CharacterChosenInitializedEvent(rpgPlayer.getChosenCharacter(),
-							e.getPlayer());
-					Bukkit.getPluginManager().callEvent(event);
-					System.out.println("Has a character already!");
-					return;
-				} else if (rpgPlayer.getCharacters().size() == 1) {
-					System.out.println("SET CHOSEN CHARACTER");
-					RPGCharacter chosen = rpgPlayer.getCharacters().iterator().next();
-					CharacterChosenInitializedEvent event = new CharacterChosenInitializedEvent(chosen, e.getPlayer());
-					rpgPlayer.setChosenCharacter(rpgPlayer.getCharacters().iterator().next());
-					Bukkit.getPluginManager().callEvent(event);
-				} else if (rpgPlayer.getCharacters().size() > 1) {
-					System.out.println("OPENING CHAR SELECT MENU");
-					CharacterMenu menu = factory.getBean(CharacterMenu.class);
-					menu.open(e.getPlayer(), rpgPlayer);
-				} else {
-					System.out.println(miscCfg.getConfig());
-					e.getPlayer().teleport(miscCfg.getConfig().getCharRoomLocation());
-					System.out.println("CREATE CHAR MENU");
-					CreateCharacterMenu menu = factory.getBean(CreateCharacterMenu.class);
-					menu.open(e.getPlayer(), rpgPlayer);
-				}
-			});
-		});
+		repo.getRecord(e.getPlayer().getUniqueId()).thenAccept((rpgPlayer) -> Bukkit.getScheduler()
+				.scheduleSyncDelayedTask(StormCore.getInstance(), () -> trySelectCharacter(e, rpgPlayer)));
+	}
+
+	/**
+	 * 
+	 * @param e
+	 * @param rpgPlayer
+	 */
+	public void trySelectCharacter(PlayerJoinEvent e, RPGPlayer rpgPlayer) {
+		if (rpgPlayer.getChosenCharacter() != null)
+			return;
+		e.getPlayer().teleport(miscCfg.getConfig().getCharRoomLocation());
 	}
 }
