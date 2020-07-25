@@ -1,7 +1,6 @@
 package org.stormrealms.stormstats.configuration.pojo;
 
 import java.util.Map;
-
 import lombok.Data;
 
 @Data
@@ -11,4 +10,5 @@ public class RaceConfig {
 	public Race getRace(String race) {
 		return races.get(race);
 	}
+
 }

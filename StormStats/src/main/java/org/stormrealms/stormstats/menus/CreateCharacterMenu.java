@@ -57,30 +57,27 @@ public class CreateCharacterMenu extends TypedMenu<RPGPlayer> {
 	@PostConstruct
 	public void addButtons() {
 		setButton(cfg.getConfig().getSetClass().getIndex(),
-				new TypedMenuButton<RPGPlayer>((p, rp) -> getClassIcon().build(),
-						(clickType, rPlayer, player) -> {
-							ClassMenu classMenu = factory.getBean(ClassMenu.class);
-							classMenu.openInstead(player, rPlayer);
-						}));
-		setButton(cfg.getConfig().getSetName().getIndex(),
-				new TypedMenuButton<RPGPlayer>((p, rp) -> cfg.getConfig().getSetName().build(),
-						(clickType, rPlayer, player) -> {
-							rPlayer.getConstructingChar().setCharacterName(UUID.randomUUID().toString());
-							this.openInstead(player, rPlayer);
-						}));
+				new TypedMenuButton<RPGPlayer>((p, rp) -> getClassIcon().build(), (clickType, rPlayer, player) -> {
+					ClassMenu classMenu = factory.getBean(ClassMenu.class);
+					classMenu.openInstead(player, rPlayer);
+				}));
+		setButton(cfg.getConfig().getSetName().getIndex(), new TypedMenuButton<RPGPlayer>(
+				(p, rp) -> cfg.getConfig().getSetName().build(), (clickType, rPlayer, player) -> {
+					rPlayer.getConstructingChar().setCharacterName(UUID.randomUUID().toString());
+					this.openInstead(player, rPlayer);
+				}));
 		setButton(cfg.getConfig().getSetRace().getIndex(),
-				new TypedMenuButton<RPGPlayer>((p, rp) -> getRaceIcon().build(),
-						(clickType, rPlayer, player) -> {
-							RaceMenu raceMenu = factory.getBean(RaceMenu.class);
-							raceMenu.openInstead(player, rPlayer);
-						}));
+				new TypedMenuButton<RPGPlayer>((p, rp) -> getRaceIcon().build(), (clickType, rPlayer, player) -> {
+					RaceMenu raceMenu = factory.getBean(RaceMenu.class);
+					raceMenu.openInstead(player, rPlayer);
+				}));
 		setButton(43, new TypedMenuButton<RPGPlayer>((p, rp) -> cfg.getConfig().getSetRace().build(),
 				(clickType, rPlayer, player) -> { player.kickPlayer("Aborted character creation!"); }));
 	}
 
 	public void setStats() {
 		RPGCharacter character = getElement().getConstructingChar();
-		Race race = raceCfg.getConfig().getRace(character.getRace());
+		Race race = character.getRace();
 		ClassInformation classInfo = confMan.getConfig().getClassMap().get(character.getData().getClassName());
 		Map<RPGStat, Integer> statMap = new HashMap();
 		statMap.putAll(classInfo.getStartingStats());
@@ -88,14 +85,8 @@ public class CreateCharacterMenu extends TypedMenu<RPGPlayer> {
 	}
 
 	private Icon getRaceIcon() {
-		String race = getSelected().getConstructingChar().getRace();
-		if (race != null) {
-			for (Race cfgRace : raceCfg.getConfig().getRaces().values()) {
-				if (cfgRace.getName().equals(race))
-					return cfgRace.getRaceIcon();
-			}
-		}
-		return cfg.getConfig().getSetRace();
+		Race race = getSelected().getConstructingChar().getRace();
+		return race.getRaceIcon();
 	}
 
 	private Icon getClassIcon() {

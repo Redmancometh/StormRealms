@@ -31,7 +31,7 @@ public class RaceMenu extends TypedMenu<RPGPlayer> {
 		cfg.getRaces().forEach((name, race) -> {
 			TypedMenuButton<RPGPlayer> button = new TypedMenuButton<>((p, t) -> race.getRaceIcon().build());
 			button.setAction((clickType, rpgPlayer, player) -> {
-				rpgPlayer.getConstructingChar().setRace(name);
+				rpgPlayer.getConstructingChar().setRace(race);
 				// TODO: Add bonus to stats from race.
 				CreateCharacterMenu menu = factory.getBean(CreateCharacterMenu.class);
 				menu.open(player, rpgPlayer);

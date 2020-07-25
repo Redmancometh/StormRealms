@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 public class Race {
-	private String name;
+	private String name, key;
 	private Icon raceIcon;
 	private Map<RPGStat, Integer> bonusStats;
 }

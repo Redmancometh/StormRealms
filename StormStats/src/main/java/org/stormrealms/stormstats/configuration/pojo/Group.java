@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 public class Group {
-	private String name;
+	private String name, key;
 	private List<String> permissions;
 }

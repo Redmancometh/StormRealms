@@ -7,6 +7,7 @@ import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,7 +22,10 @@ import org.hibernate.annotations.Type;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.outfacing.RPGStat;
+import org.stormrealms.stormstats.configuration.adapter.GroupConverter;
+import org.stormrealms.stormstats.configuration.adapter.RaceConverter;
 import org.stormrealms.stormstats.configuration.pojo.Group;
+import org.stormrealms.stormstats.configuration.pojo.Race;
 
 import lombok.Data;
 
@@ -41,7 +45,11 @@ public class RPGCharacter {
 	@Column
 	private String characterName;
 	@Column
-	private String race;
+	@Convert(converter = RaceConverter.class)
+	private Race race;
+	@Column
+	@Convert(converter = GroupConverter.class)
+	private List<Group> groups;
 	@Column
 	private double x;
 	@Column
@@ -64,15 +72,10 @@ public class RPGCharacter {
 	@Column
 	@ElementCollection(fetch = FetchType.EAGER, targetClass = String.class)
 	private List<String> additionalPermissions;
-	@Column
-	@ElementCollection(fetch = FetchType.EAGER, targetClass = String.class)
-	private List<String> groupNames;
 	@Transient
 	private Location location;
 	@Transient
 	private List<String> finalPerms;
-	@Transient
-	private List<Group> groups;
 
 	public boolean hasPermission(String permission) {
 		return finalPerms.contains(permission);
