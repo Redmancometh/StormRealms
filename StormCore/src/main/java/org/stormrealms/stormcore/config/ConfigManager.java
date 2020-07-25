@@ -213,6 +213,27 @@ public class ConfigManager<T> {
 		}
 
 	}
+	
+	public static class ClassAdapterTwo extends TypeAdapter<Class> {
+		@Override
+		public Class read(JsonReader arg0) throws IOException {
+			String string = arg0.nextString();
+			try {
+				return Class.forName(string);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			return null;
+			
+		}
+
+		@Override
+		public void write(JsonWriter arg0, Class arg1) throws IOException {
+			arg0.value(arg1.getName());
+		}
+
+	
+	}
 
 	public static class PathAdapter extends TypeAdapter<String> {
 		@Override

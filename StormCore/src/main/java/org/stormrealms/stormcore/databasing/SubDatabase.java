@@ -50,8 +50,12 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
 					return SpecialFuture.supplyAsync(() -> {
 						try (Session session = factory.openSession()) {
 							V result = session.get(type, key);
-							if (result == null)
-								return defaultObjectBuilder.apply(key);
+							if (result == null) {
+								V newObject = defaultObjectBuilder.apply(key);
+								newObject.postFetch();
+								return newObject;
+							}
+							result.postFetch();
 							return result;
 						} catch (SecurityException | IllegalArgumentException e) {
 							SpecialFuture.runSync(
@@ -70,6 +74,7 @@ public class SubDatabase<K extends Serializable, V extends Defaultable> {
 			try {
 				V v = (V) type.getConstructors()[0].newInstance(new Object[0]);
 				v.setDefaults(key);
+				v.postFetch();
 				return v;
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException | SecurityException e) {

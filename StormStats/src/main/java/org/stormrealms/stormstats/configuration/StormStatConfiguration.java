@@ -17,6 +17,7 @@ import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormmenus.MenuTemplate;
 import org.stormrealms.stormstats.configuration.pojo.ClassConfiguration;
 import org.stormrealms.stormstats.configuration.pojo.GUIConfig;
+import org.stormrealms.stormstats.configuration.pojo.GroupsConfiguration;
 import org.stormrealms.stormstats.configuration.pojo.RaceConfig;
 import org.stormrealms.stormstats.configuration.pojo.StatMiscConfig;
 import org.stormrealms.stormstats.model.RPGPlayer;
@@ -41,8 +42,17 @@ public class StormStatConfiguration {
 	}
 
 	@Bean("create-char-template")
+	@Scope("prototype")
 	public MenuTemplate createCharTemplate(GUIConfig guiCfg) {
 		return guiCfg.getCreateCharTemplate();
+	}
+
+	@Bean(name = "group-config")
+	public ConfigManager<GroupsConfiguration> groups() {
+		ConfigManager<GroupsConfiguration> man = new ConfigManager("groups.json", GroupsConfiguration.class);
+		man.init();
+		return man;
+
 	}
 
 	@Bean(name = "class-config")

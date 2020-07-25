@@ -16,7 +16,7 @@ import org.stormrealms.stormcore.StormCore;
 import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormstats.configuration.pojo.StatMiscConfig;
 import org.stormrealms.stormstats.data.StatRepo;
-import org.stormrealms.stormstats.event.PlayerInitializedEvent;
+import org.stormrealms.stormstats.event.CharacterChosenInitializedEvent;
 import org.stormrealms.stormstats.menus.CharacterMenu;
 import org.stormrealms.stormstats.menus.CreateCharacterMenu;
 import org.stormrealms.stormstats.model.RPGCharacter;
@@ -49,7 +49,7 @@ public class StatLoginListener implements Listener {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(StormCore.getInstance(), () -> {
 				System.out.println("MAIN THREAD: " + Bukkit.isPrimaryThread());
 				if (rpgPlayer.getChosenCharacter() != null) {
-					PlayerInitializedEvent event = new PlayerInitializedEvent(rpgPlayer.getChosenCharacter(),
+					CharacterChosenInitializedEvent event = new CharacterChosenInitializedEvent(rpgPlayer.getChosenCharacter(),
 							e.getPlayer());
 					Bukkit.getPluginManager().callEvent(event);
 					System.out.println("Has a character already!");
@@ -57,7 +57,7 @@ public class StatLoginListener implements Listener {
 				} else if (rpgPlayer.getCharacters().size() == 1) {
 					System.out.println("SET CHOSEN CHARACTER");
 					RPGCharacter chosen = rpgPlayer.getCharacters().iterator().next();
-					PlayerInitializedEvent event = new PlayerInitializedEvent(chosen, e.getPlayer());
+					CharacterChosenInitializedEvent event = new CharacterChosenInitializedEvent(chosen, e.getPlayer());
 					rpgPlayer.setChosenCharacter(rpgPlayer.getCharacters().iterator().next());
 					Bukkit.getPluginManager().callEvent(event);
 				} else if (rpgPlayer.getCharacters().size() > 1) {

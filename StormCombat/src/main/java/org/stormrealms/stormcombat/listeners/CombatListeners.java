@@ -31,7 +31,7 @@ import org.stormrealms.stormcore.outfacing.RPGStat;
 import org.stormrealms.stormmobs.entity.RPGEntity;
 import org.stormrealms.stormspigot.event.ChangeGearEvent;
 import org.stormrealms.stormstats.data.StatRepo;
-import org.stormrealms.stormstats.event.PlayerInitializedEvent;
+import org.stormrealms.stormstats.event.CharacterChosenInitializedEvent;
 
 @Component
 public class CombatListeners implements Listener {
@@ -85,7 +85,7 @@ public class CombatListeners implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
-	public void initialCache(PlayerInitializedEvent e) {
+	public void initialCache(CharacterChosenInitializedEvent e) {
 		System.out.println("INITIAL CACHE");
 		UUID uuid = e.getPlayer().getUniqueId();
 		if (statCache.containsKey(uuid))

@@ -31,7 +31,7 @@ import lombok.EqualsAndHashCode;
  * @author Redmancometh
  *
  */
-public class PlayerInitializedEvent extends Event {
+public class CharacterChosenInitializedEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	private RPGCharacter character;
 	private Player player;

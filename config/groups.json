@@ -1,0 +1,10 @@
+{
+	"groups": {
+		"default": {
+			"name": "Default",
+			"permissions": [
+				"test.test1"
+			]
+		}
+	}
+}

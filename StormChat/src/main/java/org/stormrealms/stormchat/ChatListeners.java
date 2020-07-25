@@ -7,6 +7,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 public class ChatListeners implements Listener {
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e) {
-		
+		e.setCancelled(true);
 	}
 }

@@ -26,7 +26,6 @@ import javax.annotation.PostConstruct;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import org.apache.commons.io.FileUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;

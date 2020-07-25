@@ -1,5 +1,6 @@
 package org.stormrealms.stormstats.model;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -12,11 +13,13 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.outfacing.RPGStat;
+import org.stormrealms.stormstats.configuration.pojo.Group;
 
 import lombok.Data;
 
@@ -56,12 +59,22 @@ public class RPGCharacter {
 	@Column
 	@ElementCollection(fetch = FetchType.EAGER, targetClass = Integer.class)
 	private Map<RPGStat, Integer> stats;
+	@Column
+	@ElementCollection(fetch = FetchType.EAGER, targetClass = String.class)
+	private List<String> additionalPermissions;
+	@Column
+	@ElementCollection(fetch = FetchType.EAGER, targetClass = String.class)
+	private List<String> groupNames;
+	@Transient
+	private List<String> finalPerms;
+	@Transient
+	private List<Group> groups;
+
+	public boolean hasPermission(String permission) {
+		return finalPerms.contains(permission);
+	}
 
 	public boolean isCharacterComplete() {
-		// System.out.println("RACE IS NULL: " + (this.getRace() == null));
-		// System.out.println("NAME IS NULL: " + (this.getCharacterName() == null));
-		// System.out.println("CLASSDATA IS NULL: " + (this.getData() == null));
-		// System.out.println("IS CHAR COMPLETE?");
 		if (this.getRace() != null && this.getCharacterName() != null && this.getData() != null
 				&& this.getData().getClassName() != null) {
 			System.out.println("CHARACTER COMPLETE");
@@ -74,6 +87,7 @@ public class RPGCharacter {
 	@PostConstruct
 	public void assignID() {
 		this.id = UUID.randomUUID();
+
 	}
 
 	public void setDefaults() {

@@ -43,7 +43,7 @@ public class RPGPlayer implements Defaultable<UUID> {
 	private RPGCharacter chosenCharacter;
 	@Transient
 	private WeakReference<Player> playerRef;
-
+	
 	public Player getPlayer() {
 		// if (playerRef != null && playerRef.get() != null)
 		// return playerRef.get();
