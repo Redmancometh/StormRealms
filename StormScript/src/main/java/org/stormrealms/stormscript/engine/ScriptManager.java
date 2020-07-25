@@ -36,7 +36,6 @@ public class ScriptManager {
 				autoClass = Class.forName(className);
 				System.out.printf("Class: %s\n", className);
 				globals.putMember(autoClass.getSimpleName(), script.getContext().asValue(autoClass));
-				var value = globals.getMember(autoClass.getSimpleName());
 			} catch(ClassNotFoundException e) {
 				System.out.printf("WARNING: Class %s referenced in autoImports could not be found.\n", className);
 			}
