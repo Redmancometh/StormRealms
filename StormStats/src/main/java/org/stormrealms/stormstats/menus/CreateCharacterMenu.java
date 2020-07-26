@@ -26,7 +26,6 @@ import org.stormrealms.stormstats.configuration.pojo.GUIConfig;
 import org.stormrealms.stormstats.configuration.pojo.Race;
 import org.stormrealms.stormstats.configuration.pojo.RaceConfig;
 import org.stormrealms.stormstats.data.StatRepo;
-import org.stormrealms.stormstats.model.ClassData;
 import org.stormrealms.stormstats.model.RPGCharacter;
 import org.stormrealms.stormstats.model.RPGPlayer;
 import org.stormrealms.stormstats.util.CharacterUtil;
@@ -78,7 +77,7 @@ public class CreateCharacterMenu extends TypedMenu<RPGPlayer> {
 	public void setStats() {
 		RPGCharacter character = getElement().getConstructingChar();
 		Race race = character.getRace();
-		ClassInformation classInfo = confMan.getConfig().getClassMap().get(character.getData().getClassName());
+		ClassInformation classInfo = confMan.getConfig().getClassMap().get(character.getClassData().getClassName());
 		Map<RPGStat, Integer> statMap = new HashMap();
 		statMap.putAll(classInfo.getStartingStats());
 		race.getBonusStats().forEach((stat, amt) -> statMap.merge(stat, amt, (v1, v2) -> v1 + v2));
@@ -86,14 +85,16 @@ public class CreateCharacterMenu extends TypedMenu<RPGPlayer> {
 
 	private Icon getRaceIcon() {
 		Race race = getSelected().getConstructingChar().getRace();
+		if (race == null)
+			return cfg.getConfig().getSetRace();
 		return race.getRaceIcon();
 	}
 
 	private Icon getClassIcon() {
-		ClassData data = getSelected().getConstructingChar().getData();
+		ClassInformation data = getSelected().getConstructingChar().getClassData();
 		if (data == null || data.getClassName() == null)
 			return cfg.getConfig().getSetClass();
-		String clazz = getSelected().getConstructingChar().getData().getClassName();
+		String clazz = getSelected().getConstructingChar().getClassData().getClassName();
 		if (clazz != null)
 			return confMan.getConfig().getClassMap().get(clazz.toLowerCase()).getClassItem();
 		return cfg.getConfig().getSetClass();
@@ -105,7 +106,7 @@ public class CreateCharacterMenu extends TypedMenu<RPGPlayer> {
 		testIcon.setDisplayName("Confirm Character Creation");
 		List<String> lore = new ArrayList();
 		lore.add("Chosen Name: " + getElement().getConstructingChar().getCharacterName());
-		lore.add("Chosen Class: " + getElement().getConstructingChar().getData().getClassName());
+		lore.add("Chosen Class: " + getElement().getConstructingChar().getClassData().getClassName());
 		lore.add("Chosen Race: " + getElement().getConstructingChar().getRace());
 		testIcon.setLore(lore);
 		testIcon.setDataValue((short) 0);
@@ -137,9 +138,7 @@ public class CreateCharacterMenu extends TypedMenu<RPGPlayer> {
 
 	@Override
 	public boolean shouldReopen() {
-		boolean charComplete = getElement().getConstructingChar() != null
-				&& getElement().getConstructingChar().isCharacterComplete();
-		return !charComplete;
+		return false;
 	}
 
 }

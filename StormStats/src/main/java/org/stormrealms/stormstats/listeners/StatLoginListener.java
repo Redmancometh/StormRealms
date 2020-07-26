@@ -37,6 +37,7 @@ public class StatLoginListener implements Listener {
 
 	@PostConstruct
 	public void register() {
+		System.out.println("Register storm players events");
 		Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("StormCore"));
 	}
 

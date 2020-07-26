@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 public class ClassInformation {
-	private String className;
+	private String className, key;
 	private Icon classItem;
 	private Map<RPGStat, Integer> startingStats;
 }

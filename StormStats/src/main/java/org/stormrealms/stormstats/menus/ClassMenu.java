@@ -3,10 +3,7 @@ package org.stormrealms.stormstats.menus;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.PostConstruct;
-
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -17,7 +14,6 @@ import org.stormrealms.stormmenus.absraction.TypedMenu;
 import org.stormrealms.stormmenus.menus.TypedMenuButton;
 import org.stormrealms.stormstats.configuration.pojo.ClassConfiguration;
 import org.stormrealms.stormstats.configuration.pojo.ClassInformation;
-import org.stormrealms.stormstats.model.ClassData;
 import org.stormrealms.stormstats.model.RPGCharacter;
 import org.stormrealms.stormstats.model.RPGPlayer;
 
@@ -37,19 +33,11 @@ public class ClassMenu extends TypedMenu<RPGPlayer> {
 	@PostConstruct
 	public void addButtons() {
 		AtomicInteger x = new AtomicInteger(0);
-		setConstructInventory((p, rpgPlayer) -> {
-			Inventory inv = Bukkit.createInventory(p, this.getSize());
-			
-			return inv;
-		});
 		confMan.getConfig().getClassMap().forEach((className, classInfo) -> {
 			TypedMenuButton<RPGPlayer> button = new TypedMenuButton<>((p, t) -> classInfo.getClassItem().build());
 			button.setAction((clickType, rpgPlayer, player) -> {
-				ClassData data = new ClassData();
-				data.setClassName(className);
 				RPGCharacter character = rpgPlayer.getConstructingChar();
-				data.setCharacter(character);
-				character.setData(data);
+				character.setClassData(classInfo);
 				CreateCharacterMenu charMenu = factory.getBean(CreateCharacterMenu.class);
 				charMenu.open(player, rpgPlayer);
 			});
