@@ -2,11 +2,12 @@ package org.stormrealms.stormscript.engine;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.util.StreamExtensions;
+import org.stormrealms.stormscript.api.APIManager;
+import org.stormrealms.stormscript.api.ImportAPI;
 
 import lombok.experimental.ExtensionMethod;
 
@@ -18,11 +19,28 @@ import lombok.experimental.ExtensionMethod;
 public class ScriptManager {
 	@Autowired
 	private ScriptLoader scriptLoader;
+	@Autowired
+	private APIManager apiManager;
+
 	private List<Script> loadedScripts = new ArrayList<>();
 
 	private void setupContext(Script script) {
 		var globals = script.getGlobalObject();
-		globals.putMember("println", (Consumer<Object>) System.out::println);
+
+		for(var className : scriptLoader.getScriptsConfig().getAutoImports()) {
+			Class<?> autoClass = null;
+
+			try {
+				autoClass = Class.forName(className);
+				System.out.printf("Class: %s\n", className);
+				globals.putMember(autoClass.getSimpleName(), script.getContext().asValue(autoClass));
+			} catch(ClassNotFoundException e) {
+				System.out.printf("WARNING: Class %s referenced in autoImports could not be found.\n", className);
+			}
+		}
+
+		var importAPI = new ImportAPI(script);
+		apiManager.bindAPI(importAPI, script);
 	}
 
 	/**
