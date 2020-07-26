@@ -3,15 +3,10 @@ package org.stormrealms.stormmenus;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.bukkit.entity.Player;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormmenus.absraction.Menu;
 import org.stormrealms.stormmenus.absraction.TypedMenu;
 import org.stormrealms.stormmenus.menus.TextPrompt;
-import org.stormrealms.stormnet.Promise;
 
 @Component
 public class MenuManager {
@@ -21,9 +16,6 @@ public class MenuManager {
 	protected static Map<UUID, TypedMenu> typedMap = new ConcurrentHashMap();
 	protected static Map<UUID, Menu> menuMap = new ConcurrentHashMap();
 	protected static Map<UUID, TextPrompt> promptMap = new ConcurrentHashMap<>();
-
-	@Autowired
-	private AutowireCapableBeanFactory factory;
 	/*
 	 * public Promise<String> prompt(String title, String defaultInput, Player
 	 * player) { TextPrompt textPrompt = factory.getBean(TextPrompt.class, title,

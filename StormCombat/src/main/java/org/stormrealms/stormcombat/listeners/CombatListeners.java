@@ -49,6 +49,7 @@ public class CombatListeners implements Listener {
 
 	@EventHandler
 	public void onEquip(ChangeGearEvent e) {
+		System.out.println("CHANGE235 GEAR EVENT AGAIN");
 		ItemStack initialItem = e.getInitialItem();
 		if (initialItem != null)
 			System.out.println(initialItem.getType());

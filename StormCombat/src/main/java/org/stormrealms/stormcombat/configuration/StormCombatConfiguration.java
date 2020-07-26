@@ -9,14 +9,23 @@ import org.springframework.context.annotation.Configuration;
 import org.stormrealms.stormcombat.configuration.pojo.CombatGUIConfig;
 import org.stormrealms.stormcombat.configuration.pojo.RegenConfig;
 import org.stormrealms.stormcore.config.ConfigManager;
+import org.stormrealms.stormcore.outfacing.RPGGearData;
 import org.stormrealms.stormcore.outfacing.RPGStat;
+
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 
 @Configuration
 public class StormCombatConfiguration {
 	@Bean("stat-cache")
 	public Map<UUID, Map<RPGStat, Integer>> statCache() {
-		//this may end up needing a concurrent hashmap
+		// this may end up needing a concurrent hashmap
 		return new HashMap();
+	}
+
+	@Bean("gear-cache")
+	public Multimap<UUID, RPGGearData> gearCache() {
+		return HashMultimap.create();
 	}
 
 	@Bean
