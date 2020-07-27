@@ -209,6 +209,7 @@ public enum EntityType implements Keyed {
     CREEPER("creeper", Creeper.class, 50),
     SKELETON("skeleton", Skeleton.class, 51),
     SPIDER("spider", Spider.class, 52),
+    RPG_ENTITY("rpg_entity", RPGEntity.class, 201),
     GIANT("giant", Giant.class, 53),
     ZOMBIE("zombie", Zombie.class, 54),
     SLIME("slime", Slime.class, 55),

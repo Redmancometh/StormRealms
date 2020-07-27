@@ -32,7 +32,6 @@ public class HelpYamlReader {
             helpYaml = YamlConfiguration.loadConfiguration(helpYamlFile);
             helpYaml.options().copyDefaults(true);
             helpYaml.setDefaults(defaultConfig);
-
             try {
                 if (!helpYamlFile.exists()) {
                     helpYaml.save(helpYamlFile);
