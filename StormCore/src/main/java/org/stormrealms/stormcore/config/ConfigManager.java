@@ -32,13 +32,8 @@ import lombok.Setter;
  */
 @Data
 public class ConfigManager<T> {
-	protected Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED)
-			.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
-			.registerTypeHierarchyAdapter(String.class, new PathAdapter())
-			.registerTypeHierarchyAdapter(Material.class, new MaterialAdapter())
-			.registerTypeAdapter(Location.class, new LocationAdapter())
-			.registerTypeAdapter(RPGStat.class, new RPGStatAdapter())
-			.registerTypeHierarchyAdapter(Class.class, new ClassAdapter()).setLenient().setPrettyPrinting().create();
+	@Getter
+	protected Gson gson;
 	protected String fileName;
 	protected Class clazz;
 	protected T config;
@@ -48,16 +43,26 @@ public class ConfigManager<T> {
 	private Runnable onReload;
 
 	public ConfigManager(String fileName, Class clazz) {
-		super();
-		this.fileName = fileName;
-		this.clazz = clazz;
+		this(fileName, clazz, null);
 	}
 
 	public ConfigManager(String fileName, Class clazz, Runnable onReload) {
+		this(fileName, clazz, onReload, null);
+	}
+
+	public ConfigManager(String fileName, Class clazz, Runnable onReload, GsonBuilder gsonBuilder) {
 		super();
 		this.fileName = fileName;
 		this.clazz = clazz;
 		this.onReload = onReload;
+		if(gsonBuilder == null) gsonBuilder = new GsonBuilder();
+		gson = gsonBuilder.excludeFieldsWithModifiers(Modifier.PROTECTED)
+			.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
+			.registerTypeHierarchyAdapter(String.class, new PathAdapter())
+			.registerTypeHierarchyAdapter(Material.class, new MaterialAdapter())
+			.registerTypeAdapter(Location.class, new LocationAdapter())
+			.registerTypeAdapter(RPGStat.class, new RPGStatAdapter())
+			.registerTypeHierarchyAdapter(Class.class, new ClassAdapter()).setLenient().setPrettyPrinting().create();
 	}
 
 	public void init() {
