@@ -220,7 +220,7 @@ public class EntityTypes<T extends Entity> {
 			EntityTypes.a.a(EnumCreatureType.MISC).b().a().a(0.6F, 1.8F));
 	public static final EntityTypes<EntityFishingHook> FISHING_BOBBER = a("fishing_bobber",
 			EntityTypes.a.a(EnumCreatureType.MISC).b().a().a(0.25F, 0.25F));
-	public static final EntityTypes<EntityCustom> CUSTOM_MONSTER = a("rpg_entity",
+	public static final EntityTypes<EntityCustomMonster> CUSTOM_MONSTER = a("rpg_entity",
 			EntityTypes.a.a(EnumCreatureType.MISC).b().a().a(1F, 1F));
 	private final EntityTypes.b<T> ba;
 	private final EnumCreatureType bb;

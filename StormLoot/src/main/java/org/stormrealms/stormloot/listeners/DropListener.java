@@ -16,6 +16,7 @@ import org.stormrealms.stormcore.config.ConfigManager.MaterialAdapter;
 import org.stormrealms.stormcore.config.ConfigManager.RPGStatAdapter;
 import org.stormrealms.stormcore.outfacing.RPGStat;
 import org.stormrealms.stormloot.controller.LootSelector;
+
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -38,4 +39,5 @@ public class DropListener implements Listener {
 			e.getPlayer().getInventory().addItem(selector.itemDrop(10));
 		}
 	}
+
 }

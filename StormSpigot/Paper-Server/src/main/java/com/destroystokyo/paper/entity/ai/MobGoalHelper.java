@@ -4,8 +4,6 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
 import com.destroystokyo.paper.entity.RangedEntity;
-import com.destroystokyo.paper.entity.ai.GoalKey;
-import com.destroystokyo.paper.entity.ai.GoalType;
 import com.destroystokyo.paper.util.set.OptimizedSmallEnumSet;
 
 import net.minecraft.server.*; // intentional star import
@@ -222,7 +220,7 @@ public class MobGoalHelper {
 		bukkitMap.put(EntityZombie.class, Zombie.class);
 		bukkitMap.put(EntityZombieHusk.class, Husk.class);
 		bukkitMap.put(EntityZombieVillager.class, ZombieVillager.class);
-		bukkitMap.put(EntityCustom.class, RPGEntity.class);
+		bukkitMap.put(EntityCustomMonster.class, RPGEntity.class);
 	}
 
 	public static String getUsableName(Class<?> clazz) {
