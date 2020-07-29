@@ -1,9 +1,7 @@
 package net.minecraft.server;
 
 import org.stormrealms.stormspigot.entities.RPGEntityData;
-
 import lombok.Getter;
-import net.minecraft.server.PacketPlayOutSpawnEntityLiving;
 
 public class EntityCustomMonster extends EntityMonster {
 	@Getter
@@ -18,9 +16,5 @@ public class EntityCustomMonster extends EntityMonster {
 	public Packet<?> L() {
 		return new PacketPlayOutSpawnEntityLiving(this);
 	}
-
-	@Override
-	public int getId() {
-		return this.getData().getId();
-	}
+	
 }

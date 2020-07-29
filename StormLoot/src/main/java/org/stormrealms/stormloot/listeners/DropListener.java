@@ -36,7 +36,7 @@ public class DropListener implements Listener {
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
 		if (e.getPlayer().isSneaking()) {
-			e.getPlayer().getInventory().addItem(selector.itemDrop(10));
+			e.getPlayer().getInventory().addItem(selector.itemDrop(15));
 		}
 	}
 

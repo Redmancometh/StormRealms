@@ -53,6 +53,7 @@ public class StormCore extends JavaPlugin {
 	};
 
 	public void onEnable() {
+		System.out.println("TEST2");
 		setPluginManager(new RedPlugins());
 		setMasterDB(new MasterDatabase());
 		instance = this;
