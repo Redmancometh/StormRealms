@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class RPGEntityData {
-	private int id;
+	private int id, level, defense;
 }

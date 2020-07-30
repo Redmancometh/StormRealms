@@ -33,4 +33,14 @@ public class CraftRPGEntity extends CraftMonster implements RPGEntity {
 	public EntityType getType() {
 		return EntityType.RPG_ENTITY;
 	}
+
+	@Override
+	public int getLevel() {
+		return getHandle().getData().getLevel();
+	}
+
+	@Override
+	public int getDefense() {
+		return getHandle().getData().getDefense();
+	}
 }

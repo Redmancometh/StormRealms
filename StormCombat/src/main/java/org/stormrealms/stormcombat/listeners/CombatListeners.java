@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.entity.CraftLivingEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.RPGEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -28,7 +28,6 @@ import org.stormrealms.stormcombat.events.WeaponAttackEvent;
 import org.stormrealms.stormcombat.util.CombatUtil;
 import org.stormrealms.stormcore.outfacing.RPGGearData;
 import org.stormrealms.stormcore.outfacing.RPGStat;
-import org.stormrealms.stormmobs.entity.RPGEntity;
 import org.stormrealms.stormspigot.event.ChangeGearEvent;
 import org.stormrealms.stormstats.data.StatRepo;
 import org.stormrealms.stormstats.event.CharacterChosenEvent;
@@ -49,7 +48,6 @@ public class CombatListeners implements Listener {
 
 	@EventHandler
 	public void onEquip(ChangeGearEvent e) {
-		System.out.println("CHANGE235 GEAR EVENT AGAIN");
 		ItemStack initialItem = e.getInitialItem();
 		if (initialItem != null)
 			System.out.println(initialItem.getType());
@@ -123,7 +121,7 @@ public class CombatListeners implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void throwEvent(EntityDamageByEntityEvent e) {
+	public void throwEvent(EntityDamageByEntityEvent e) {		
 		Entity damager = e.getDamager();
 		Entity damaged = e.getEntity();
 		if (damager instanceof Player && (damaged instanceof LivingEntity)) {
@@ -131,9 +129,9 @@ public class CombatListeners implements Listener {
 			if (damaged instanceof Player) {
 				Bukkit.getPluginManager().callEvent(new PVPEvent());
 				return;
-			} else if (((CraftLivingEntity) damaged).getHandle() instanceof RPGEntity) {
-				Bukkit.getPluginManager().callEvent(new PVMEvent(util.getRPGCharacter(dPlayer), dPlayer,
-						(RPGEntity) ((CraftLivingEntity) damaged).getHandle()));
+			} else if (damaged instanceof RPGEntity) {
+				Bukkit.getPluginManager()
+						.callEvent(new PVMEvent(util.getRPGCharacter(dPlayer), dPlayer, (RPGEntity) damaged));
 			}
 		}
 	}

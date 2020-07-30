@@ -254,6 +254,7 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
+							<shadedArtifactAttached>true</shadedArtifactAttached>
 							<dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation> <!-- Paper -->
 							<createSourcesJar>${shadeSourcesJar}</createSourcesJar>
 							<outputDirectory>${user.home}/Desktop/stormrealms/testserver</outputDirectory>

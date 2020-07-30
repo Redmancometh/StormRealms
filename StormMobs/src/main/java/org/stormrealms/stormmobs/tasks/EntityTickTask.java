@@ -1,7 +1,7 @@
 package org.stormrealms.stormmobs.tasks;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.stormrealms.stormmobs.entity.RPGEntity;
 

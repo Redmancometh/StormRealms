@@ -13,6 +13,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<properties>
+		<api.version>unknown</api.version>
+		<minecraft.version>1.15.2</minecraft.version>
+		<minecraft_version>1_15_R1</minecraft_version>
 		<jackson.version>2.9.2</jackson.version>
 		<maven.compiler.source>1.11</maven.compiler.source>
 		<maven.compiler.target>1.11</maven.compiler.target>
@@ -33,6 +36,7 @@
 			<groupId>org.stormrealms</groupId>
 			<artifactId>paper</artifactId>
 			<version>1.15.2-R0.1-SNAPSHOT</version>
+			<classifier>shaded</classifier>
 		</dependency>
 		<dependency>
 			<groupId>org.aspectj</groupId>
@@ -189,9 +193,26 @@
 							<include>*:*</include>
 						</includes>
 						<excludes>
+							<exclude>org.yaml:*</exclude>
+							<exclude>com.destroystokyo.paper:*</exclude>
+							<exclude>net.minecrell:*</exclude>
+							<exclude>org.jline:*</exclude>
+							<exclude>io.netty:*</exclude>
+							<exclude>de.ruedigermoeller:*</exclude>
+							<exclude>org.graalvm.sdk:*</exclude>
+							<exclude>org.graalvm.regex:*</exclude>
+							<exclude>org.graalvm.js:*</exclude>
+							<exclude>org.graalvm.truffle:*</exclude>
+							<exclude>com.comphenix.protocol:*</exclude>
+							<exclude>org.spigotmc:*</exclude>
+							<exclude>net.md-5:*</exclude>
+							<exclude>co.aikar:*</exclude>
+							<exclude>com.filoghost:*</exclude>
+							<exclude>com.mojang:*</exclude>
 							<exclude>javax:*</exclude>
-							<exclude>org.stormrealms:StormMenu:*</exclude>
-							<exclude>org.stormrealms:spigot:*</exclude>
+							<exclude>org.stormrealms:paper:*</exclude>
+							<exclude>org.bukkit:/**</exclude>
+							<exclude>com.destroystokyo.paper:/**</exclude>
 						</excludes>
 					</artifactSet>
 				</configuration>

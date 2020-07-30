@@ -286,14 +286,6 @@ public class EntityTrackerEntry {
 	public void b(EntityPlayer entityPlayer) {
 		entityPlayer.playerConnection.getClass();
 		this.a((packet) -> {
-			if (packet instanceof PacketPlayOutSpawnEntityLiving) {
-				PacketPlayOutSpawnEntityLiving lePack = (PacketPlayOutSpawnEntityLiving) packet;
-				EntityLiving ent = lePack.getEntityRef().get();
-				if (ent instanceof EntityCustomMonster)
-					System.out.println("Setting ID in packet to: "+((EntityCustomMonster) ent).getData().getId());
-					((PacketPlayOutSpawnEntityLiving) packet)
-							.setInternalId(((EntityCustomMonster) ent).getData().getId());
-			}
 			entityPlayer.playerConnection.sendPacket(packet);
 		}, entityPlayer); // CraftBukkit - add player
 		this.tracker.b(entityPlayer);

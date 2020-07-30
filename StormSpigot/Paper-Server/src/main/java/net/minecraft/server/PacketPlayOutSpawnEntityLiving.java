@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.UUID;
 
-import org.bukkit.entity.LivingEntity;
-
 public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlayOut> {
 
 	private int a;
@@ -28,9 +26,10 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
 	public PacketPlayOutSpawnEntityLiving(EntityLiving entityliving) {
 		this.a = entityliving.getId();
 		this.b = entityliving.getUniqueID();
-		this.c = IRegistry.ENTITY_TYPE.a((EntityTypes<?>) entityliving.getEntityType());
-		System.out.println("C: "+c);
-		System.out.println("A: "+a);
+		if (entityliving instanceof EntityCustomMonster)
+			this.c = ((EntityCustomMonster) entityliving).getData().getId();
+		else
+			this.c = IRegistry.ENTITY_TYPE.a((EntityTypes<?>) entityliving.getEntityType());
 		this.d = entityliving.locX();
 		this.e = entityliving.locY();
 		this.f = entityliving.locZ();

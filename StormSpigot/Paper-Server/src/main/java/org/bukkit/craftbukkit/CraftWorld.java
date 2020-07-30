@@ -1919,6 +1919,7 @@ public class CraftWorld implements World {
 
 	public CraftRPGEntity spawnCustom(Location loc, RPGEntityData data) {
 		EntityCustomMonster baseEntity = new EntityCustomMonster(EntityTypes.CUSTOM_MONSTER, world, data);
+		baseEntity.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getPitch(), loc.getYaw());
 		CraftRPGEntity cbEntity = new CraftRPGEntity(server, baseEntity);
 		world.addEntity(baseEntity);
 		return cbEntity;
