@@ -121,7 +121,7 @@ public class CombatListeners implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void throwEvent(EntityDamageByEntityEvent e) {		
+	public void throwEvent(EntityDamageByEntityEvent e) {
 		Entity damager = e.getDamager();
 		Entity damaged = e.getEntity();
 		if (damager instanceof Player && (damaged instanceof LivingEntity)) {
@@ -132,6 +132,7 @@ public class CombatListeners implements Listener {
 			} else if (damaged instanceof RPGEntity) {
 				Bukkit.getPluginManager()
 						.callEvent(new PVMEvent(util.getRPGCharacter(dPlayer), dPlayer, (RPGEntity) damaged));
+				
 			}
 		}
 	}
@@ -167,6 +168,7 @@ public class CombatListeners implements Listener {
 		if (cCalc.isGlancing(e))
 			e.setGlancingBlow(true);
 		e.setDamage(cCalc.calculateMeleeDamage(e));
+		System.out.println("DMG: " + e.getDamage());
 		cProc.hit(e);
 	}
 }
