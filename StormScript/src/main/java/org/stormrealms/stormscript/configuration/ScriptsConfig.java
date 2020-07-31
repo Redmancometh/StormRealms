@@ -13,5 +13,10 @@ public class ScriptsConfig {
 	 */
 	@Getter private Path scriptsBasePath;
 
+	/**
+	 * The base path for scriptable object declarations relative to the config folder.
+	 */
+	@Getter private Path objectsBasePath;
+
 	@Getter private String[] autoImports;
 }

@@ -1,33 +1,85 @@
 package org.stormrealms.stormscript.engine;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
+
+import javax.annotation.PostConstruct;
+
+import com.google.gson.GsonBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.stormrealms.stormcore.util.StreamExtensions;
+import org.stormrealms.stormcore.util.IterableM;
+import org.stormrealms.stormcore.util.Just;
+import org.stormrealms.stormcore.util.Maybe;
 import org.stormrealms.stormscript.api.APIManager;
 import org.stormrealms.stormscript.api.ImportAPI;
-
-import lombok.experimental.ExtensionMethod;
+import org.stormrealms.stormscript.configuration.PathTypeAdapter;
+import org.stormrealms.stormscript.scriptable.Scriptable;
 
 /**
  * Component for accessing and storing state about scripts.
  */
 @Component
-@ExtensionMethod(StreamExtensions.class)
 public class ScriptManager {
+	@Autowired
+	private PathTypeAdapter pathTypeAdapter;
 	@Autowired
 	private ScriptLoader scriptLoader;
 	@Autowired
 	private APIManager apiManager;
 
+	private final GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(Path.class, pathTypeAdapter);
+
 	private List<Script> loadedScripts = new ArrayList<>();
+	private List<Class<? extends Scriptable>> scriptablePrototypes = new ArrayList<>();
+
+	@PostConstruct
+	public void init() {
+		var objectsBasePath = scriptLoader.getScriptsConfig().getConfig().getObjectsBasePath();
+
+		Stream<Path> walkStream;
+
+		try(Stream<Path> tryWalkStream = Files.walk(objectsBasePath)) {
+			walkStream = tryWalkStream;
+		} catch (IOException e) {
+			System.out.printf(
+					"Could not load scripts because an IO error ocurred when trying to scan the base path %s. Error: %s\n",
+					objectsBasePath, e);
+			return;
+        }
+
+        IterableM.of(walkStream.iterator())
+            .fmap(Just::of)
+            .filter(path -> !path.toFile().isDirectory());
+
+		/* walkStream
+			.filter(path -> !path.toFile().isDirectory())
+			.forEach(path -> {
+				var script = scriptLoader.loadScript(path, reloadedScript -> {
+					reloadedScript.open();
+					setupContext(reloadedScript);
+					var result = reloadedScript.execute();
+		
+					result.get().ifPresentOrElse(returnValue -> {
+						System.out.printf("Script %s was loaded successfully.\n", reloadedScript);
+					}, () -> {
+						System.out.printf("Script %s failed to initialize properly. Error: %s\n", reloadedScript,
+								result.getExecutionError());
+						result.getExecutionError().printStackTrace();
+					});
+				});
+			}); */
+	}
 
 	private void setupContext(Script script) {
 		var globals = script.getGlobalObject();
 
-		for(var className : scriptLoader.getScriptsConfig().getAutoImports()) {
+		for(var className : scriptLoader.getScriptsConfig().getConfig().getAutoImports()) {
 			Class<?> autoClass = null;
 
 			try {
@@ -43,23 +95,10 @@ public class ScriptManager {
 		apiManager.bindAPI(importAPI, script);
 	}
 
-	/**
-	 * Loads all scripts and enters them into reload-on-save mode.
-	 */
-	public void loadAllAndExecute() {
-		loadedScripts.addAll(scriptLoader.loadAllFromConfig(script -> {
-			script.open();
-			setupContext(script);
-			var result = script.execute();
-
-			result.get().ifPresentOrElse(returnValue -> {
-				System.out.printf("Script %s was loaded successfully.\n", script);
-			}, () -> {
-				System.out.printf("Script %s failed to initialize properly. Error: %s\n", script,
-						result.getExecutionError());
-				result.getExecutionError().printStackTrace();
-			});
-		}));
+	public <T extends Scriptable> void registerPrototype(Class<T> prototypeClass) {
+		scriptablePrototypes.add(prototypeClass);
+		// var config = new ConfigManager<T>(String.format("config/scripts/%s",
+		// configPath), class_);
 	}
 
 	/**
