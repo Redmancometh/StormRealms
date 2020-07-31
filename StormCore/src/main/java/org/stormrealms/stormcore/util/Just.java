@@ -1,6 +1,7 @@
 package org.stormrealms.stormcore.util;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class Just<A> implements Maybe<A> {
     protected A value;
@@ -25,7 +26,13 @@ public class Just<A> implements Maybe<A> {
 
     @Override
     public Maybe<A> filter(Function<A, Boolean> f) {
-        if(f.apply(value)) return this;
+        if (f.apply(value))
+            return this;
         return Maybe.none();
+    }
+
+    @Override
+    public <T> T match(Function<A, T> just, Supplier<T> none) {
+        return just.apply(value);
     }
 }

@@ -2,6 +2,7 @@ package org.stormrealms.stormcore.util;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 public class IterableM<A, T extends Iterator<A>> implements Monad<A>, Filterable<A> {
@@ -47,21 +48,25 @@ public class IterableM<A, T extends Iterator<A>> implements Monad<A>, Filterable
     @Override
     public IterableM<? super A, ? extends Iterator<A>> filter(Function<A, Boolean> f) {
         return of(new Iterator<A>() {
-            A lookAhead = Just.of(iterator);
+            Maybe<A> lookAhead = getNext();
+
+            private Maybe<A> getNext() {
+                return Maybe.when(iterator.hasNext(), () -> iterator.next());
+            }
 
             @Override
             public boolean hasNext() {
-                return iterator.hasNext() && f.apply(iterator.next());
+                return lookAhead.match($ -> true, () -> false);
             }
 
             @Override
             public A next() {
-                //return f.apply(iterator.next());
-                var a = iterator.next();
+                var result = lookAhead;
+                lookAhead = getNext();
 
-                if(a instanceof Filterable) {
-
-                }
+                return result.match(a -> a, () -> {
+                    throw new NoSuchElementException();
+                });
             }
         });
     }

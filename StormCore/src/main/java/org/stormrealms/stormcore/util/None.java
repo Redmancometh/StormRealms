@@ -1,9 +1,11 @@
 package org.stormrealms.stormcore.util;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class None<A> implements Maybe<A> {
-    protected None() { }
+    protected None() {
+    }
 
     @Override
     public <B> None<B> fmap(Function<A, B> f) {
@@ -18,5 +20,10 @@ public class None<A> implements Maybe<A> {
     @Override
     public None<A> filter(Function<A, Boolean> f) {
         return this;
+    }
+
+    @Override
+    public <T> T match(Function<A, T> just, Supplier<T> none) {
+        return none.get();
     }
 }
