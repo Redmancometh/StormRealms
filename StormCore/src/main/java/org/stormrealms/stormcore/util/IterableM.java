@@ -64,9 +64,7 @@ public class IterableM<A, T extends Iterator<A>> implements Monad<A>, Filterable
                 var result = lookAhead;
                 lookAhead = tryNext();
 
-                return result.match(a -> a, () -> {
-                    throw new NoSuchElementException();
-                });
+                return result.matchOrThrow(a -> a, () -> new NoSuchElementException("Attempted to call next on an empty Iterator."));
             }
         });
     }

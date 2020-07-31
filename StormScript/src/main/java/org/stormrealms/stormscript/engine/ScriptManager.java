@@ -54,7 +54,6 @@ public class ScriptManager {
         }
 
         IterableM.of(walkStream.iterator())
-            .fmap(Just::of)
             .filter(path -> !path.toFile().isDirectory());
 
 		/* walkStream

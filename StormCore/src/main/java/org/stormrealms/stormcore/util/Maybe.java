@@ -14,6 +14,8 @@ public interface Maybe<A> extends Monad<A>, Filterable<A> {
 
     public <T> T match(Function<A, T> just, Supplier<T> none);
 
+    <T, U extends Throwable> T matchOrThrow(Function<A, T> just, Supplier<U> throwable) throws U;
+
     @Override
     default <T> Monad<T> pure(T value) {
         return Just.of(value);

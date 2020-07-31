@@ -26,4 +26,9 @@ public class None<A> implements Maybe<A> {
     public <T> T match(Function<A, T> just, Supplier<T> none) {
         return none.get();
     }
+
+    @Override
+    public <T, U extends Throwable> T matchOrThrow(Function<A, T> just, Supplier<U> throwable) throws U {
+        throw throwable.get();
+    }
 }
