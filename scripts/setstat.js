@@ -2,7 +2,6 @@ var stormcore = StormCore()
 var context = stormcore.getContext()
 var factory = context.getAutowireCapableBeanFactory()
 var allBeanNames = context.getBeanDefinitionNames();
-var stormStatsInstance = wireByName("stormStats")
 var statRepo = wireByName("statRepo")
 var InventoryOpen = Java.type("org.bukkit.event.inventory.InventoryOpenEvent").class
 var PlayerLogin = Java.type("org.bukkit.event.player.PlayerLoginEvent").class

@@ -46,7 +46,6 @@
 	<build>
 		<finalName>StormNet</finalName>
 		<directory>target</directory>
-		<sourceDirectory>src</sourceDirectory>
 
 		<plugins>
 			<plugin>

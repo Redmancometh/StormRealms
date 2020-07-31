@@ -3,11 +3,11 @@ package org.stormrealms.stormcombat.events;
 import java.util.Map;
 
 import org.bukkit.entity.Player;
+import org.bukkit.entity.RPGEntity;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.stormrealms.stormcore.outfacing.RPGGearData;
 import org.stormrealms.stormcore.outfacing.RPGStat;
-import org.stormrealms.stormmobs.entity.RPGEntity;
 import org.stormrealms.stormstats.model.RPGCharacter;
 
 import lombok.Data;

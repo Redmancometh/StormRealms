@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.LivingEntity;
@@ -30,6 +30,7 @@ import net.minecraft.server.IChatBaseComponent;
 import net.minecraft.server.PacketPlayOutTitle;
 import net.minecraft.server.PacketPlayOutTitle.EnumTitleAction;
 import net.minecraft.server.PlayerConnection;
+import net.minecraft.server.World;
 
 /**
  * 
@@ -57,7 +58,7 @@ public interface RPGEntity<T extends Entity, U extends RPGEntity> {
 	public abstract Function<World, U> spawnSupplier();
 
 	public default T spawn(Location loc) {
-		T e = MobUtil.<T>spawnEntity(spawnSupplier().apply(loc.getWorld()), loc);
+		T e = MobUtil.<T>spawnEntity(spawnSupplier().apply(((CraftWorld) loc.getWorld()).getHandle()), loc);
 		onSpawn();
 		return (T) e;
 	}

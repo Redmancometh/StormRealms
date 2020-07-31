@@ -5,14 +5,12 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -22,8 +20,10 @@ import org.hibernate.annotations.Type;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.outfacing.RPGStat;
+import org.stormrealms.stormstats.configuration.adapter.ClassConverter;
 import org.stormrealms.stormstats.configuration.adapter.GroupConverter;
 import org.stormrealms.stormstats.configuration.adapter.RaceConverter;
+import org.stormrealms.stormstats.configuration.pojo.ClassInformation;
 import org.stormrealms.stormstats.configuration.pojo.Group;
 import org.stormrealms.stormstats.configuration.pojo.Race;
 
@@ -36,14 +36,15 @@ import lombok.Data;
 @Scope("prototype")
 public class RPGCharacter {
 
-	@OneToOne(mappedBy = "character", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	private ClassData data;
 	@Id
 	@Column(name = "character_id")
 	@Type(type = "uuid-char")
 	private UUID id;
 	@Column
 	private String characterName;
+	@Column
+	@Convert(converter = ClassConverter.class)
+	private ClassInformation classData;
 	@Column
 	@Convert(converter = RaceConverter.class)
 	private Race race;
@@ -73,8 +74,6 @@ public class RPGCharacter {
 	@ElementCollection(fetch = FetchType.EAGER, targetClass = String.class)
 	private List<String> additionalPermissions;
 	@Transient
-	private Location location;
-	@Transient
 	private List<String> finalPerms;
 
 	public boolean hasPermission(String permission) {
@@ -82,8 +81,8 @@ public class RPGCharacter {
 	}
 
 	public boolean isCharacterComplete() {
-		if (this.getRace() != null && this.getCharacterName() != null && this.getData() != null
-				&& this.getData().getClassName() != null) {
+		if (this.getRace() != null && this.getCharacterName() != null && this.getClassData() != null
+				&& this.getClassData() != null) {
 			System.out.println("CHARACTER COMPLETE");
 			return true;
 		}
@@ -94,7 +93,6 @@ public class RPGCharacter {
 	@PostConstruct
 	public void assignID() {
 		this.id = UUID.randomUUID();
-		this.location = new Location(Bukkit.getWorld(world), x, y, z);
 	}
 
 	public void setDefaults() {

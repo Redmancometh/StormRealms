@@ -2,6 +2,7 @@ package org.stormrealms.stormcore.outfacing;
 
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Location;
@@ -25,6 +26,7 @@ import lombok.Data;
 @Data
 public class RPGGearData {
 	private Map<RPGStat, Integer> bonuses = new HashMap();
+	private List<ItemEffect> effects;
 	protected Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED)
 			.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
 			.registerTypeHierarchyAdapter(Material.class, new MaterialAdapter())

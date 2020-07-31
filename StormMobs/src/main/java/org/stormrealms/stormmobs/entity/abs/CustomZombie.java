@@ -1,25 +1,21 @@
-package org.stormrealms.stormmobs.entity.mixin;
+package org.stormrealms.stormmobs.entity.abs;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import org.bukkit.craftbukkit.CraftWorld;
 import org.stormrealms.stormmobs.entity.RPGEntity;
-import org.stormrealms.stormmobs.entity.LootableEntity;
-
 import lombok.Setter;
+import net.minecraft.server.EntityTypes;
 import net.minecraft.server.EntityZombie;
 import net.minecraft.server.World;
 
 public class CustomZombie<T extends CustomZombie> extends EntityZombie
-		implements RPGEntity<EntityZombie, T>, LootableEntity {
+		implements RPGEntity<EntityZombie, CustomZombie> {
 	@Setter
 	public static Supplier<String> nameSupplier;
-	private static Function<org.bukkit.World, CustomZombie> spawnSupplier = (w) -> new CustomZombie(
-			((CraftWorld) w).getHandle());
+	private static Function<World, CustomZombie> spawnSupplier = (w) -> new CustomZombie(w);
 
 	public CustomZombie(World world) {
-		super(world);
+		super(EntityTypes.ZOMBIE, world);
 	}
 
 	@Override
@@ -36,9 +32,12 @@ public class CustomZombie<T extends CustomZombie> extends EntityZombie
 		return nameSupplier;
 	}
 
+	/**
+	 * Only way to really prevent reflection..
+	 */
 	@Override
-	public Function<org.bukkit.World, T> spawnSupplier() {
-		return (Function<org.bukkit.World, T>) spawnSupplier;
+	public Function<World, CustomZombie> spawnSupplier() {
+		return spawnSupplier;
 	}
 
 	@Override
@@ -47,13 +46,13 @@ public class CustomZombie<T extends CustomZombie> extends EntityZombie
 	}
 
 	@Override
-	public int getLevel() {
-		return 5;
+	public int getDefense() {
+		return 0;
 	}
 
 	@Override
-	public int getDefense() {
-		return 5;
+	public int getLevel() {
+		return 0;
 	}
 
 }

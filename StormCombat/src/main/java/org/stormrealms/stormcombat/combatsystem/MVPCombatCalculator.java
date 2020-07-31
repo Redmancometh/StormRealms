@@ -1,12 +1,13 @@
 package org.stormrealms.stormcombat.combatsystem;
 
 import java.util.Map;
+
+import org.bukkit.entity.RPGEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormcombat.events.WeaponAttackEvent;
 import org.stormrealms.stormcombat.util.CombatUtil;
 import org.stormrealms.stormcore.outfacing.RPGStat;
-import org.stormrealms.stormmobs.entity.RPGEntity;
 import org.stormrealms.stormstats.model.RPGCharacter;
 
 import io.netty.util.internal.ThreadLocalRandom;
