@@ -48,9 +48,9 @@ public class IterableM<A, T extends Iterator<A>> implements Monad<A>, Filterable
     @Override
     public IterableM<? super A, ? extends Iterator<A>> filter(Function<A, Boolean> f) {
         return of(new Iterator<A>() {
-            Maybe<A> lookAhead = getNext();
+            Maybe<A> lookAhead = tryNext();
 
-            private Maybe<A> getNext() {
+            private Maybe<A> tryNext() {
                 return Maybe.when(iterator.hasNext(), () -> iterator.next());
             }
 
@@ -62,7 +62,7 @@ public class IterableM<A, T extends Iterator<A>> implements Monad<A>, Filterable
             @Override
             public A next() {
                 var result = lookAhead;
-                lookAhead = getNext();
+                lookAhead = tryNext();
 
                 return result.match(a -> a, () -> {
                     throw new NoSuchElementException();
