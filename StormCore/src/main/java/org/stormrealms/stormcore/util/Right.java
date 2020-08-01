@@ -2,10 +2,10 @@ package org.stormrealms.stormcore.util;
 
 import java.util.function.Function;
 
-public class Right<RightType> implements Either<Object> {
-	protected RightType value;
+public class Right<A> extends Either<Object, A> {
+	protected A value;
 
-	protected Right(RightType value) {
+	protected Right(A value) {
 		this.value = value;
 	}
 
@@ -14,12 +14,27 @@ public class Right<RightType> implements Either<Object> {
 	}
 
 	@Override
-	public <B> Either<? super B> fmap(Function<Object, B> f) {
+	public A undo() {
+		return value;
+	}
+
+	@Override
+	public <B> Right<? super A> bind(Function<Object, Monad<B>> f) {
 		return this;
 	}
 
 	@Override
-	public RightType undo() {
-		return value;
+	public <B> Right<? super A> apply(Applicative<Function<Object, B>> f) {
+		return this;
 	}
+
+    @Override
+    public <B> Right<? super A> fmap(Function<Object, B> f) {
+        return this;
+    }
+
+    @Override
+    public <T> T match(Function<Object, T> $, Function<A, T> right) {
+        return right.apply(value);
+    }
 }

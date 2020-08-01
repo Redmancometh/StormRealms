@@ -3,7 +3,7 @@ package org.stormrealms.stormcore.util;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class Just<A> implements Maybe<A> {
+public class Just<A> extends Maybe<A> {
 	protected A value;
 
 	protected Just(A value) {
@@ -39,5 +39,20 @@ public class Just<A> implements Maybe<A> {
 	@Override
 	public <T, U extends Throwable> T matchOrThrow(Function<A, T> just, Supplier<U> throwable) {
 		return just.apply(value);
+	}
+
+	@Override
+	public <B> Monad<? super B> bind(Function<A, Monad<B>> f) {
+		return f.apply(this.undo());
+	}
+
+	@Override
+	public Applicative<? super A> pure(A value) {
+		return Just.of(value);
+	}
+
+	@Override
+	public <B> Applicative<? super B> apply(Applicative<Function<A, B>> f) {
+		return this.fmap(f.undo());
 	}
 }

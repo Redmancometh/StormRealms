@@ -5,11 +5,15 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
 
-public class IterableM<A, T extends Iterator<A>> implements Monad<A>, Filterable<A> {
-	protected T iterator;
+public class IterableM<A, T extends Iterator<A>> extends Monad<A> implements Filterable<A> {
+	protected Iterator<A> iterator;
 
 	protected IterableM(T iterator) {
 		this.iterator = iterator;
+	}
+
+	protected IterableM(Iterable<A> iterable) {
+		this.iterator = iterable.iterator();
 	}
 
 	public static <E> IterableM<E, Iterator<E>> of(Iterable<E> iterable) {
@@ -21,7 +25,7 @@ public class IterableM<A, T extends Iterator<A>> implements Monad<A>, Filterable
 	}
 
 	@Override
-	public <B> IterableM<? super B, ? extends Iterator<B>> fmap(Function<A, B> f) {
+	public <B> IterableM<B, Iterator<B>> fmap(Function<A, B> f) {
 		return of(new Iterator<B>() {
 			@Override
 			public boolean hasNext() {
@@ -41,12 +45,12 @@ public class IterableM<A, T extends Iterator<A>> implements Monad<A>, Filterable
 	}
 
 	@Override
-	public <U> IterableM<U, Iterator<U>> pure(U value) {
+	public IterableM<A, Iterator<A>> pure(A value) {
 		return of(Arrays.asList(value));
 	}
 
 	@Override
-	public IterableM<? super A, ? extends Iterator<A>> filter(Function<A, Boolean> f) {
+	public IterableM<A, Iterator<A>> filter(Function<A, Boolean> f) {
 		return of(new Iterator<A>() {
 			Maybe<A> lookAhead = tryNext();
 
@@ -67,5 +71,15 @@ public class IterableM<A, T extends Iterator<A>> implements Monad<A>, Filterable
 				return result.matchOrThrow(a -> a, () -> new NoSuchElementException("Attempted to call next on an empty Iterator."));
 			}
 		});
+	}
+
+	@Override
+	public <B> IterableM<B, Iterator<B>> bind(Function<A, Monad<B>> f) {
+		return this.fmap(a -> f.apply(a).undo());
+	}
+
+	@Override
+	public <B> IterableM<B, Iterator<B>> apply(Applicative<Function<A, B>> f) {
+		return this.fmap(f.undo());
 	}
 }

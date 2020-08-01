@@ -2,8 +2,14 @@ package org.stormrealms.stormcore.util;
 
 import java.util.function.Function;
 
-public interface Monad<A> extends Applicative<A> {
-	default <B> Monad<? super B> bind(Function<A, Monad<B>> f) {
-		return (Monad<? super B>) apply(pure((Function<A, B>) a -> (B) f.apply(a).undo()));
+public abstract class Monad<A> extends Applicative<A> {
+	public Monad<? super A> create(A value) {
+		return (Monad<? super A>) pure(value);
+	}
+
+	public abstract <B> Monad<? super B> bind(Function<A, Monad<B>> f);
+
+	public <B> Monad<? super B> then(Monad<B> m) {
+		return bind($ -> m);
 	}
 }
