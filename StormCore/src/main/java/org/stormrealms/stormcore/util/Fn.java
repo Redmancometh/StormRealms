@@ -1,6 +1,8 @@
 package org.stormrealms.stormcore.util;
 
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -11,6 +13,32 @@ public class Fn {
 	
 	public static <A, B> Function<A, B> always(Supplier<B> f) {
 		return a -> f.get();
+	}
+
+	public static <A> Consumer<A> discard(Runnable f) {
+		return a -> f.run();
+	}
+
+	public static <A, B> BiConsumer<A, B> discard(Consumer<B> f) {
+		return (a, b) -> f.accept(b);
+	}
+
+	public static <A, B, C> TriConsumer<A, B, C> discard(BiConsumer<B, C> f) {
+		return (a, b, c) -> f.accept(b, c);
+	}
+
+	public static <A> Supplier<Unit> unit(Runnable f) {
+		return () -> {
+			f.run();
+			return Unit.it();
+		};
+	}
+
+	public static <A> Function<A, Unit> unit(Consumer<A> f) {
+		return a -> {
+			f.accept(a);
+			return Unit.it();
+		};
 	}
 
 	public static <A, B> Supplier<B> partial(Function<A, B> f, Supplier<A> a) {

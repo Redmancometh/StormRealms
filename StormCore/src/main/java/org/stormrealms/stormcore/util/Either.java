@@ -1,5 +1,6 @@
 package org.stormrealms.stormcore.util;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -14,4 +15,8 @@ public abstract class Either<A, R> extends Monad<A> {
 	}
 
 	public abstract <T> T match(Function<A, T> left, Function<R, T> right);
+
+	public Unit match(Consumer<A> left, Consumer<R> right) {
+		return this.match(Fn.unit(left), Fn.unit(right));
+	}
 }

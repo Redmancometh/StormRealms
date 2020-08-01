@@ -13,9 +13,8 @@ import com.google.gson.GsonBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.stormrealms.stormcore.util.Fn;
 import org.stormrealms.stormcore.util.IterableM;
-import org.stormrealms.stormcore.util.Just;
-import org.stormrealms.stormcore.util.Maybe;
 import org.stormrealms.stormscript.api.APIManager;
 import org.stormrealms.stormscript.api.ImportAPI;
 import org.stormrealms.stormscript.configuration.PathTypeAdapter;
@@ -54,25 +53,21 @@ public class ScriptManager {
         }
 
         IterableM.of(walkStream.iterator())
-            .filter(path -> !path.toFile().isDirectory());
-
-		/* walkStream
 			.filter(path -> !path.toFile().isDirectory())
-			.forEach(path -> {
-				var script = scriptLoader.loadScript(path, reloadedScript -> {
+			.fmap(Fn.unit(path -> {
+				scriptLoader.loadScript(path, reloadedScript -> {
 					reloadedScript.open();
 					setupContext(reloadedScript);
 					var result = reloadedScript.execute();
 		
-					result.get().ifPresentOrElse(returnValue -> {
-						System.out.printf("Script %s was loaded successfully.\n", reloadedScript);
-					}, () -> {
-						System.out.printf("Script %s failed to initialize properly. Error: %s\n", reloadedScript,
-								result.getExecutionError());
-						result.getExecutionError().printStackTrace();
-					});
+					result.match(
+						returnValue -> System.out.printf("Script %s was loaded successfully.\n", reloadedScript),
+						err -> {
+							System.out.printf("Script %s failed to initialize properly. Error: %s\n", reloadedScript, err);
+							err.printStackTrace();
+						});
 				});
-			}); */
+			}));
 	}
 
 	private void setupContext(Script script) {

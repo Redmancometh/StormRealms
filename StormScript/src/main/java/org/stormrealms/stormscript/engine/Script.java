@@ -2,9 +2,10 @@ package org.stormrealms.stormscript.engine;
 
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Value;
+import org.stormrealms.stormcore.util.Either;
 
 public interface Script extends AutoCloseable {
-	public ScriptExecutionResult execute();
+	public Either<Value, Throwable> execute();
 
 	public Context getContext();
 
