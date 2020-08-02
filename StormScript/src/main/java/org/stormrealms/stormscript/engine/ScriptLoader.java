@@ -10,13 +10,9 @@ import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.HostAccess;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.config.FileWatcher;
-import org.stormrealms.stormscript.configuration.ScriptsConfig;
 
 /**
- * Represents a component that loads scripts and the scripting system's
- * configuration.
- * 
- * @see ScriptsConfig
+ * Represents a component that loads and reloads scripts.
  */
 @Component
 public class ScriptLoader {
