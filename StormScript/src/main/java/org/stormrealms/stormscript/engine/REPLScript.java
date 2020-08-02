@@ -1,12 +1,14 @@
 package org.stormrealms.stormscript.engine;
 
 import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Value;
+import org.stormrealms.stormcore.util.Either;
 
 // TODO(Yevano): REPL for server console. Maybe in-game as well?
 
 public class REPLScript implements Script {
 	@Override
-	public ScriptExecutionResult execute() {
+	public Either<Value, Throwable> execute() {
 		return null;
 	}
 

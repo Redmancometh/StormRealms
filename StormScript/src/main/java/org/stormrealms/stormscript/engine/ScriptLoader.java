@@ -5,16 +5,12 @@ import java.util.function.Consumer;
 
 import javax.annotation.PostConstruct;
 
-import com.google.gson.GsonBuilder;
-
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.HostAccess;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormcore.config.FileWatcher;
-import org.stormrealms.stormscript.configuration.PathTypeAdapter;
 import org.stormrealms.stormscript.configuration.ScriptsConfig;
 
 import lombok.Getter;

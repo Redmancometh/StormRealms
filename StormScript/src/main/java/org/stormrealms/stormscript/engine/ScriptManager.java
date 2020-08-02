@@ -9,15 +9,12 @@ import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
-import com.google.gson.GsonBuilder;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.util.Fn;
 import org.stormrealms.stormcore.util.IterableM;
 import org.stormrealms.stormscript.api.APIManager;
 import org.stormrealms.stormscript.api.ImportAPI;
-import org.stormrealms.stormscript.configuration.PathTypeAdapter;
 import org.stormrealms.stormscript.scriptable.Scriptable;
 
 /**
@@ -26,13 +23,9 @@ import org.stormrealms.stormscript.scriptable.Scriptable;
 @Component
 public class ScriptManager {
 	@Autowired
-	private PathTypeAdapter pathTypeAdapter;
-	@Autowired
 	private ScriptLoader scriptLoader;
 	@Autowired
 	private APIManager apiManager;
-
-	private final GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapter(Path.class, pathTypeAdapter);
 
 	private List<Script> loadedScripts = new ArrayList<>();
 	private List<Class<? extends Scriptable>> scriptablePrototypes = new ArrayList<>();
@@ -58,9 +51,7 @@ public class ScriptManager {
 				scriptLoader.loadScript(path, reloadedScript -> {
 					reloadedScript.open();
 					setupContext(reloadedScript);
-					var result = reloadedScript.execute();
-		
-					result.match(
+					reloadedScript.execute().match(
 						returnValue -> System.out.printf("Script %s was loaded successfully.\n", reloadedScript),
 						err -> {
 							System.out.printf("Script %s failed to initialize properly. Error: %s\n", reloadedScript, err);

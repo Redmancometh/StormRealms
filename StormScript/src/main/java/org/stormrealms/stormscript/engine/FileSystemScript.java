@@ -5,6 +5,8 @@ import java.nio.file.Path;
 
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Source;
+import org.graalvm.polyglot.Value;
+import org.stormrealms.stormcore.util.Either;
 
 public class FileSystemScript implements Script {
 	private boolean ready = false;
@@ -63,14 +65,9 @@ public class FileSystemScript implements Script {
 	 *         script's execution.
 	 */
 	@Override
-	public ScriptExecutionResult execute() {
+	public Either<Value, Throwable> execute() {
 		assert ready;
-
-		try {
-			return new ScriptExecutionResult(context.eval(source));
-		} catch (Throwable t) {
-			return new ScriptExecutionResult(t);
-		}
+		return Either.leftOrCatch(() -> context.eval(source));
 	}
 
 	/**
