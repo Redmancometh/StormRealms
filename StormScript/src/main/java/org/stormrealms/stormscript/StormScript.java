@@ -12,10 +12,13 @@ import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormscript.configuration.ScriptsConfig;
 import org.stormrealms.stormscript.engine.ScriptManager;
 
+import lombok.Getter;
+
 @Component
 public class StormScript extends StormSpringPlugin {
 	@Autowired private ScriptManager scriptManager;
 
+	@Getter
 	private ConfigManager<ScriptsConfig> scriptsConfigManager = new ConfigManager<>("scripts/scripts.json", ScriptsConfig.class);
 
 	@PostConstruct

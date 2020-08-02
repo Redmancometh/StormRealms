@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.stormrealms.stormcore.util.Either;
 import org.stormrealms.stormcore.util.IterableM;
 import org.stormrealms.stormcore.util.SupplierThrows;
+import org.stormrealms.stormscript.StormScript;
 import org.stormrealms.stormscript.api.APIManager;
 import org.stormrealms.stormscript.api.ImportAPI;
 import org.stormrealms.stormscript.scriptable.Scriptable;
@@ -25,6 +26,8 @@ public class ScriptManager {
 	@Autowired
 	private ScriptLoader scriptLoader;
 	@Autowired
+	private StormScript module;
+	@Autowired
 	private APIManager apiManager;
 
 	private List<Script> loadedScripts = new ArrayList<>();
@@ -33,7 +36,7 @@ public class ScriptManager {
 	private void setupContext(Script script) {
 		var globals = script.getGlobalObject();
 
-		for(var className : scriptLoader.getScriptsConfig().getConfig().getAutoImports()) {
+		for(var className : module.getScriptsConfigManager().getConfig().getAutoImports()) {
 			Class<?> autoClass = null;
 
 			try {
@@ -75,7 +78,7 @@ public class ScriptManager {
 
 	@PostConstruct
 	public void init() {
-		var objectsBasePath = scriptLoader.getScriptsConfig().getConfig().getObjectsBasePath();
+		var objectsBasePath = module.getScriptsConfigManager().getConfig().getObjectsBasePath();
 
 		var walkStream = Either.leftOrCatch((SupplierThrows<Stream<Path>, Throwable>) () -> Files.walk(objectsBasePath));
 		var errorString = "Could not load scripts because an IO error ocurred when trying to scan the base path %s. Error: %s\n";

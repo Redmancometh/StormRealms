@@ -9,11 +9,8 @@ import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.HostAccess;
 import org.springframework.stereotype.Component;
-import org.stormrealms.stormcore.config.ConfigManager;
 import org.stormrealms.stormcore.config.FileWatcher;
 import org.stormrealms.stormscript.configuration.ScriptsConfig;
-
-import lombok.Getter;
 
 /**
  * Represents a component that loads scripts and the scripting system's
@@ -23,15 +20,12 @@ import lombok.Getter;
  */
 @Component
 public class ScriptLoader {
-	@Getter
-	private ConfigManager<ScriptsConfig> scriptsConfig;
 	private final Engine scriptEngine = Engine.create();
 	private final Context.Builder defaultContextBuilder = Context.newBuilder("js").allowHostAccess(HostAccess.ALL)
 			.allowIO(true).allowHostClassLookup(className -> true).engine(scriptEngine);
 
 	@PostConstruct
-	public void loadScriptsConfig() {
-	}
+	public void loadScriptsConfig() { }
 
 	public Script loadScript(Path path, Consumer<Script> onChange) {
 		var script = new FileSystemScript(path, defaultContextBuilder);
