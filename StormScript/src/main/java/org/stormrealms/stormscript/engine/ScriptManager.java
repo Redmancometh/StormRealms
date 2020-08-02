@@ -1,6 +1,5 @@
 package org.stormrealms.stormscript.engine;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -11,8 +10,9 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.stormrealms.stormcore.util.Fn;
+import org.stormrealms.stormcore.util.Either;
 import org.stormrealms.stormcore.util.IterableM;
+import org.stormrealms.stormcore.util.SupplierThrows;
 import org.stormrealms.stormscript.api.APIManager;
 import org.stormrealms.stormscript.api.ImportAPI;
 import org.stormrealms.stormscript.scriptable.Scriptable;
@@ -29,37 +29,6 @@ public class ScriptManager {
 
 	private List<Script> loadedScripts = new ArrayList<>();
 	private List<Class<? extends Scriptable>> scriptablePrototypes = new ArrayList<>();
-
-	@PostConstruct
-	public void init() {
-		var objectsBasePath = scriptLoader.getScriptsConfig().getConfig().getObjectsBasePath();
-
-		Stream<Path> walkStream;
-
-		try(Stream<Path> tryWalkStream = Files.walk(objectsBasePath)) {
-			walkStream = tryWalkStream;
-		} catch (IOException e) {
-			System.out.printf(
-					"Could not load scripts because an IO error ocurred when trying to scan the base path %s. Error: %s\n",
-					objectsBasePath, e);
-			return;
-        }
-
-        IterableM.of(walkStream.iterator())
-			.filter(path -> !path.toFile().isDirectory())
-			.fmap(Fn.unit(path -> {
-				scriptLoader.loadScript(path, reloadedScript -> {
-					reloadedScript.open();
-					setupContext(reloadedScript);
-					reloadedScript.execute().match(
-						returnValue -> System.out.printf("Script %s was loaded successfully.\n", reloadedScript),
-						err -> {
-							System.out.printf("Script %s failed to initialize properly. Error: %s\n", reloadedScript, err);
-							err.printStackTrace();
-						});
-				});
-			}));
-	}
 
 	private void setupContext(Script script) {
 		var globals = script.getGlobalObject();
@@ -78,6 +47,42 @@ public class ScriptManager {
 
 		var importAPI = new ImportAPI(script);
 		apiManager.bindAPI(importAPI, script);
+	}
+
+	private void onLoad(Script reloadedScript) {
+		reloadedScript.open();
+		setupContext(reloadedScript);
+
+		reloadedScript.execute().match(
+			returnValue -> System.out.printf(
+				"Script %s was loaded successfully.\n",
+				reloadedScript),
+
+			err -> {
+				System.out.printf(
+					"Script %s failed to initialize properly. Error: %s\n",
+					reloadedScript, err);
+
+				err.printStackTrace();
+			});
+	}
+
+	private void iterateScripts(Stream<Path> stream) {
+		IterableM.of(stream.iterator())
+			.filter(path -> !path.toFile().isDirectory())
+			.fmap(path -> loadedScripts.add(scriptLoader.loadScript(path, this::onLoad)));
+	}
+
+	@PostConstruct
+	public void init() {
+		var objectsBasePath = scriptLoader.getScriptsConfig().getConfig().getObjectsBasePath();
+
+		var walkStream = Either.leftOrCatch((SupplierThrows<Stream<Path>, Throwable>) () -> Files.walk(objectsBasePath));
+		var errorString = "Could not load scripts because an IO error ocurred when trying to scan the base path %s. Error: %s\n";
+
+		walkStream.match(
+			this::iterateScripts,
+			e -> System.out.printf(errorString, objectsBasePath, e));
 	}
 
 	public <T extends Scriptable> void registerPrototype(Class<T> prototypeClass) {

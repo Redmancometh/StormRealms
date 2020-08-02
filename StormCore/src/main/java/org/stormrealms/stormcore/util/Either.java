@@ -26,7 +26,7 @@ public abstract class Either<A, R> extends Monad<A> {
 		return b ? leftOf(f.get()) : rightOf(g.get());
 	}
 
-	public static <S> Either<S, Throwable> leftOrCatch(Supplier<S> left) {
+	public static <S> Either<S, Throwable> leftOrCatch(SupplierThrows<S, Throwable> left) {
 		try {
 			return leftOf(left.get());
 		} catch (Throwable t) {
