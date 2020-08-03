@@ -35,22 +35,22 @@ public class ConfigManager<T> {
 	@Getter
 	protected Gson gson;
 	protected String fileName;
-	protected Class clazz;
+	protected Class<T> clazz;
 	protected T config;
 	private FileWatcher watcher;
 	@Getter
 	@Setter
 	private Runnable onReload;
 
-	public ConfigManager(String fileName, Class clazz) {
+	public ConfigManager(String fileName, Class<T> clazz) {
 		this(fileName, clazz, null);
 	}
 
-	public ConfigManager(String fileName, Class clazz, Runnable onReload) {
+	public ConfigManager(String fileName, Class<T> clazz, Runnable onReload) {
 		this(fileName, clazz, onReload, null);
 	}
 
-	public ConfigManager(String fileName, Class clazz, Runnable onReload, GsonBuilder gsonBuilder) {
+	public ConfigManager(String fileName, Class<T> clazz, Runnable onReload, GsonBuilder gsonBuilder) {
 		super();
 		this.fileName = fileName;
 		this.clazz = clazz;
@@ -106,7 +106,7 @@ public class ConfigManager<T> {
 
 	protected void initConfig() {
 		try (FileReader reader = new FileReader("config" + File.separator + fileName)) {
-			T conf = (T) getGson().fromJson(reader, clazz);
+			T conf = getGson().fromJson(reader, clazz);
 			this.config = conf;
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -151,9 +151,9 @@ public class ConfigManager<T> {
 		}
 	}
 
-	public static class ClassAdapter extends TypeAdapter<Class> {
+	public static class ClassAdapter extends TypeAdapter<Class<?>> {
 		@Override
-		public void write(JsonWriter jsonWriter, Class material) throws IOException {
+		public void write(JsonWriter jsonWriter, Class<?> material) throws IOException {
 
 		}
 
@@ -219,9 +219,9 @@ public class ConfigManager<T> {
 
 	}
 	
-	public static class ClassAdapterTwo extends TypeAdapter<Class> {
+	public static class ClassAdapterTwo extends TypeAdapter<Class<?>> {
 		@Override
-		public Class read(JsonReader arg0) throws IOException {
+		public Class<?> read(JsonReader arg0) throws IOException {
 			String string = arg0.nextString();
 			try {
 				return Class.forName(string);
@@ -233,7 +233,7 @@ public class ConfigManager<T> {
 		}
 
 		@Override
-		public void write(JsonWriter arg0, Class arg1) throws IOException {
+		public void write(JsonWriter arg0, Class<?> arg1) throws IOException {
 			arg0.value(arg1.getName());
 		}
 
