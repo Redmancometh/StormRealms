@@ -17,6 +17,14 @@ public abstract class Maybe<A> extends Monad<A> implements Filterable<A> {
 		return b ? Just.of(f) : none();
 	}
 
+	public static <T> Maybe<T> notNull(Supplier<T> value) {
+		return Maybe.when(value == null, value.get());
+	}
+
+	public static <T> Maybe<T> notNull(T value) {
+		return Maybe.when(value == null, value);
+	}
+
 	public abstract <T> T match(Function<A, T> just, Supplier<T> none);
 
 	public Unit match(Consumer<A> just, Runnable none) {
