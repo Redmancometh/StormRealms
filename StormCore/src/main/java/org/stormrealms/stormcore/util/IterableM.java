@@ -20,6 +20,10 @@ public class IterableM<A, T extends Iterator<A>> extends Monad<A> implements Fil
 		return of(iterable.iterator());
 	}
 
+	public static <E> IterableM<E, Iterator<E>> of(E[] array) {
+		return of(Arrays.asList(array).iterator());
+	}
+
 	public static <E> IterableM<E, Iterator<E>> of(Iterator<E> iterator) {
 		return new IterableM<>(iterator);
 	}
