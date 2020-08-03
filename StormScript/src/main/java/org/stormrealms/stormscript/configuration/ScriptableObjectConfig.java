@@ -1,11 +1,10 @@
 package org.stormrealms.stormscript.configuration;
 
-import java.util.Map;
+import java.nio.file.Path;
 
 import lombok.Getter;
 
 public class ScriptableObjectConfig {
-	@Getter private Map<String, ?> entries;
-
-	
+	@Getter private Class<?> prototype;
+	@Getter private Path script;
 }
