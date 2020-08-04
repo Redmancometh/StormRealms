@@ -41,6 +41,10 @@ public class Fn {
 		};
 	}
 
+	public static <A> Runnable discardResult(Supplier<A> f) {
+		return () -> f.get();
+	}
+
 	public static <A, B> Supplier<B> partial(Function<A, B> f, Supplier<A> a) {
 		return () -> f.apply(a.get());
 	}
