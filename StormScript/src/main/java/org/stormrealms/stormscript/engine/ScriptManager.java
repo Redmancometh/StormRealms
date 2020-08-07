@@ -8,15 +8,22 @@ import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
+import com.google.gson.GsonBuilder;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.stormrealms.stormcore.config.ConfigManager;
+import org.stormrealms.stormcore.util.Console;
 import org.stormrealms.stormcore.util.Either;
 import org.stormrealms.stormcore.util.IterableM;
-import org.stormrealms.stormcore.util.SupplierThrows;
-import org.stormrealms.stormscript.StormScript;
 import org.stormrealms.stormscript.api.APIManager;
 import org.stormrealms.stormscript.api.ImportAPI;
+import org.stormrealms.stormscript.configuration.PathTypeAdapter;
+import org.stormrealms.stormscript.configuration.ScriptableObjectConfig;
+import org.stormrealms.stormscript.configuration.ScriptsConfig;
 import org.stormrealms.stormscript.scriptable.Scriptable;
+
+import lombok.Getter;
 
 /**
  * Component for accessing and storing state about scripts.
@@ -26,17 +33,21 @@ public class ScriptManager {
 	@Autowired
 	private ScriptLoader scriptLoader;
 	@Autowired
-	private StormScript module;
-	@Autowired
 	private APIManager apiManager;
+	@Autowired
+	private Console con;
+	@Autowired
+	private PathTypeAdapter pathTypeAdapter;
+	@Getter
+	private ConfigManager<ScriptsConfig> scriptsConfigManager;
 
-	private List<Script> loadedScripts = new ArrayList<>();
+	private List<Scriptable> loadedScriptObjects = new ArrayList<>();
 	private List<Class<? extends Scriptable>> scriptablePrototypes = new ArrayList<>();
 
 	private void setupContext(Script script) {
 		var globals = script.getGlobalObject();
 
-		for(var className : module.getScriptsConfigManager().getConfig().getAutoImports()) {
+		for(var className : scriptsConfigManager.getConfig().getAutoImports()) {
 			Class<?> autoClass = null;
 
 			try {
@@ -52,7 +63,7 @@ public class ScriptManager {
 		apiManager.bindAPI(importAPI, script);
 	}
 
-	private void onLoad(Script reloadedScript) {
+	private void onLoad(Script reloadedScript, ScriptableObjectConfig object) {
 		reloadedScript.open();
 		setupContext(reloadedScript);
 
@@ -70,21 +81,28 @@ public class ScriptManager {
 			});
 	}
 
-	private void iterateScripts(Stream<Path> stream) {
-		IterableM.of(stream.iterator())
+	private void iterateScriptObjects(Stream<Path> stream) {
+		var objects = IterableM.of(stream.iterator())
 			.filter(path -> !path.toFile().isDirectory())
-			.fmap(path -> loadedScripts.add(scriptLoader.loadScript(path, this::onLoad)));
+			.flatMap((Path path) -> scriptLoader.loadScriptableObjects(path, this::onLoad))
+			.toList();
+
+		loadedScriptObjects.addAll(objects);
 	}
 
 	@PostConstruct
 	public void init() {
-		var objectsBasePath = module.getScriptsConfigManager().getConfig().getObjectsBasePath();
+		scriptsConfigManager = new ConfigManager<>("scripts.json", ScriptsConfig.class, null, new GsonBuilder()
+			.registerTypeAdapter(Path.class, pathTypeAdapter));
+		scriptsConfigManager.init();
+		var configPath = Path.of("config").toAbsolutePath();
+		var objectsBasePath = configPath.resolve(scriptsConfigManager.getConfig().getObjectsBasePath());
 
-		var walkStream = Either.leftOrCatch((SupplierThrows<Stream<Path>, Throwable>) () -> Files.walk(objectsBasePath));
-		var errorString = "Could not load scripts because an IO error ocurred when trying to scan the base path %s. Error: %s\n";
+		var walkStream = Either.leftOrCatch(() -> Files.walk(objectsBasePath.toAbsolutePath()));
+		var errorString = "Could not load scripts because an IO error occurred when trying to scan the objects base path %s. Error: %s\n";
 
 		walkStream.match(
-			this::iterateScripts,
+			this::iterateScriptObjects,
 			e -> System.out.printf(errorString, objectsBasePath, e));
 	}
 
@@ -98,6 +116,6 @@ public class ScriptManager {
 	 * Closes all scripts, quitting execution of any concurrently running script code.
 	 */
 	public void stopAndUnloadAll() {
-		loadedScripts.stream().forEach(Script::close);
+		loadedScriptObjects.stream().forEach(Scriptable::deinit);
 	}
 }
