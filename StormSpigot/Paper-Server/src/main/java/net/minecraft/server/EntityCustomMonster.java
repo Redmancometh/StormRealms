@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import org.bukkit.entity.RPGEntity;
 import org.stormrealms.stormspigot.entities.RPGEntityData;
 import lombok.Getter;
 
@@ -16,5 +17,11 @@ public class EntityCustomMonster extends EntityMonster {
 	public Packet<?> L() {
 		return new PacketPlayOutSpawnEntityLiving(this);
 	}
-	
+
+	@Override
+	public void tick() {
+		super.tick();
+		((RPGEntity) getBukkitEntity()).tick();
+	}
+
 }

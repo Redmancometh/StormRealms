@@ -2,8 +2,8 @@ package org.stormrealms.stormmobs.tasks;
 
 import org.bukkit.craftbukkit.entity.CraftLivingEntity;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.RPGEntity;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.stormrealms.stormmobs.entity.RPGEntity;
 
 public class ShootingRunnable extends BukkitRunnable {
 	private int shots;
@@ -27,7 +27,7 @@ public class ShootingRunnable extends BukkitRunnable {
 			this.cancel();
 			return;
 		}
-		shooter.broadcastArmSwing();
+		//shooter.broadcastArmSwing();
 		Projectile proj = ((CraftLivingEntity) shooter).launchProjectile(projectileClass);
 		proj.setVelocity(proj.getVelocity().multiply(projectileSpeed));
 		shotCounter++;

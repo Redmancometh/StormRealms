@@ -1,16 +1,25 @@
 package org.bukkit.craftbukkit.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.RPGEntity;
+import org.spigotmc.event.entity.Goal;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.server.EntityCustomMonster;
 
 public class CraftRPGEntity extends CraftMonster implements RPGEntity {
 
+	@Getter
+	@Setter
+	private List<Goal> goals = new ArrayList();
+
 	public CraftRPGEntity(CraftServer server, EntityCustomMonster entity) {
 		super(server, entity);
-
 	}
 
 	@Override
@@ -20,7 +29,6 @@ public class CraftRPGEntity extends CraftMonster implements RPGEntity {
 
 	@Override
 	public String toString() {
-		// We're gonna put the thing here later.
 		return "CraftRPGEntity";
 	}
 
@@ -43,4 +51,25 @@ public class CraftRPGEntity extends CraftMonster implements RPGEntity {
 	public int getDefense() {
 		return getHandle().getData().getDefense();
 	}
+
+	@Override
+	public void addGoal(Goal goal) {
+		this.goals.add(goal);
+	}
+
+	@Override
+	public void removeGoal(Goal goal) {
+		this.goals.add(goal);
+	}
+	
+	@Override
+	public void tickSecond() {
+		System.out.println("TICK SECOND");
+	}
+	
+	@Override
+	public void tick() {
+		RPGEntity.super.tick();
+	}
+	
 }
