@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 
 public abstract class Either<A, R> extends Monad<A> {
 	@Override
-	public Either<A, Object> pure(A value) {
+	public Either<A, A> pure(A value) {
 		return Left.of(value);
 	}
 
@@ -34,7 +34,7 @@ public abstract class Either<A, R> extends Monad<A> {
 		}
 	}
 
-	public abstract <T> T match(Function<A, T> left, Function<R, T> right);
+	public abstract <B> B match(Function<A, B> left, Function<R, B> right);
 
 	public Unit match(Consumer<A> left, Consumer<R> right) {
 		return this.match(Fn.unit(left), Fn.unit(right));

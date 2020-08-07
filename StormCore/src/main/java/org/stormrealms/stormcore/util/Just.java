@@ -15,7 +15,7 @@ public class Just<A> extends Maybe<A> {
 	}
 
 	@Override
-	public <B> Just<? super B> fmap(Function<A, B> f) {
+	public <B> Just<B> fmap(Function<A, B> f) {
 		return Just.of(f.apply(value));
 	}
 
@@ -32,23 +32,33 @@ public class Just<A> extends Maybe<A> {
 	}
 
 	@Override
+	public boolean isJust() {
+		return true;
+	}
+
+	@Override
 	public <T> T match(Function<A, T> just, Supplier<T> none) {
-		return just.apply(value);
+		return just.apply(this.undo());
 	}
 
 	@Override
 	public <T, U extends Throwable> T matchOrThrow(Function<A, T> just, Supplier<U> throwable) {
-		return just.apply(value);
+		return just.apply(this.undo());
 	}
 
 	@Override
-	public <B> Monad<? super B> bind(Function<A, Monad<B>> f) {
+	public <B> Monad<B> bind(Function<A, Monad<B>> f) {
 		return f.apply(this.undo());
 	}
 
 	@Override
 	public Applicative<? super A> pure(A value) {
-		return Just.of(value);
+		return Just.of(this.undo());
+	}
+
+	@Override
+	public <B> IterableM<B> flat() {
+		return Monad.<B>cast(value).match((Monad<B> m) -> m.flat(), (B v) -> IterableM.of(v));
 	}
 
 	@Override

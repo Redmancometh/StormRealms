@@ -22,6 +22,11 @@ public class None<A> extends Maybe<A> {
 	}
 
 	@Override
+	public boolean isJust() {
+		return false;
+	}
+
+	@Override
 	public <T> T match(Function<A, T> just, Supplier<T> none) {
 		return none.get();
 	}
@@ -32,13 +37,18 @@ public class None<A> extends Maybe<A> {
 	}
 
 	@Override
-	public <B> Monad<? super B> bind(Function<A, Monad<B>> f) {
+	public <B> Monad<B> bind(Function<A, Monad<B>> f) {
 		return none();
 	}
 
 	@Override
 	public Applicative<? super A> pure(A value) {
 		return none();
+	}
+
+	@Override
+	public <B> IterableM<B> flat() {
+		return IterableM.of();
 	}
 
 	@Override

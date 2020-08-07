@@ -84,4 +84,8 @@ public class Fn {
 	public static <A, B, C, D> TriFunction<A, B, C, D> uncurryTri(Function<A, Function<B, Function<C, D>>> f) {
 		return (a, b, c) -> f.apply(a).apply(b).apply(c);
 	}
+
+	public static <A, B> Monad<B> doM(Monad<A> m, Function<A, Monad<B>> f) {
+		return m.bind(f);
+	}
 }

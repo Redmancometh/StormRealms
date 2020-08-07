@@ -9,6 +9,8 @@ public abstract class Maybe<A> extends Monad<A> implements Filterable<A> {
 		return new None<T>();
 	}
 
+	public abstract <B> Maybe<B> fmap(Function<A, B> f);
+
 	public static <T> Maybe<T> when(boolean b, Supplier<T> f) {
 		return b ? Just.of(f.get()) : none();
 	}
@@ -23,6 +25,12 @@ public abstract class Maybe<A> extends Monad<A> implements Filterable<A> {
 
 	public static <T> Maybe<T> notNull(T value) {
 		return Maybe.when(value == null, value);
+	}
+
+	public abstract boolean isJust();
+
+	public boolean isNone() {
+		return !isJust();
 	}
 
 	public abstract <T> T match(Function<A, T> just, Supplier<T> none);
