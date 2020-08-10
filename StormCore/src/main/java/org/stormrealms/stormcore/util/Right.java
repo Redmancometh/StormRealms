@@ -2,45 +2,25 @@ package org.stormrealms.stormcore.util;
 
 import java.util.function.Function;
 
-public class Right<A> extends Either<A, A> {
-	protected A value;
+public class Right<$L, R> extends Either<$L, R> {
+	protected R value;
 
-	protected Right(A value) {
+	protected Right(R value) {
 		this.value = value;
 	}
 
-	public static <L, R> Right<R> of(R value) {
-		return new Right<>(value);
+	@Override
+	public <B> Right<B, R> fmap(Function<$L, B> f) {
+		return right(value);
 	}
 
 	@Override
-	public A undo() {
-		return value;
-	}
-
-	@Override
-	public <B> Monad<B> bind(Function<A, Monad<B>> f) {
-		return f.apply(this.undo());
-	}
-
-	@Override
-	public <B> Applicative<? super B> apply(Applicative<Function<A, B>> f) {
-		return (Applicative<? super B>) this.fmap(f.undo());
+	public <B> Right<B, R> bind(Function<$L, Either<B, R>> f) {
+		return right(value);
 	}
 
     @Override
-    public <B> Right<? super B> fmap(Function<A, B> f) {
-        return Right.of(f.apply(this.undo()));
-    }
-
-    @Override
-    public <B> B match(Function<A, B> $, Function<A, B> right) {
+    public <B> B match(Function<$L, B> $, Function<R, B> right) {
         return right.apply(value);
     }
-
-	@Override
-	public <B> IterableM<B> flat() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

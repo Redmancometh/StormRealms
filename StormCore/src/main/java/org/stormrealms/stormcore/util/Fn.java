@@ -85,7 +85,43 @@ public class Fn {
 		return (a, b, c) -> f.apply(a).apply(b).apply(c);
 	}
 
-	public static <A, B> Monad<B> doM(Monad<A> m, Function<A, Monad<B>> f) {
-		return m.bind(f);
+	public static <A> A whilePred(A seed, Function<A, Boolean> p, Function<A, A> f) {
+		while(p.apply(seed)) {
+			seed = f.apply(seed);
+		}
+
+		return seed;
+	}
+
+	public static <A> A doWhile(A seed, Function<A, A> f, Function<A, Boolean> p) {
+		do {
+			seed = f.apply(seed);
+		} while(p.apply(seed));
+
+		return seed;
+	}
+
+	public static <A> A doWhile(Supplier<A> f, Function<A, Boolean> p) {
+		A current = null;
+
+		do {
+			current = f.get();
+		} while(p.apply(current));
+
+		return current;
+	}
+
+	public static <A> Maybe<A> doWhileMaybe(Supplier<Maybe<A>> f, Function<A, Boolean> p) {
+		Maybe<A> maybeCurrent = Maybe.just(null);
+
+		do {
+			maybeCurrent = maybeCurrent.bind($ -> f.get());
+		} while(maybeCurrent.match(current -> p.apply(current), () -> false));
+
+		return maybeCurrent;
+	}
+
+	public static <A, B, C> Function<A, C> compose(Function<A, B> f, Function<B, C> g) {
+		return a -> g.apply(f.apply(a));
 	}
 }

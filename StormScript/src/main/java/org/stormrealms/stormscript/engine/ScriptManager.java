@@ -84,7 +84,7 @@ public class ScriptManager {
 	private void iterateScriptObjects(Stream<Path> stream) {
 		var objects = IterableM.of(stream.iterator())
 			.filter(path -> !path.toFile().isDirectory())
-			.flatMap((Path path) -> scriptLoader.loadScriptableObjects(path, this::onLoad))
+			.bind((Path path) -> scriptLoader.loadScriptableObjects(path, this::onLoad))
 			.toList();
 
 		loadedScriptObjects.addAll(objects);
@@ -102,7 +102,7 @@ public class ScriptManager {
 		var errorString = "Could not load scripts because an IO error occurred when trying to scan the objects base path %s. Error: %s\n";
 
 		walkStream.match(
-			this::iterateScriptObjects,
+			(Stream<Path> stream) -> iterateScriptObjects(stream),
 			e -> System.out.printf(errorString, objectsBasePath, e));
 	}
 

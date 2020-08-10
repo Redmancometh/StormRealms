@@ -1,5 +1,8 @@
 package org.stormrealms.stormcore.util;
 
+import static org.stormrealms.stormcore.util.Fn.doWhileMaybe;
+import static org.stormrealms.stormcore.util.Fn.unit;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,14 +10,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 
-import static org.stormrealms.stormcore.util.Fn.*;
-
-public class IterableM<A> extends Monad<A> implements Filterable<A> {
-	@Getter
-	protected Iterator<A> iterator;
+public class IterableM<A> {
+	@Getter(value = AccessLevel.PROTECTED)
+	private Iterator<A> iterator;
 
 	protected IterableM(Iterator<A> iterator) {
 		this.iterator = iterator;
@@ -53,79 +56,119 @@ public class IterableM<A> extends Monad<A> implements Filterable<A> {
 		return result;
 	}
 
-	@Override
 	public <B> IterableM<B> fmap(Function<A, B> f) {
-		return of(new Iterator<B>() {
-			@Override
-			public boolean hasNext() {
-				return iterator.hasNext();
+		return of(new MapIterator<>(f));
+	}
+
+	public <B> IterableM<B> map(Function<A, B> f) {
+		return this.fmap(f);
+	}
+
+	public boolean isEmpty() {
+		return !iterator.hasNext();
+	}
+
+	public <B> IterableM<B> bind(Function<A, IterableM<B>> f) {
+		var nestedIterable = this.fmap(f);
+		var nestedIterator = nestedIterable.fmap(it -> it.getIterator()).getIterator();
+		return of(new BindIterator<>(nestedIterator));
+	}
+
+	public <B> IterableM<B> apply(IterableM<Function<A, B>> it) {
+		return it.bind(f -> this.fmap(a -> f.apply(a)));
+	}
+
+	public IterableM<A> filter(Function<A, Boolean> p) {
+		return this.bind(a -> p.apply(a) ? IterableM.of(a) : IterableM.of());
+	}
+
+	protected <B> Supplier<Maybe<B>> maybeIterator(Iterator<B> iterator) {
+		return () -> Maybe.when(iterator.hasNext(), () -> iterator.next());
+	}
+
+	class MapIterator<B> implements Iterator<B> {
+		Function<A, B> f;
+
+		public MapIterator(Function<A, B> f) {
+			this.f = f;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return iterator.hasNext();
+		}
+
+		@Override
+		public B next() {
+			return f.apply(iterator.next());
+		}
+	}
+
+	/* class BindIterator<B> implements Iterator<B> {
+		private List<Iterator<B>> iteratorList;
+		private int index = 0;
+
+		public BindIterator(List<Iterator<B>> iteratorList) {
+			this.iteratorList = iteratorList;
+		}
+
+		@Override
+		public boolean hasNext() {
+			while(index < iteratorList.size()) {
+				if(iteratorList.get(index).hasNext()) return true;
+				index++;
 			}
 
-			@Override
-			public B next() {
-				return f.apply(iterator.next());
-			}
-		});
-	}
+			return false;
+		}
 
-	@Override
-	public <B> IterableM<B> flat() {
-		return of(new Iterator<B>() {
-			Maybe<Iterator<B>> currentIterator = tryNext();
+		@Override
+		public B next() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	} */
 
-			// Get the next element from the outter iterator, and convert it to a monadic
-			// value if necessary.
-			private Maybe<Iterator<B>> tryNext() {
-				return Maybe.when(iterator.hasNext(), () -> iterator.next())
-					.fmap(Monad::<B>cast)
-					.fmap(a -> a.match((Monad<B> m) -> m.<B>flat(), (B v) -> IterableM.of(v)))
-					.fmap(IterableM::getIterator);
-			}
+	class BindIterator<B> implements Iterator<B> {
+		Supplier<Maybe<Iterator<B>>> nextIterator;
+		Maybe<Iterator<B>> maybeCurrentIterator = Maybe.none();
 
-			// Check if the current iterator is finished. If so, try to get the next one. If
-			// this fails, then this iterator is done.
-			@Override
-			public boolean hasNext() {
-				return currentIterator.match(
-					m -> m.hasNext(),
+		public BindIterator(Iterator<Iterator<B>> iterOfIters) {
+			this.nextIterator = maybeIterator(iterOfIters);
+			searchNonEmptyIterator();
+		}
 
-					() -> {
-						currentIterator = tryNext();
-						return currentIterator.isJust();
-					});
-			}
+		// Search for a non-empty iterator if our current iterator is empty.
+		void searchNonEmptyIterator() {
+			maybeCurrentIterator = maybeCurrentIterator.orElse(() ->
+				doWhileMaybe(
+					nextIterator,
+					it -> !it.hasNext()));
+		}
 
-			@Override
-			public B next() {
-				return currentIterator.matchOrThrow(
-					Iterator::next,
-					() -> new NoSuchElementException("Attempted to call next on an empty Iterator."));
-			}
-		});
-	}
+		// Check if there are any iterators that are non-empty
+		@Override
+		public boolean hasNext() {
+			// If the current iterator is empty, try to advance to a non-empty one.
+			searchNonEmptyIterator();
+			return maybeCurrentIterator.isJust();
+		}
 
-	@Override
-	public A undo() {
-		return iterator.next();
-	}
+		@Override
+		public B next() {
+			// Try to ensure that we have a non-empty iterator to pull from.
+			searchNonEmptyIterator();
 
-	@Override
-	public IterableM<A> pure(A value) {
-		return of(Arrays.asList(value));
-	}
+			return maybeCurrentIterator.matchOrThrow(current -> {
+				B result = current.next();
 
-	@Override
-	public IterableM<A> filter(Function<A, Boolean> f) {
-		return this.fmap(e -> Maybe.when(f.apply(e), () -> e)).flat();
-	}
+				// If current iterator is finished, set it to None to represent that a new
+				// iterator must be searched for.
+				if(!current.hasNext()) maybeCurrentIterator = Maybe.none();
 
-	@Override
-	public <B> IterableM<B> bind(Function<A, Monad<B>> f) {
-		return this.fmap(a -> f.apply(a).undo());
-	}
-
-	@Override
-	public <B> IterableM<B> apply(Applicative<Function<A, B>> f) {
-		return this.fmap(f.undo());
+				return result;
+			}, () ->
+				new NoSuchElementException("Attempted to iterate on an empty iterator."));
+		}
 	}
 }

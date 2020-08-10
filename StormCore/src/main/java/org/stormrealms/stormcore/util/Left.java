@@ -2,44 +2,25 @@ package org.stormrealms.stormcore.util;
 
 import java.util.function.Function;
 
-public class Left<A> extends Either<A, A> {
-	protected A value;
+public class Left<L, $R> extends Either<L, $R> {
+	protected L value;
 
-	protected Left(A value) {
+	protected Left(L value) {
 		this.value = value;
 	}
 
-	public static <L, R> Left<L> of(L value) {
-		return new Left<>(value);
+	@Override
+	public <B> Left<B, $R> fmap(Function<L, B> f) {
+		return left(f.apply(value));
 	}
 
 	@Override
-	public <B> Left<? super B> fmap(Function<A, B> f) {
-		return Left.of(f.apply(value));
-	}
-
-	@Override
-	public A undo() {
-		return value;
-	}
-
-	@Override
-	public <B> Monad<B> bind(Function<A, Monad<B>> f) {
-		return f.apply(this.undo());
-	}
-
-	@Override
-	public <B> Applicative<? super B> apply(Applicative<Function<A, B>> f) {
-		return this.fmap(f.undo());
-	}
-
-	@Override
-	public <B> IterableM<B> flat() {
-		return Monad.<B>cast(value).match((Monad<B> m) -> m.flat(), (B v) -> IterableM.of(v));
+	public <B> Either<B, $R> bind(Function<L, Either<B, $R>> f) {
+		return f.apply(this.value);
 	}
 
     @Override
-    public <B> B match(Function<A, B> left, Function<A, B> $) {
+    public <B> B match(Function<L, B> left, Function<$R, B> $) {
         return left.apply(value);
     }
 }

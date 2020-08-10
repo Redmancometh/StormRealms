@@ -37,7 +37,7 @@ public class Console {
 		}
 
 		public FormatStream arg(Object stringAlike) {
-			var stringArg = Maybe.notNull(stringAlike).match(Object::toString, () -> "null");
+			var stringArg = stringAlike != null ? stringAlike.toString() : "null";
 
 			// Find the next parameter location.
 			int templateParamIndex = template.indexOf('%', templateIndex);

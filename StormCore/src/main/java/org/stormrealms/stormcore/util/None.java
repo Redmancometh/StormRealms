@@ -12,16 +12,6 @@ public class None<A> extends Maybe<A> {
 	}
 
 	@Override
-	public A undo() {
-		return null;
-	}
-
-	@Override
-	public None<A> filter(Function<A, Boolean> f) {
-		return this;
-	}
-
-	@Override
 	public boolean isJust() {
 		return false;
 	}
@@ -37,22 +27,7 @@ public class None<A> extends Maybe<A> {
 	}
 
 	@Override
-	public <B> Monad<B> bind(Function<A, Monad<B>> f) {
-		return none();
-	}
-
-	@Override
-	public Applicative<? super A> pure(A value) {
-		return none();
-	}
-
-	@Override
-	public <B> IterableM<B> flat() {
-		return IterableM.of();
-	}
-
-	@Override
-	public <B> Applicative<? super B> apply(Applicative<Function<A, B>> f) {
+	public <B> None<B> bind(Function<A, Maybe<B>> f) {
 		return none();
 	}
 }

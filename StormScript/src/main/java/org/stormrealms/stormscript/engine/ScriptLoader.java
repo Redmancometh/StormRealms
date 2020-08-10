@@ -50,19 +50,27 @@ public class ScriptLoader {
 				return Tuple.of(object, script);
 			})
 
-			.fmap(t -> t.match((object, script) -> t.and(Either.leftOrCatch(() -> {
+			.fmap(
+				t
+			 -> t.match((object, script)
+			 -> t.and(Either.leftOrCatch(()
+			 -> {
 				var inst = object.getPrototype().getConstructor().newInstance();
 				inst.init(script);
 				return inst;
 			}))))
 
-			.flatMap(t -> t.match((object, script, inst) -> inst.match(Just::of, err -> {
+			.bind(
+				t
+			 -> t.match((object, script, inst)
+			 -> inst.match(IterableM::of, err
+			 -> {
 				con.format("Could not instantiate scriptable object class %. Error: %")
 					.arg(object.getPrototype().getName())
 					.arg(err);
 
 				err.printStackTrace();
-				return None.none();
+				return IterableM.of();
 			})));
 	}
 
@@ -70,19 +78,22 @@ public class ScriptLoader {
 		// NOTE(Yevano): We have to use a relative path, because ConfigManager does not
 		// support absolute paths. Consider changing ConfigManager's behavior in this
 		// regard.
-		con.format("% of % = %")
+		con.format("% of % = %\n")
 			.arg(Path.of("config").toAbsolutePath())
 			.arg(objectsConfigPath.toAbsolutePath())
 			.arg(Path.of("config").toAbsolutePath().relativize(objectsConfigPath.toAbsolutePath()))
 			.out();
+		
 		System.out.println(Path.of("config").toAbsolutePath());
 		System.out.println(objectsConfigPath.toAbsolutePath());
 		System.out.println(Path.of("config").toAbsolutePath().relativize(objectsConfigPath.toAbsolutePath()));
+		
 		var fileName = Path.of("config").toAbsolutePath().relativize(objectsConfigPath.toAbsolutePath()).toString();
 		con.out(fileName);
+
 		var objectsConfigManager = new ConfigManager<ScriptableObjectsConfig>(fileName, ScriptableObjectsConfig.class);
 		objectsConfigManager.init();
-		
+
 		Supplier<IterableM<Scriptable>> reload = () -> reloadScriptableObjects(objectsConfigManager.getConfig().getObjects(), onChange);
 
 		objectsConfigManager.setOnReload(discardResult(reload));
