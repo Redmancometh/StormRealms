@@ -9,4 +9,5 @@ import lombok.Getter;
 public class ScriptableObjectConfig {
 	@Getter private Class<Scriptable> prototype;
 	@Getter private Path script;
+	@Getter private String[] arguments;
 }

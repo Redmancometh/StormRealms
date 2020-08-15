@@ -6,12 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.stormrealms.stormcore.outfacing.RPGStat;
-
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -19,6 +13,13 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.stormrealms.stormcore.StormCore;
+import org.stormrealms.stormcore.outfacing.RPGStat;
 
 import lombok.Data;
 import lombok.Getter;
@@ -159,9 +160,10 @@ public class ConfigManager<T> {
 
 		@Override
 		public Class<?> read(JsonReader jsonReader) throws IOException {
+			var classLoader = StormCore.getInstance().getContext().getClassLoader();
 			String className = jsonReader.nextString();
 			try {
-				return Class.forName(className);
+				return classLoader.loadClass(className);
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}

@@ -8,3 +8,6 @@ commands:
   sc:
     description: sc.
     usage: /sc
+  test:
+    description: test command
+    usage: /test

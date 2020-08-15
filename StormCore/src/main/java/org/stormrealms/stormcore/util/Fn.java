@@ -4,9 +4,13 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
-public class Fn {
+public final class Fn {
+	private Fn() { }
+
 	public static <T> T id(T x) {
 		return x;
 	}
@@ -27,7 +31,7 @@ public class Fn {
 		return (a, b, c) -> f.accept(b, c);
 	}
 
-	public static <A> Supplier<Unit> unit(Runnable f) {
+	public static Supplier<Unit> unit(Runnable f) {
 		return () -> {
 			f.run();
 			return Unit.it();
@@ -85,38 +89,38 @@ public class Fn {
 		return (a, b, c) -> f.apply(a).apply(b).apply(c);
 	}
 
-	public static <A> A whilePred(A seed, Function<A, Boolean> p, Function<A, A> f) {
-		while(p.apply(seed)) {
+	public static <A> A whilePred(A seed, Predicate<A> p, UnaryOperator<A> f) {
+		while(p.test(seed)) {
 			seed = f.apply(seed);
 		}
 
 		return seed;
 	}
 
-	public static <A> A doWhile(A seed, Function<A, A> f, Function<A, Boolean> p) {
+	public static <A> A doWhile(A seed, UnaryOperator<A> f, Predicate<A> p) {
 		do {
 			seed = f.apply(seed);
-		} while(p.apply(seed));
+		} while(p.test(seed));
 
 		return seed;
 	}
 
-	public static <A> A doWhile(Supplier<A> f, Function<A, Boolean> p) {
+	public static <A> A doWhile(Supplier<A> f, Predicate<A> p) {
 		A current = null;
 
 		do {
 			current = f.get();
-		} while(p.apply(current));
+		} while(p.test(current));
 
 		return current;
 	}
 
-	public static <A> Maybe<A> doWhileMaybe(Supplier<Maybe<A>> f, Function<A, Boolean> p) {
+	public static <A> Maybe<A> doWhileMaybe(Supplier<Maybe<A>> f, Predicate<A> p) {
 		Maybe<A> maybeCurrent = Maybe.just(null);
 
 		do {
 			maybeCurrent = maybeCurrent.bind($ -> f.get());
-		} while(maybeCurrent.match(current -> p.apply(current), () -> false));
+		} while(maybeCurrent.match(p::test, () -> false));
 
 		return maybeCurrent;
 	}

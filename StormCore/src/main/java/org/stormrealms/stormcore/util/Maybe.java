@@ -37,7 +37,7 @@ public abstract class Maybe<A> {
 	}
 
 	public static <T> Maybe<T> notNull(Supplier<T> value) {
-		return Maybe.when(value == null, value);
+		return Maybe.when(value != null, value);
 	}
 
 	public abstract boolean isJust();
@@ -86,5 +86,9 @@ public abstract class Maybe<A> {
 		} while(maybeCurrent.match(current -> p.apply(current), () -> false));
 
 		return maybeCurrent;
+	}
+
+	public Maybe<A> filter(Function<A, Boolean> p) {
+		return this.bind(a -> p.apply(a) ? just(a) : none());
 	}
 }

@@ -1,7 +1,6 @@
 package org.stormrealms.stormcore.util;
 
 import static org.stormrealms.stormcore.util.Fn.doWhileMaybe;
-import static org.stormrealms.stormcore.util.Fn.unit;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -9,7 +8,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import lombok.AccessLevel;
@@ -52,7 +53,7 @@ public class IterableM<A> {
 
 	public List<A> toList() {
 		var result = new ArrayList<A>();
-		this.fmap(unit(e -> result.add(e)));
+		this.forEach(e -> result.add(e));
 		return result;
 	}
 
@@ -78,12 +79,18 @@ public class IterableM<A> {
 		return it.bind(f -> this.fmap(a -> f.apply(a)));
 	}
 
-	public IterableM<A> filter(Function<A, Boolean> p) {
-		return this.bind(a -> p.apply(a) ? IterableM.of(a) : IterableM.of());
+	public IterableM<A> filter(Predicate<A> p) {
+		return this.bind(a -> p.test(a) ? IterableM.of(a) : IterableM.of());
 	}
 
 	protected <B> Supplier<Maybe<B>> maybeIterator(Iterator<B> iterator) {
-		return () -> Maybe.when(iterator.hasNext(), () -> iterator.next());
+		return () -> Maybe.when(iterator.hasNext(), iterator::next);
+	}
+
+	public void forEach(Consumer<A> f) {
+		while(iterator.hasNext()) {
+			f.accept(iterator.next());
+		}
 	}
 
 	class MapIterator<B> implements Iterator<B> {
@@ -103,31 +110,6 @@ public class IterableM<A> {
 			return f.apply(iterator.next());
 		}
 	}
-
-	/* class BindIterator<B> implements Iterator<B> {
-		private List<Iterator<B>> iteratorList;
-		private int index = 0;
-
-		public BindIterator(List<Iterator<B>> iteratorList) {
-			this.iteratorList = iteratorList;
-		}
-
-		@Override
-		public boolean hasNext() {
-			while(index < iteratorList.size()) {
-				if(iteratorList.get(index).hasNext()) return true;
-				index++;
-			}
-
-			return false;
-		}
-
-		@Override
-		public B next() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-	} */
 
 	class BindIterator<B> implements Iterator<B> {
 		Supplier<Maybe<Iterator<B>>> nextIterator;

@@ -4,11 +4,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
-
-import com.google.gson.GsonBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,9 +17,9 @@ import org.stormrealms.stormcore.util.Either;
 import org.stormrealms.stormcore.util.IterableM;
 import org.stormrealms.stormscript.api.APIManager;
 import org.stormrealms.stormscript.api.ImportAPI;
-import org.stormrealms.stormscript.configuration.PathTypeAdapter;
 import org.stormrealms.stormscript.configuration.ScriptableObjectConfig;
 import org.stormrealms.stormscript.configuration.ScriptsConfig;
+import org.stormrealms.stormscript.proxy.ClassProxy;
 import org.stormrealms.stormscript.scriptable.Scriptable;
 
 import lombok.Getter;
@@ -36,8 +35,6 @@ public class ScriptManager {
 	private APIManager apiManager;
 	@Autowired
 	private Console con;
-	@Autowired
-	private PathTypeAdapter pathTypeAdapter;
 	@Getter
 	private ConfigManager<ScriptsConfig> scriptsConfigManager;
 
@@ -47,38 +44,35 @@ public class ScriptManager {
 	private void setupContext(Script script) {
 		var globals = script.getGlobalObject();
 
-		for(var className : scriptsConfigManager.getConfig().getAutoImports()) {
+		for (var className : scriptsConfigManager.getConfig().getAutoImports()) {
 			Class<?> autoClass = null;
 
 			try {
 				autoClass = Class.forName(className);
 				System.out.printf("Class: %s\n", className);
-				globals.putMember(autoClass.getSimpleName(), script.getContext().asValue(autoClass));
-			} catch(ClassNotFoundException e) {
+				var classProxy = new ClassProxy<>(autoClass);
+				globals.putMember(autoClass.getSimpleName(), script.getContext().asValue(classProxy));
+			} catch (ClassNotFoundException e) {
 				System.out.printf("WARNING: Class %s referenced in autoImports could not be found.\n", className);
 			}
 		}
 
 		var importAPI = new ImportAPI(script);
 		apiManager.bindAPI(importAPI, script);
+
+		globals.putMember("print", (Consumer<Object>) str -> System.out.println(str));
 	}
 
 	private void onLoad(Script reloadedScript, ScriptableObjectConfig object) {
 		reloadedScript.open();
 		setupContext(reloadedScript);
 
-		reloadedScript.execute().match(
-			returnValue -> System.out.printf(
-				"Script %s was loaded successfully.\n",
-				reloadedScript),
-
-			err -> {
-				System.out.printf(
-					"Script %s failed to initialize properly. Error: %s\n",
-					reloadedScript, err);
-
-				err.printStackTrace();
-			});
+		reloadedScript.execute().match(returnValue -> {
+			System.out.printf("Script %s was loaded successfully.\n", reloadedScript);
+		}, err -> {
+			System.out.printf("Script %s failed to initialize properly. Error: %s\n", reloadedScript, err);
+			err.printStackTrace();
+		});
 	}
 
 	private void iterateScriptObjects(Stream<Path> stream) {
@@ -92,8 +86,7 @@ public class ScriptManager {
 
 	@PostConstruct
 	public void init() {
-		scriptsConfigManager = new ConfigManager<>("scripts.json", ScriptsConfig.class, null, new GsonBuilder()
-			.registerTypeAdapter(Path.class, pathTypeAdapter));
+		scriptsConfigManager = new ConfigManager<>("scripts.json", ScriptsConfig.class, null, scriptLoader.getGsonBuilder());
 		scriptsConfigManager.init();
 		var configPath = Path.of("config").toAbsolutePath();
 		var objectsBasePath = configPath.resolve(scriptsConfigManager.getConfig().getObjectsBasePath());
