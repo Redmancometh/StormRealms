@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public abstract class Either<L, R> {
+public interface Either<L, R> {
 	public static <L, $R> Left<L, $R> left(L value) {
 		return new Left<>(value);
 	}
@@ -26,27 +26,27 @@ public abstract class Either<L, R> {
 	}
 
 	/* Functor (Either L) */
-	public abstract <B> Either<B, R> fmap(Function<L, B> f);
+	<B> Either<B, R> fmap(Function<L, B> f);
 
 	/* Applicative (Either L) */
-	public <B, $> Either<B, R> apply(Left<Function<L, B>, $> f) {
+	default <B, $> Either<B, R> apply(Left<Function<L, B>, $> f) {
 		return this.fmap(f.value);
 	}
 
-	public <B, $> Either<L, R> apply(Right<Function<L, B>, $> f) {
+	default <B, $> Either<L, R> apply(Right<Function<L, B>, $> f) {
 		return this;
 	}
 
 	/* Monad (Either L) */
-	public abstract <B> Either<? super B, R> bind(Function<L, Either<B, R>> f);
+	<B> Either<B, R> bind(Function<L, Either<B, R>> f);
 
-	public <B> Either<? super B, R> then(Supplier<Either<B, R>> m) {
+	default <B> Either<B, R> then(Supplier<Either<B, R>> m) {
 		return this.bind($ -> m.get());
 	}
 
-	public abstract <B> B match(Function<L, B> left, Function<R, B> right);
+	<B> B match(Function<L, B> left, Function<R, B> right);
 
-	public Unit match(Consumer<L> left, Consumer<R> right) {
+	default Unit match(Consumer<L> left, Consumer<R> right) {
 		return this.match(Fn.unit(left), Fn.unit(right));
 	}
 }

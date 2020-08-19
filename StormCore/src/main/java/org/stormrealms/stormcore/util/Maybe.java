@@ -2,33 +2,34 @@ package org.stormrealms.stormcore.util;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public abstract class Maybe<A> {
+public interface Maybe<A> {
 	public static <T> Just<T> just(T value) {
 		return new Just<>(value);
 	}
 
 	public static <T> None<T> none() {
-		return new None<T>();
+		return new None<>();
 	}
 
 	/* Functor Maybe */
-	public abstract <B> Maybe<B> fmap(Function<A, B> f);
+	<B> Maybe<B> fmap(Function<A, B> f);
 
 	/* Applicative Maybe */
-	public <B> Maybe<B> apply(Just<Function<A, B>> f) {
+	default <B> Maybe<B> apply(Just<Function<A, B>> f) {
 		return this.fmap(f.value);
 	}
 
-	public <B> None<B> apply(None<Function<A, B>> f) {
+	default <B> None<B> apply(None<Function<A, B>> f) {
 		return none();
 	}
 
 	/* Monad Maybe */
-	public abstract <B> Maybe<B> bind(Function<A, Maybe<B>> f);
+	<B> Maybe<B> bind(Function<A, Maybe<B>> f);
 
-	public <B> Maybe<B> then(Supplier<Maybe<B>> m) {
+	default <B> Maybe<B> then(Supplier<Maybe<B>> m) {
 		return this.bind($ -> m.get());
 	}
 
@@ -40,55 +41,55 @@ public abstract class Maybe<A> {
 		return Maybe.when(value != null, value);
 	}
 
-	public abstract boolean isJust();
+	boolean isJust();
 
-	public boolean isNone() {
+	default boolean isNone() {
 		return !isJust();
 	}
 
-	public abstract <B> B match(Function<A, B> just, Supplier<B> none);
+	<B> B match(Function<A, B> just, Supplier<B> none);
 
-	public Maybe<A> orElse(Supplier<Maybe<A>> f) {
+	default Maybe<A> orElse(Supplier<Maybe<A>> f) {
 		return this.match(a -> just(a), f);
 	}
 
-	public Unit match(Consumer<A> just, Runnable none) {
-		return this.match(Fn.unit(just), Fn.<A>unit(none));
+	default Unit match(Consumer<A> just, Runnable none) {
+		return this.match(Fn.unit(just), Fn.unit(none));
 	}
 
-	public abstract <B, U extends Throwable> B matchOrThrow(Function<A, B> just, Supplier<U> throwable) throws U;
+	<B, U extends Throwable> B matchOrThrow(Function<A, B> just, Supplier<U> throwable) throws U;
 
-	public Maybe<A> whilePred(Function<A, Boolean> p, Function<A, Maybe<A>> f) {
+	default Maybe<A> whilePred(Predicate<A> p, Function<A, Maybe<A>> f) {
 		var maybeCurrent = this;
 
-		while(maybeCurrent.match(current -> p.apply(current), () -> false)) {
+		while(maybeCurrent.match(current -> p.test(current), () -> false)) {
 			maybeCurrent = maybeCurrent.bind(f);
 		}
 
 		return maybeCurrent;
 	}
 
-	public Maybe<A> doWhile(Function<A, Maybe<A>> f, Function<A, Boolean> p) {
+	default Maybe<A> doWhile(Function<A, Maybe<A>> f, Predicate<A> p) {
 		var maybeCurrent = this;
 
 		do {
 			maybeCurrent = maybeCurrent.bind(f);
-		} while(maybeCurrent.match(current -> p.apply(current), () -> false));
+		} while(maybeCurrent.match(current -> p.test(current), () -> false));
 
 		return maybeCurrent;
 	}
 
-	public Maybe<A> doWhile(Supplier<Maybe<A>> f, Function<A, Boolean> p) {
+	default Maybe<A> doWhile(Supplier<Maybe<A>> f, Predicate<A> p) {
 		var maybeCurrent = this;
 
 		do {
 			maybeCurrent = maybeCurrent.bind($ -> f.get());
-		} while(maybeCurrent.match(current -> p.apply(current), () -> false));
+		} while(maybeCurrent.match(p::test, () -> false));
 
 		return maybeCurrent;
 	}
 
-	public Maybe<A> filter(Function<A, Boolean> p) {
-		return this.bind(a -> p.apply(a) ? just(a) : none());
+	default Maybe<A> filter(Predicate<A> p) {
+		return this.bind(a -> p.test(a) ? just(a) : none());
 	}
 }

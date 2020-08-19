@@ -3,7 +3,7 @@ package org.stormrealms.stormcore.util;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class Just<A> extends Maybe<A> {
+public class Just<A> implements Maybe<A> {
 	protected A value;
 
 	protected Just(A value) {
@@ -12,7 +12,7 @@ public class Just<A> extends Maybe<A> {
 
 	@Override
 	public <B> Just<B> fmap(Function<A, B> f) {
-		return just(f.apply(value));
+		return Maybe.just(f.apply(value));
 	}
 
 	@Override

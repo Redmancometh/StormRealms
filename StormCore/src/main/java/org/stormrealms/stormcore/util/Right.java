@@ -2,7 +2,7 @@ package org.stormrealms.stormcore.util;
 
 import java.util.function.Function;
 
-public class Right<$L, R> extends Either<$L, R> {
+public class Right<$L, R> implements Either<$L, R> {
 	protected R value;
 
 	protected Right(R value) {
@@ -11,12 +11,12 @@ public class Right<$L, R> extends Either<$L, R> {
 
 	@Override
 	public <B> Right<B, R> fmap(Function<$L, B> f) {
-		return right(value);
+		return Either.right(value);
 	}
 
 	@Override
 	public <B> Right<B, R> bind(Function<$L, Either<B, R>> f) {
-		return right(value);
+		return Either.right(value);
 	}
 
     @Override
