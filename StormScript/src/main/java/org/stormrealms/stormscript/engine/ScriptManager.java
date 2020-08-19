@@ -52,7 +52,7 @@ public class ScriptManager {
 				var classProxy = new ClassProxy<>(autoClass);
 				globals.putMember(autoClass.getSimpleName(), script.getContext().asValue(classProxy));
 			} catch (ClassNotFoundException e) {
-				con.format("WARNING: Class %s referenced in autoImports could not be found.%n")
+				con.format("WARNING: Class % referenced in autoImports could not be found.\n")
 					.arg(className)
 					.out();
 			}
@@ -61,7 +61,7 @@ public class ScriptManager {
 		var importAPI = new ImportAPI(script);
 		apiManager.bindAPI(importAPI, script);
 
-		globals.putMember("print", (Consumer<Object>) str -> System.out.println(str));
+		globals.putMember("print", (Consumer<Object>) str -> con.out(str));
 	}
 
 	private void onLoad(Script reloadedScript, ScriptableObjectConfig object) {
@@ -69,11 +69,11 @@ public class ScriptManager {
 		setupContext(reloadedScript);
 
 		reloadedScript.execute().match(returnValue -> {
-			con.format("Script %s was loaded successfully.%n")
+			con.format("Script % was loaded successfully.\n")
 				.arg(reloadedScript)
 				.out();
 		}, err -> {
-			con.format("Script %s failed to initialize properly. Error: %s%n")
+			con.format("Script % failed to initialize properly. Error: %\n")
 				.arg(reloadedScript)
 				.arg(err)
 				.out();
@@ -99,11 +99,11 @@ public class ScriptManager {
 		var objectsBasePath = configPath.resolve(scriptsConfigManager.getConfig().getObjectsBasePath());
 
 		var walkStream = Either.leftOrCatch(() -> Files.walk(objectsBasePath.toAbsolutePath()));
-		var errorString = "Could not load scripts because an IO error occurred when trying to scan the objects base path %s. Error: %s\n";
+		var errorFormat = con.format("Could not load scripts because an IO error occurred when trying to scan the objects base path %. Error: %\n");
 
 		walkStream.match(
-			(Stream<Path> stream) -> iterateScriptObjects(stream),
-			e -> System.out.printf(errorString, objectsBasePath, e));
+			this::iterateScriptObjects,
+			e -> errorFormat.arg(objectsBasePath).arg(e).out());
 	}
 
 	public <T extends Scriptable> void registerPrototype(Class<T> prototypeClass) {
