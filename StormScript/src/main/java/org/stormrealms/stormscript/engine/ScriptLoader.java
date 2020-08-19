@@ -104,18 +104,7 @@ public class ScriptLoader {
 		// NOTE(Yevano): We have to use a relative path, because ConfigManager does not
 		// support absolute paths. Consider changing ConfigManager's behavior in this
 		// regard.
-		con.format("% of % = %\n")
-			.arg(Path.of("config").toAbsolutePath())
-			.arg(objectsConfigPath.toAbsolutePath())
-			.arg(Path.of("config").toAbsolutePath().relativize(objectsConfigPath.toAbsolutePath()))
-			.out();
-		
-		System.out.println(Path.of("config").toAbsolutePath());
-		System.out.println(objectsConfigPath.toAbsolutePath());
-		System.out.println(Path.of("config").toAbsolutePath().relativize(objectsConfigPath.toAbsolutePath()));
-
 		var fileName = Path.of("config").toAbsolutePath().relativize(objectsConfigPath.toAbsolutePath()).toString();
-		con.out(fileName);
 
 		var objectsConfigManager = new ConfigManager<ScriptableObjectsConfig>(
 			fileName,
@@ -124,7 +113,6 @@ public class ScriptLoader {
 			gsonBuilder);
 		
 		objectsConfigManager.init();
-		con.out(StormCommand.class).println();
 
 		Supplier<IterableM<Scriptable>> reload = () ->
 			reloadScriptableObjects(objectsConfigManager.getConfig().getObjects(), onChange);
