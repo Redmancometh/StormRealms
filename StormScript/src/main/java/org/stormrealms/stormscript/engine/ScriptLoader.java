@@ -22,7 +22,6 @@ import org.stormrealms.stormcore.util.Console;
 import org.stormrealms.stormcore.util.Either;
 import org.stormrealms.stormcore.util.IterableM;
 import org.stormrealms.stormcore.util.Tuple;
-import org.stormrealms.stormscript.commands.StormCommand;
 import org.stormrealms.stormscript.configuration.PathTypeAdapter;
 import org.stormrealms.stormscript.configuration.ScriptableObjectConfig;
 import org.stormrealms.stormscript.configuration.ScriptableObjectsConfig;
