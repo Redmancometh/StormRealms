@@ -61,7 +61,7 @@ public class FileSystemScript implements Script {
 	/**
 	 * If this script is open, execute it and return the result.
 	 * 
-	 * @return a {@link ScriptExecutionResult} representing the result of this
+	 * @return an {@link Either<Value, Throwable>} representing the result of this
 	 *         script's execution.
 	 */
 	@Override
