@@ -128,4 +128,12 @@ public final class Fn {
 	public static <A, B, C> Function<A, C> compose(Function<A, B> f, Function<B, C> g) {
 		return a -> g.apply(f.apply(a));
 	}
+
+	public static <A> A forwardException(SupplierThrows<A, Throwable> f) {
+		try {
+			return f.get();
+		} catch(Throwable e) {
+			throw new RuntimeException(e);
+		}
+	}
 }
