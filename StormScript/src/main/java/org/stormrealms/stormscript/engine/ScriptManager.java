@@ -49,11 +49,12 @@ public class ScriptManager {
 
 			try {
 				autoClass = Class.forName(className);
-				System.out.printf("Class: %s\n", className);
 				var classProxy = new ClassProxy<>(autoClass);
 				globals.putMember(autoClass.getSimpleName(), script.getContext().asValue(classProxy));
 			} catch (ClassNotFoundException e) {
-				System.out.printf("WARNING: Class %s referenced in autoImports could not be found.\n", className);
+				con.format("WARNING: Class %s referenced in autoImports could not be found.%n")
+					.arg(className)
+					.out();
 			}
 		}
 
@@ -68,9 +69,15 @@ public class ScriptManager {
 		setupContext(reloadedScript);
 
 		reloadedScript.execute().match(returnValue -> {
-			System.out.printf("Script %s was loaded successfully.\n", reloadedScript);
+			con.format("Script %s was loaded successfully.%n")
+				.arg(reloadedScript)
+				.out();
 		}, err -> {
-			System.out.printf("Script %s failed to initialize properly. Error: %s\n", reloadedScript, err);
+			con.format("Script %s failed to initialize properly. Error: %s%n")
+				.arg(reloadedScript)
+				.arg(err)
+				.out();
+
 			err.printStackTrace();
 		});
 	}
@@ -101,8 +108,6 @@ public class ScriptManager {
 
 	public <T extends Scriptable> void registerPrototype(Class<T> prototypeClass) {
 		scriptablePrototypes.add(prototypeClass);
-		// var config = new ConfigManager<T>(String.format("config/scripts/%s",
-		// configPath), class_);
 	}
 
 	/**
