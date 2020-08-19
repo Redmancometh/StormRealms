@@ -5,9 +5,11 @@ import static org.stormrealms.stormcore.util.Fn.doWhileMaybe;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -53,7 +55,13 @@ public class IterableM<A> {
 
 	public List<A> toList() {
 		var result = new ArrayList<A>();
-		this.forEach(e -> result.add(e));
+		this.forEach(result::add);
+		return result;
+	}
+
+	public Set<A> toSet() {
+		var result = new HashSet<A>();
+		this.forEach(result::add);
 		return result;
 	}
 
